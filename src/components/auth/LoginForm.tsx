@@ -1,3 +1,4 @@
+import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
 import { AiFillApple } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
@@ -60,6 +61,7 @@ const LoginForm = ({ onAccountClick }: LoginFormProps) => {
           <Button label={'ログイン'} outline color="text-primary" />
         </div>
       </form>
+      <Footer />
     </>
   );
 };
