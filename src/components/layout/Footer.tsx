@@ -25,7 +25,7 @@ const LINKS = [
 
 const Footer = () => {
   return (
-    <footer className="text-center mt-10">
+    <footer className="text-center mt-10 sm:mt-20 md:mt-12 lg:mt-20 xl:mt-28">
       <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 justify-center ">
         {LINKS.map((link, index) => (
           <li
