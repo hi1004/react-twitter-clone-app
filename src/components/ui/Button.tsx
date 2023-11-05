@@ -1,3 +1,4 @@
+import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { IconType } from 'react-icons';
 interface ButtonProps {
   label: string;
@@ -8,6 +9,7 @@ interface ButtonProps {
   small?: boolean;
   icon?: IconType;
   color?: string;
+  register?: UseFormRegister<FieldValues>;
 }
 const Button = ({
   label,
@@ -18,6 +20,7 @@ const Button = ({
   small,
   icon: Icon,
   color,
+  register,
 }: ButtonProps) => {
   return (
     <button
@@ -28,9 +31,11 @@ const Button = ({
           : `
         disabled:opacity-70
         disabled:cursor-not-allowed
+        disabled:bg-gray-400
         rounded-[9999px]
         relative
         border-[1px]
+        w-full
         pointerhover:hover:opacity-80
 
         ${outline ? 'bg-white' : 'bg-primary'}
@@ -40,12 +45,13 @@ const Button = ({
         ${small ? 'text-xs' : 'text-sm'}
         ${small ? 'py-1' : 'py-2'}
         ${small ? 'font-medium' : 'font-semibold'}
-     
-   
         `
       }
       onClick={onClick}
-      disabled={disabled}
+      {...(register?.(label),
+      {
+        disabled,
+      })}
     >
       <span className="flex justify-center gap-2">
         {Icon && <Icon size={24} className="left-4" />}
