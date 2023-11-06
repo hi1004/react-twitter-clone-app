@@ -1,6 +1,12 @@
 import { SignupFormProps } from '@/components/auth/signup/SingupForm';
 import Button from '@/components/ui/Button';
 import ModalContext from '@/context/ModalContext';
+import { app } from '@/firebaseApp';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from 'firebase/auth';
 import { ReactNode, useContext } from 'react';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { CgClose } from 'react-icons/cg';
@@ -65,11 +71,27 @@ const FormStep = ({
             <Button
               label={buttonText}
               onClick={handleSubmit!(async data => {
-                await new Promise(r => setTimeout(r, 1000));
-
-                alert(JSON.stringify(data));
-
-                navigate('/');
+                const { name, email, password } = data;
+                try {
+                  const auth = getAuth(app);
+                  let userCredential;
+                  if (email) {
+                    userCredential = await createUserWithEmailAndPassword(
+                      auth,
+                      email,
+                      password
+                    );
+                  }
+                  const user = userCredential?.user;
+                  if (user) {
+                    await updateProfile(user, {
+                      displayName: name,
+                    });
+                  }
+                  navigate('/');
+                } catch (error) {
+                  console.log(error);
+                }
               })}
               register={register}
               disabled={isSubmitting || !isValid}
