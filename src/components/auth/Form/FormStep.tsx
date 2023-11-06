@@ -11,6 +11,7 @@ import { ReactNode, useContext } from 'react';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { CgClose } from 'react-icons/cg';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface FormStepProps extends SignupFormProps {
   title?: string;
@@ -88,9 +89,14 @@ const FormStep = ({
                       displayName: name,
                     });
                   }
+                  toast.success(
+                    `${user?.displayName}様、新規会員登録に成功しました`
+                  );
                   navigate('/');
-                } catch (error) {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } catch (error: any) {
                   console.log(error);
+                  toast.error(error?.code);
                 }
               })}
               register={register}
