@@ -18,15 +18,23 @@ export const ModalProvider = ({ children }: ModalProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   useEffect(() => {
     const handleResize = () => {
       if (location.pathname === '/signup' && window.innerWidth < 768) {
-        setIsModalOpen(false);
+        closeModal();
       } else if (location.pathname === '/signup' && window.innerWidth >= 768) {
         setLoading(true);
         setTimeout(() => {
           navigate('/login');
-          setIsModalOpen(true);
+          openModal();
           setLoading(false);
         }, 400);
       } else if (
@@ -37,7 +45,7 @@ export const ModalProvider = ({ children }: ModalProps) => {
         setLoading(true);
         setTimeout(() => {
           navigate('/signup');
-          setIsModalOpen(false);
+          closeModal();
           setLoading(false);
         }, 400);
       }
@@ -48,15 +56,14 @@ export const ModalProvider = ({ children }: ModalProps) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [location.pathname, navigate, isModalOpen, loading]);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  }, [
+    location.pathname,
+    navigate,
+    closeModal,
+    openModal,
+    isModalOpen,
+    loading,
+  ]);
 
   return (
     <ModalContext.Provider

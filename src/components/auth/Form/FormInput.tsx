@@ -5,12 +5,14 @@ const FormInput = ({
   label,
   type,
   register,
+  focused,
   errors,
   isSubmitted,
+  watch,
   required,
 }: InputProps) => {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col">
       <Input
         id={id}
         type={type}
@@ -18,8 +20,9 @@ const FormInput = ({
         register={register}
         errors={errors}
         isSubmitted={isSubmitted}
+        watch={watch}
         required={required}
-        focused="name"
+        focused={focused}
       />
     </div>
   );

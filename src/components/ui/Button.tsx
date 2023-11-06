@@ -9,7 +9,9 @@ interface ButtonProps {
   small?: boolean;
   icon?: IconType;
   color?: string;
+  name?: string;
   register?: UseFormRegister<FieldValues>;
+  id?: string;
 }
 const Button = ({
   label,
@@ -21,10 +23,13 @@ const Button = ({
   icon: Icon,
   color,
   register,
+  id,
 }: ButtonProps) => {
   return (
     <button
       type="submit"
+      id={id}
+      name={id}
       className={
         className
           ? className

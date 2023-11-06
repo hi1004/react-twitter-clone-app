@@ -8,8 +8,9 @@ const SignupFormStep3 = ({
   register,
   isSubmitting,
   isSubmitted,
-  handleSubmit,
   errors,
+  watch,
+  isValid,
 }: SignupFormProps) => {
   return (
     <>
@@ -20,11 +21,11 @@ const SignupFormStep3 = ({
           errors={errors}
           isSubmitted={isSubmitted}
           handleStepSubmit={handleStepSubmit}
-          handleSubmit={handleSubmit}
           step={step}
-          maxSteps={3}
-          buttonText="ログイン"
+          maxSteps={4}
+          buttonText="次へ"
           isSubmitting={isSubmitting}
+          isValid={isValid}
         >
           <FormInput
             id="password"
@@ -33,6 +34,8 @@ const SignupFormStep3 = ({
             register={register}
             errors={errors}
             isSubmitted={isSubmitted}
+            focused="password"
+            watch={watch}
             required
           />
           <FormInput
@@ -42,6 +45,7 @@ const SignupFormStep3 = ({
             register={register}
             errors={errors}
             isSubmitted={isSubmitted}
+            watch={watch}
             required
           />
         </FormStep>

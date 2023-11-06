@@ -1,6 +1,7 @@
 import { SignupFormProps } from '@/components/auth/signup/SingupForm';
 import Button from '@/components/ui/Button';
-import { ReactNode } from 'react';
+import ModalContext from '@/context/ModalContext';
+import { ReactNode, useContext } from 'react';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { CgClose } from 'react-icons/cg';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +11,7 @@ interface FormStepProps extends SignupFormProps {
   maxSteps: number;
   children?: ReactNode;
   buttonText: string;
+  isAllFieldsValid?: boolean;
 }
 
 const FormStep = ({
@@ -19,19 +21,25 @@ const FormStep = ({
   step,
   maxSteps,
   children,
+  isValid,
   buttonText,
-  closeModal,
   handleSubmit,
   isSubmitting,
 }: FormStepProps) => {
   const navigate = useNavigate();
+  const { isModalOpen } = useContext(ModalContext);
+
   return (
     <>
       <div className="step flex flex-col gap-2 min-h-[75vh]  md:min-h-[400px] justify-between">
         <div>
-          <h3 className="flex items-center gap-10 mt-4 text-xl font-bold tracking-tighter">
+          <h3
+            className={`flex items-center gap-3 mt-4 text-xl font-bold tracking-tighter ${
+              step === 1 && isModalOpen && 'gap-0'
+            }`}
+          >
             <span
-              className="cursor-pointer md:hidden"
+              className="text-gray-500 cursor-pointer"
               onClick={() => {
                 step > 1 ? handleStepSubmit(-1) : navigate('/login');
               }}
@@ -39,7 +47,7 @@ const FormStep = ({
               {step > 1 ? (
                 <AiOutlineArrowLeft size={28} />
               ) : (
-                <CgClose size={28} />
+                <>{!isModalOpen && <CgClose size={28} />}</>
               )}
             </span>
             ステップ {step}/{maxSteps}
@@ -53,24 +61,25 @@ const FormStep = ({
           </div>
         </div>
         <div className="mt-8">
-          {step === 3 ? (
+          {step === 4 ? (
             <Button
               label={buttonText}
               onClick={handleSubmit!(async data => {
                 await new Promise(r => setTimeout(r, 1000));
-                closeModal?.();
+
                 alert(JSON.stringify(data));
+
                 navigate('/');
               })}
               register={register}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isValid}
             />
           ) : (
             <Button
               label={buttonText}
               onClick={() => handleStepSubmit(1)}
               register={register}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isValid}
             />
           )}
         </div>

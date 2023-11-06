@@ -8,6 +8,7 @@ const SignupFormStep2 = ({
   isSubmitting,
   isSubmitted,
   errors,
+  isValid,
 }: SignupFormProps) => {
   return (
     <>
@@ -19,7 +20,8 @@ const SignupFormStep2 = ({
           isSubmitted={isSubmitted}
           handleStepSubmit={handleStepSubmit}
           step={step}
-          maxSteps={3}
+          isValid={isValid}
+          maxSteps={4}
           buttonText="次へ"
           isSubmitting={isSubmitting}
         >

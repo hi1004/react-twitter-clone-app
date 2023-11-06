@@ -1,11 +1,13 @@
-import SignupFormStep1 from '@/components/auth/signup/SignupFormStep1';
-import SignupFormStep2 from '@/components/auth/signup/SignupFormStep2';
-import SignupFormStep3 from '@/components/auth/signup/SignupFormStep3';
+import SignupFormStep1 from '@/components/auth/signup/step/SignupFormStep1';
+import SignupFormStep2 from '@/components/auth/signup/step/SignupFormStep2';
+import SignupFormStep3 from '@/components/auth/signup/step/SignupFormStep3';
+import SignupFormStep4 from '@/components/auth/signup/step/SignupFormStep4';
 import {
   FieldErrors,
   FieldValues,
   UseFormHandleSubmit,
   UseFormRegister,
+  UseFormWatch,
 } from 'react-hook-form';
 
 export interface SignupFormProps {
@@ -19,20 +21,22 @@ export interface SignupFormProps {
   isSubmitting: boolean;
   isSubmitted: boolean;
   errors: FieldErrors;
-  closeModal?: () => void;
+  watch?: UseFormWatch<FieldValues>;
+  isValid?: boolean;
 }
 
 const SingupForm = ({
   step,
   handleStepSubmit,
-  closeModal,
-  register,
   handleSubmit,
   generateDaysInMonth,
   handleClickToggle,
   clickToggle,
-  isSubmitting,
   isSubmitted,
+  watch,
+  register,
+  isValid,
+  isSubmitting,
   errors,
 }: SignupFormProps) => {
   return (
@@ -48,7 +52,8 @@ const SingupForm = ({
         isSubmitted={isSubmitted}
         isSubmitting={isSubmitting}
         register={register}
-        closeModal={closeModal}
+        isValid={isValid}
+        watch={watch}
       />
       <SignupFormStep2
         step={step}
@@ -60,8 +65,9 @@ const SingupForm = ({
         handleSubmit={handleSubmit}
         isSubmitted={isSubmitted}
         isSubmitting={isSubmitting}
+        watch={watch}
+        isValid={isValid}
         register={register}
-        closeModal={closeModal}
       />
       <SignupFormStep3
         step={step}
@@ -74,7 +80,22 @@ const SingupForm = ({
         isSubmitted={isSubmitted}
         isSubmitting={isSubmitting}
         register={register}
-        closeModal={closeModal}
+        isValid={isValid}
+        watch={watch}
+      />
+      <SignupFormStep4
+        step={step}
+        clickToggle={clickToggle}
+        errors={errors}
+        generateDaysInMonth={generateDaysInMonth}
+        handleClickToggle={handleClickToggle}
+        handleStepSubmit={handleStepSubmit}
+        handleSubmit={handleSubmit}
+        isSubmitted={isSubmitted}
+        isSubmitting={isSubmitting}
+        register={register}
+        isValid={isValid}
+        watch={watch}
       />
     </div>
   );

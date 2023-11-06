@@ -8,16 +8,14 @@ interface SignupProps {
   children: ReactNode;
 }
 
-function isLeapYear(year: number) {
-  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-}
-
 export const SignupProvider = ({ children }: SignupProps) => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, isSubmitted, errors },
-  } = useForm();
+    setValue,
+    formState: { isSubmitting, isSubmitted, errors, isValid },
+    watch,
+  } = useForm({ mode: 'onChange' });
   const [step, setStep] = useState<number>(1);
   const [clickToggle, setClickToggle] = useState<boolean>(false);
 
@@ -25,30 +23,10 @@ export const SignupProvider = ({ children }: SignupProps) => {
     setStep(step + n);
   };
 
-  const generateDaysInMonth = (month: number, year: number) => {
-    const daysInMonth = [
-      31,
-      isLeapYear(year) ? 29 : 28,
-      31,
-      30,
-      31,
-      30,
-      31,
-      31,
-      30,
-      31,
-      30,
-      31,
-    ];
-
-    return Array.from(
-      { length: daysInMonth[month - 1] },
-      (_, index) => index + 1
-    );
-  };
-
   const handleClickToggle = () => {
     setClickToggle(!clickToggle);
+    setValue('email', '');
+    setValue('tel', '');
   };
 
   return (
@@ -58,11 +36,12 @@ export const SignupProvider = ({ children }: SignupProps) => {
         handleStepSubmit,
         register,
         handleSubmit,
-        generateDaysInMonth,
         handleClickToggle,
         clickToggle,
         isSubmitting,
         isSubmitted,
+        watch,
+        isValid,
         errors,
       }}
     >

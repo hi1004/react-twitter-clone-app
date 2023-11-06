@@ -1,10 +1,16 @@
+import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
+
 export interface SelectProps {
   id: string;
   datas: string[];
   label: string;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors;
+  isSubmitted: boolean;
+  required: boolean;
 }
 
-const Select = ({ id, datas, label }: SelectProps) => {
+const Select = ({ id, datas, label, register }: SelectProps) => {
   return (
     <div className="relative">
       <select
@@ -13,7 +19,9 @@ const Select = ({ id, datas, label }: SelectProps) => {
     border focus:border-2 text-base"
       >
         {datas.map((value, index) => (
-          <option key={index}>{value}</option>
+          <option key={index} {...(register(id), { required: true })}>
+            {value}
+          </option>
         ))}
       </select>
       <label

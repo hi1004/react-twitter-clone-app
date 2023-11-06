@@ -1,5 +1,6 @@
 import Header from '@/components/layout/Header';
 import MenuNav from '@/components/layout/MenuNav';
+import { LoginProvider } from '@/context/AuthContext';
 import { ModalProvider } from '@/context/ModalContext';
 import { SignupProvider } from '@/context/SignupContext';
 import { useMemo } from 'react';
@@ -22,11 +23,13 @@ const RootLayout = ({ isHeader = true, isNav = true }: RootLayoutProps) => {
   return (
     <ModalProvider>
       <SignupProvider>
-        <main className="px-8">
-          {headerComponent}
-          <Outlet />
-          {navComponent}
-        </main>
+        <LoginProvider>
+          <main className="px-8">
+            {headerComponent}
+            <Outlet />
+            {navComponent}
+          </main>
+        </LoginProvider>
       </SignupProvider>
     </ModalProvider>
   );

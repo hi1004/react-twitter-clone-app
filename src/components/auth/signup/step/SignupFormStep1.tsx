@@ -6,22 +6,15 @@ import { SignupFormProps } from '@/components/auth/signup/SingupForm';
 const SignupFormStep1 = ({
   step,
   handleStepSubmit,
-  register,
-  isSubmitting,
   isSubmitted,
-  errors,
   clickToggle,
-  generateDaysInMonth,
   handleClickToggle,
+  watch,
+  register,
+  isValid,
+  isSubmitting,
+  errors,
 }: SignupFormProps) => {
-  const years = Array.from(
-    { length: new Date().getFullYear() - 1902 },
-    (_, index) => `${new Date().getFullYear() - index}年`
-  );
-  const months = Array.from({ length: 12 }, (_, index) => `${index + 1}月`);
-  const days = generateDaysInMonth!(2, 2023).map(
-    (_, index) => `${index + 1}日`
-  );
   return (
     <>
       {step === 1 && (
@@ -32,9 +25,11 @@ const SignupFormStep1 = ({
           isSubmitted={isSubmitted}
           handleStepSubmit={handleStepSubmit}
           step={step}
-          maxSteps={3}
+          maxSteps={4}
           buttonText="次へ"
           isSubmitting={isSubmitting}
+          watch={watch}
+          isValid={isValid}
         >
           <FormInput
             id="name"
@@ -42,6 +37,8 @@ const SignupFormStep1 = ({
             register={register}
             errors={errors}
             isSubmitted={isSubmitted}
+            watch={watch}
+            focused="name"
             required
           />
           <FormInput
@@ -50,6 +47,7 @@ const SignupFormStep1 = ({
             label={clickToggle ? '電話番号' : 'メールアドレス'}
             register={register}
             errors={errors}
+            watch={watch}
             isSubmitted={isSubmitted}
             required
           />
@@ -60,9 +58,6 @@ const SignupFormStep1 = ({
             かわりに{!clickToggle ? '電話番号' : 'メールアドレス'}を登録する
           </span>
           <FormSelect
-            years={years}
-            months={months}
-            days={days}
             errors={errors}
             isSubmitted={isSubmitted}
             register={register}
