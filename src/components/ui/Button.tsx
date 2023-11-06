@@ -37,6 +37,7 @@ const Button = ({
         disabled:opacity-70
         disabled:cursor-not-allowed
         disabled:bg-gray-400
+        font-bold
         rounded-[9999px]
         relative
         border-[1px]
@@ -46,7 +47,7 @@ const Button = ({
         ${outline ? 'bg-white' : 'bg-primary'}
         ${outline ? 'border-slate-300' : 'border-primary'}
         ${outline ? `${color ? color : 'text-slate-700'} ` : 'text-white'}
-     
+        ${disabled && 'border-slate-400'}
         ${small ? 'text-xs' : 'text-sm'}
         ${small ? 'py-1' : 'py-2'}
         ${small ? 'font-medium' : 'font-semibold'}

@@ -80,7 +80,7 @@ const Input = ({
   }
   return (
     <>
-      <div className="relative">
+      <div className="relative w-full">
         <input
           id={id}
           type={type}
@@ -88,7 +88,7 @@ const Input = ({
           required={required}
           placeholder={placeholder}
           className={`
-        relative block px-2.5 pb-2.5 pt-4 w-full text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer
+        relative block px-2.5 pb-2.5 pt-4 w-full text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer
         border focus:border-2 text-base
         ${errors[id] ? 'border-rose-500 sm:h-auto' : ''}
         ${errors[id] ? 'focus:border-rose-500' : 'focus:border-sky-600'}
