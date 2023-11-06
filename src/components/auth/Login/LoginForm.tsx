@@ -9,8 +9,13 @@ import { useContext } from 'react';
 export interface LoginFormProps {
   closeModal: () => void;
   isModalOpen: boolean;
+  onLoginClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
-const LoginForm = ({ closeModal, isModalOpen }: LoginFormProps) => {
+const LoginForm = ({
+  closeModal,
+  isModalOpen,
+  onLoginClick,
+}: LoginFormProps) => {
   const {
     step,
     handleStepSubmit,
@@ -28,11 +33,9 @@ const LoginForm = ({ closeModal, isModalOpen }: LoginFormProps) => {
   return (
     <>
       <Modal
-        step={step}
         isOpen={isModalOpen}
         isSubmitted={isSubmitted}
         onClose={closeModal}
-        handleStepSubmit={handleStepSubmit}
       >
         <SingupForm
           step={step}
@@ -51,7 +54,12 @@ const LoginForm = ({ closeModal, isModalOpen }: LoginFormProps) => {
       </Modal>
       <div className="flex flex-col gap-4 md:max-w-sm">
         <h3 className="font-medium">アカウントをお持ちの場合</h3>
-        <Button label={'ログイン'} outline color="text-primary" />
+        <Button
+          label={'ログイン'}
+          outline
+          color="text-primary"
+          onClick={onLoginClick}
+        />
       </div>
     </>
   );

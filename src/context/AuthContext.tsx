@@ -9,6 +9,7 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { ReactNode, createContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export interface AuthProps {
   handleSocalLogin: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
@@ -46,15 +47,22 @@ export const AuthContextProvider = ({ children }: LoginProps) => {
     const { id } = e.currentTarget;
 
     const providers: AuthProviders = {
+      'login-google': new GoogleAuthProvider(),
       google: new GoogleAuthProvider(),
+      'login-github': new GoogleAuthProvider(),
       github: new GithubAuthProvider(),
     };
     const provider = providers[id];
     const auth = getAuth(app);
     try {
       await signInWithPopup(auth, provider);
-    } catch (error) {
+      toast.success(
+        `${auth.currentUser?.displayName}様、ログインに成功しました`
+      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       console.log(error);
+      toast.error(error?.message);
     }
   };
 

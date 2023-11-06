@@ -6,8 +6,6 @@ interface ModalProps {
   onClose: () => void;
   children: ReactNode;
   isSubmitted: boolean;
-  step: number;
-  handleStepSubmit: (n: number) => void;
 }
 
 const Modal = ({ isOpen, onClose, children, isSubmitted }: ModalProps) => {
@@ -19,12 +17,12 @@ const Modal = ({ isOpen, onClose, children, isSubmitted }: ModalProps) => {
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <div className="w-[500px]">
+        <div className="w-full h-[100vh] md:w-[500px]  flex items-center justify-center">
           <div className="fixed inset-0 bg-black opacity-70"></div>
-          <div className="relative z-10 p-8 bg-white rounded-lg">
+          <div className="relative z-10 flex w-full h-full p-8 bg-white rounded-none md:rounded-lg md:h-auto ">
             <button
               onClick={onClose}
-              className="absolute text-gray-500 top-8 right-6"
+              className="absolute text-gray-500 top-10 md:right-6"
             >
               <CgClose size={28} />
             </button>

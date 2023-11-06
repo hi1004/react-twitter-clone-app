@@ -41,7 +41,7 @@ const FormStep = ({
       <div className="step flex flex-col gap-2 min-h-[75vh]  md:min-h-[400px] justify-between">
         <div>
           <h3
-            className={`flex items-center gap-3 mt-4 text-xl font-bold tracking-tighter ${
+            className={`flex items-center gap-3 mt-10 text-xl font-bold tracking-tighter ${
               step === 1 && isModalOpen && 'gap-0'
             }`}
           >

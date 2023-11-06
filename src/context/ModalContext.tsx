@@ -4,9 +4,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const ModalContext = createContext({
   isModalOpen: false,
+  isLoginModalOpen: false,
   openModal: () => {},
   closeModal: () => {},
+  clickLoginButton: () => {},
+  closeLoginPage: () => {},
   loading: false,
+  login: false,
 });
 
 interface ModalProps {
@@ -15,7 +19,10 @@ interface ModalProps {
 
 export const ModalProvider = ({ children }: ModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [login, setLogin] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,49 +32,115 @@ export const ModalProvider = ({ children }: ModalProps) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const clickLoginButton = () => {
+    setLogin(true);
+    setIsLoginModalOpen(true);
+  };
+  const closeLoginPage = () => {
+    setLogin(false);
+    setIsLoginModalOpen(false);
+  };
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (location.pathname === '/signup' && window.innerWidth < 768) {
-        closeModal();
-      } else if (location.pathname === '/signup' && window.innerWidth >= 768) {
-        setLoading(true);
-        setTimeout(() => {
-          navigate('/login');
-          openModal();
-          setLoading(false);
-        }, 400);
-      } else if (
-        location.pathname === '/login' &&
-        isModalOpen &&
-        window.innerWidth < 768
-      ) {
-        setLoading(true);
-        setTimeout(() => {
-          navigate('/signup');
+  if (!login) {
+    useEffect(() => {
+      const handleResize = () => {
+        if (location.pathname === '/signup' && window.innerWidth < 768) {
           closeModal();
-          setLoading(false);
-        }, 400);
-      }
-    };
+          setLogin(false);
+          setIsLoginModalOpen(false);
+        } else if (
+          location.pathname === '/signup' &&
+          window.innerWidth >= 768
+        ) {
+          setLoading(true);
+          setTimeout(() => {
+            navigate('/login');
+            openModal();
+            setLoading(false);
+          }, 400);
+        } else if (
+          location.pathname === '/login' &&
+          isModalOpen &&
+          window.innerWidth < 768
+        ) {
+          setLoading(true);
+          setTimeout(() => {
+            navigate('/signup');
+            closeModal();
+            setLoading(false);
+          }, 400);
+        }
+      };
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [
-    location.pathname,
-    navigate,
-    closeModal,
-    openModal,
-    isModalOpen,
-    loading,
-  ]);
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, [
+      location.pathname,
+      navigate,
+      closeModal,
+      openModal,
+      isModalOpen,
+      loading,
+    ]);
+  } else {
+    useEffect(() => {
+      const handleResize = () => {
+        if (location.pathname === '/signup' && window.innerWidth < 768) {
+          closeLoginPage();
+        } else if (
+          location.pathname === '/signup' &&
+          window.innerWidth >= 768
+        ) {
+          setLoading(true);
+          setTimeout(() => {
+            openModal();
+            setLoading(false);
+          }, 400);
+        } else if (
+          location.pathname === '/login' &&
+          isModalOpen &&
+          window.innerWidth < 768
+        ) {
+          setLoading(true);
+          setTimeout(() => {
+            closeModal();
+            setLoading(false);
+          }, 400);
+        }
+      };
+      setLogin(true);
+      setIsLoginModalOpen(true);
+
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, [
+      location.pathname,
+      navigate,
+      closeModal,
+      openModal,
+      isModalOpen,
+      loading,
+    ]);
+  }
 
   return (
     <ModalContext.Provider
-      value={{ isModalOpen, openModal, loading, closeModal }}
+      value={{
+        isModalOpen,
+        isLoginModalOpen,
+        openModal,
+        loading,
+        closeModal,
+        clickLoginButton,
+        closeLoginPage,
+        login,
+      }}
     >
       {loading ? (
         <RiTwitterXLine

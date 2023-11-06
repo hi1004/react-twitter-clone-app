@@ -1,8 +1,10 @@
 import LoginForm from '@/components/auth/Login/LoginForm';
+import LoginModalForm from '@/components/auth/Login/LoginModalForm';
 import OAuth from '@/components/auth/Login/OAuth';
 import { SignupFormProps } from '@/components/auth/signup/SingupForm';
 import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
+import Modal from '@/components/ui/Modal';
 import ModalContext from '@/context/ModalContext';
 import SignupContext from '@/context/SignupContext';
 import React, { useContext } from 'react';
@@ -10,8 +12,16 @@ import { RiTwitterXLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
-  const { isModalOpen, closeModal, openModal } = useContext(ModalContext);
-  const { handleStepSubmit, step } = useContext(
+  const {
+    isModalOpen,
+    closeModal,
+    isLoginModalOpen,
+    openModal,
+    login,
+    clickLoginButton,
+    closeLoginPage,
+  } = useContext(ModalContext);
+  const { handleStepSubmit, step, isSubmitted } = useContext(
     SignupContext as React.Context<SignupFormProps>
   );
 
@@ -22,7 +32,12 @@ const LoginPage = () => {
       handleStepSubmit(1 - step);
     }
   };
-
+  const onLoginClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!isLoginModalOpen) {
+      clickLoginButton();
+    }
+  };
   return (
     <>
       <form className="sm:max-w-sm sm:m-auto md:flex md:max-w-[80%] md:justify-center md:items-center md:gap-8">
@@ -69,9 +84,26 @@ const LoginPage = () => {
             </h2>
           </div>
 
-          <LoginForm closeModal={closeModal} isModalOpen={isModalOpen} />
+          <LoginForm
+            closeModal={closeModal}
+            isModalOpen={isModalOpen}
+            onLoginClick={onLoginClick}
+          />
         </div>
       </form>
+      {login && (
+        <Modal
+          isOpen={isLoginModalOpen}
+          onClose={closeLoginPage}
+          isSubmitted={isSubmitted}
+        >
+          <LoginModalForm
+            onLoginClick={onLoginClick}
+            closeLoginPage={closeLoginPage}
+            login={login}
+          />
+        </Modal>
+      )}
       <Footer />
     </>
   );
