@@ -3,6 +3,8 @@ import { app } from '@/firebaseApp';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { RiTwitterXLine } from 'react-icons/ri';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const auth = getAuth(app);
@@ -24,6 +26,17 @@ const App = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       {init ? (
         <Router isAuthenticated={isAuthenticated} />
       ) : (

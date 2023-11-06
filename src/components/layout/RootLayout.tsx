@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header';
 import MenuNav from '@/components/layout/MenuNav';
-import { LoginProvider } from '@/context/AuthContext';
+import { AuthContextProvider } from '@/context/AuthContext';
 import { ModalProvider } from '@/context/ModalContext';
 import { SignupProvider } from '@/context/SignupContext';
 import { useMemo } from 'react';
@@ -21,17 +21,17 @@ const RootLayout = ({ isHeader = true, isNav = true }: RootLayoutProps) => {
   const navComponent = useMemo(() => isNav && <MenuNav />, [isNav]);
 
   return (
-    <ModalProvider>
-      <SignupProvider>
-        <LoginProvider>
+    <AuthContextProvider>
+      <ModalProvider>
+        <SignupProvider>
           <main className="px-8">
             {headerComponent}
             <Outlet />
             {navComponent}
           </main>
-        </LoginProvider>
-      </SignupProvider>
-    </ModalProvider>
+        </SignupProvider>
+      </ModalProvider>
+    </AuthContextProvider>
   );
 };
 

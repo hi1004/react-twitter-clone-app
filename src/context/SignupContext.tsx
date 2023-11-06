@@ -1,6 +1,6 @@
 import { SignupFormProps } from '@/components/auth/signup/SingupForm';
 import { ReactNode, createContext, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 
 const SignupContext = createContext<SignupFormProps | undefined>(undefined);
 
@@ -15,7 +15,7 @@ export const SignupProvider = ({ children }: SignupProps) => {
     setValue,
     formState: { isSubmitting, isSubmitted, errors, isValid },
     watch,
-  } = useForm({ mode: 'onChange' });
+  } = useForm<FieldValues>({ mode: 'onChange' });
   const [step, setStep] = useState<number>(1);
   const [clickToggle, setClickToggle] = useState<boolean>(false);
 

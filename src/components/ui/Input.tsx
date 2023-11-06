@@ -84,7 +84,7 @@ const Input = ({
         <input
           id={id}
           type={type}
-          disabled={disabled}
+          disabled={id === 'tel' ? true : disabled}
           required={required}
           placeholder={placeholder}
           className={`

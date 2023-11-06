@@ -25,7 +25,6 @@ const LoginForm = ({ closeModal, isModalOpen }: LoginFormProps) => {
     isSubmitted,
     errors,
   } = useContext(SignupContext as React.Context<SignupFormProps>);
-
   return (
     <>
       <Modal
