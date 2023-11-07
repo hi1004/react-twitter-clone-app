@@ -87,16 +87,20 @@ const Input = ({
           disabled={id === 'tel' ? true : disabled}
           required={required}
           placeholder={placeholder}
-          className={`
+          className={`input-autofill dark:input-autofill
         relative block px-2.5 pb-2.5 pt-4 w-full text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer
-        border focus:border-2 text-base
-        ${errors[id] ? 'border-rose-500 sm:h-auto' : ''}
-        ${errors[id] ? 'focus:border-rose-500' : 'focus:border-sky-600'}
+        border focus:border-2 text-base dark:text-white 
+        ${errors[id] ? 'border-rose-500 dark:border-rose-500 sm:h-auto' : ''}
+        ${
+          errors[id]
+            ? 'focus:border-rose-500 dark:focus:border-rose-500'
+            : 'focus:border-sky-600'
+        }
       ${
         !errorMessage &&
         watch &&
         watch(id) &&
-        'border-green-600 focus:border-green-600'
+        'border-green-600 dark:border-green-600 focus:border-green-600 dark:focus:border-green-600'
       }
         `}
           {...register(id, {
@@ -111,8 +115,19 @@ const Input = ({
         <label
           htmlFor={id}
           className={`
-        absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-white bg-white  px-2 peer-focus:px-2 peer-focus:text-primary peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-[0.8] peer-focus:-translate-y-4 left-1
-        ${errors[id] ? 'peer-focus:text-rose-500 text-rose-500' : ''}
+        absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-white bg-white  px-2 peer-focus:px-2 peer-focus:text-primary peer-focus:dark:text-primary peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-[0.8] peer-focus:-translate-y-4 left-1
+         dark:bg-black dark:peer-focus:bg-black 
+        ${
+          errors[id]
+            ? 'peer-focus:text-rose-500 peer-focus:dark:text-rose-500 text-rose-500 dark:text-rose-500'
+            : ''
+        }
+        ${
+          !errorMessage &&
+          watch &&
+          watch(id) &&
+          'text-green-600 dark:text-green-600 peer-focus:dark:text-green-600'
+        }
       `}
         >
           {label}

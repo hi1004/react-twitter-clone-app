@@ -52,7 +52,7 @@ const LoginPage = () => {
 
             <OAuth />
 
-            <p className="text-[0.5625rem] text-slate-600 md:text-xs">
+            <p className="text-[0.6rem] text-slate-600 dark:text-slate-200 md:text-xs">
               アカウントを登録することにより、
               <Link
                 to="https://twitter.com/ja/tos"

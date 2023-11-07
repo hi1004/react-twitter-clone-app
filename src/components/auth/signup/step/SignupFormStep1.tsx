@@ -53,7 +53,7 @@ const SignupFormStep1 = ({
           />
           <span
             onClick={handleClickToggle}
-            className="text-sm text-right cursor-pointer text-primary pointerhover:hover:underline focus:underline"
+            className="text-sm cursor-pointer  w-fit text-primary pointerhover:hover:underline focus:underline"
           >
             かわりに{!clickToggle ? '電話番号' : 'メールアドレス'}を登録する
           </span>

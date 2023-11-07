@@ -25,7 +25,7 @@ const App = () => {
   }, [auth, init]);
 
   return (
-    <>
+    <div>
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -45,7 +45,7 @@ const App = () => {
           className="fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"
         />
       )}
-    </>
+    </div>
   );
 };
 
