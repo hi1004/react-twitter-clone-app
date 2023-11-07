@@ -24,10 +24,17 @@ input[type='date']::-webkit-calendar-picker-indicator {
   .input-autofill:autofill:hover,
   .input-autofill:autofill:focus,
   .input-autofill:autofill:active {
-    -webkit-text-fill-color: #007daedd;
+    -webkit-text-fill-color: #000;
+    caret-color: #000;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset;
     box-shadow: 0 0 0px 1000px transparent inset;
     transition: background-color 5000s ease-in-out 0s;
-    @apply caret-black dark:caret-white;
+  }
+  .dark .input-autofill:autofill,
+  .dark .input-autofill:autofill:hover,
+  .dark .input-autofill:autofill:focus,
+  .dark .input-autofill:autofill:active {
+    -webkit-text-fill-color: #fff;
+    caret-color: #fff;
   }
 }
