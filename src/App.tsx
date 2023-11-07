@@ -1,9 +1,10 @@
 import Router from '@/components/Router';
+import ThemeContext from '@/context/ThemeContext';
 import { app } from '@/firebaseApp';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { RiTwitterXLine } from 'react-icons/ri';
-import { ToastContainer } from 'react-toastify';
+import { Theme, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
@@ -12,7 +13,7 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     !!auth?.currentUser
   );
-
+  const { isDark } = useContext(ThemeContext);
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       if (user) {
@@ -36,6 +37,7 @@ const App = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        theme={(isDark ? 'dark' : 'light') as Theme}
       />
       {init ? (
         <Router isAuthenticated={isAuthenticated} />
