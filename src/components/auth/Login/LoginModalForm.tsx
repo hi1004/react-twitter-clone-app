@@ -50,7 +50,7 @@ const LoginModalForm = ({
     >
       <h2 className="mb-12 text-2xl font-bold">Xにログイン</h2>
       <OAuth login={login} />
-      <div className="flex flex-col w-full gap-2 mt-4">
+      <div className="flex flex-col w-full gap-4 mt-4">
         <Input
           id="email"
           label="email"

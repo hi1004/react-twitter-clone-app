@@ -46,7 +46,7 @@ const FormStep = ({
             }`}
           >
             <span
-              className="text-gray-500 cursor-pointer"
+              className="text-gray-500 cursor-pointer pointerhover:hover:text-gray-700 dark:text-slate-400 pointerhover:hover:dark:text-slate-100"
               onClick={() => {
                 step > 1 ? handleStepSubmit(-1) : navigate('/login');
               }}

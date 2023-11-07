@@ -14,7 +14,7 @@ const OAuth = ({ login }: OAutProps) => {
   );
 
   return (
-    <div className="flex flex-col w-full gap-2">
+    <div className="flex flex-col w-full gap-4">
       {login ? (
         <>
           <Button
