@@ -16,7 +16,7 @@ const Router = ({ isAuthenticated }: RouterProps) => {
   return (
     <Routes>
       {isAuthenticated ? (
-        <Route element={<RootLayout isHeader={false} />}>
+        <Route element={<RootLayout isHeader={true} />}>
           <Route index element={<HomePage />} />
           <Route path="/posts/:id" element={<PostDetailPage />} />
           <Route path="/posts/edit/:id" element={<PostEditPage />} />

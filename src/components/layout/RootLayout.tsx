@@ -1,4 +1,4 @@
-import Header from '@/components/layout/Header';
+import Header from '@/components/layout/header/Header';
 import MenuNav from '@/components/layout/MenuNav';
 import { AuthContextProvider } from '@/context/AuthContext';
 import { ModalProvider } from '@/context/ModalContext';
