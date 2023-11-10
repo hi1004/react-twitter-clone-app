@@ -26,7 +26,7 @@ const App = () => {
   }, [auth, init]);
 
   return (
-    <div>
+    <div className="min-h-[1008px]">
       <ToastContainer
         position="top-right"
         autoClose={2000}

@@ -12,7 +12,7 @@ import { ReactNode, createContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export interface AuthProps {
-  handleSocalLogin: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  handleSocalLogin?: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
   user: User | null;
 }
 export interface AuthPropsWithLogin extends AuthProps {
