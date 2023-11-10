@@ -22,7 +22,7 @@ const RootLayout = ({ isHeader = true }: RootLayoutProps) => {
     <ModalProvider>
       <SignupProvider>
         {headerComponent}
-        <main className={`px-8 ${user && ' md:px-0'}`}>
+        <main className={`px-8 ${user && 'px-0'}`}>
           <div
             className={`${
               user ? 'flex-row' : 'flex-col'

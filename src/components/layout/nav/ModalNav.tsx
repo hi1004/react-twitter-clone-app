@@ -21,7 +21,7 @@ const ModalNav = () => {
       <div
         role="presentation"
         className={`fixed inset-0 bg-gray-400 bg-opacity-20 transform transition-transform  ${
-          isModalOpen ? 'opacity-100' : 'opacity-0  -z-10'
+          isModalOpen ? 'opacity-100 z-10' : 'opacity-0  -z-10'
         }`}
         onClick={handleBackgroundClick}
       >
@@ -30,10 +30,10 @@ const ModalNav = () => {
             isModalOpen
               ? 'translate-x-0 opacity-100'
               : '-translate-x-full opacity-0'
-          } absolute w-4/5 sm:w-3/5 h-screen  z-10  inset-0  dark:bg-dark transform transition-transform `}
+          } absolute w-4/5 sm:w-3/5 h-screen   inset-0  dark:bg-dark transform transition-transform `}
         >
           <div className="h-full p-4 text-black bg-white dark:bg-dark dark:text-white">
-            <HeaderProfile user={user} />
+            <HeaderProfile user={user} toProfile />
 
             <div className="flex flex-col pl-1 mb-7">
               <div className="text-lg font-semibold">{user?.displayName}</div>

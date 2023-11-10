@@ -10,8 +10,10 @@ const Header = () => {
 
   return (
     <header
-      className={`flex items-center justify-between pt-4 mb-12 ${
-        user ? ' md:hidden sticky px-4 top-0 backdrop-blur-sm' : 'flex  px-8'
+      className={`flex items-center justify-between pt-4  ${
+        user
+          ? ' md:hidden sticky px-4 top-0 backdrop-blur-sm z-10'
+          : 'flex mb-12 px-8'
       } md:pt-5`}
     >
       <HeaderProfile user={user} />

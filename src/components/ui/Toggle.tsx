@@ -9,7 +9,7 @@ const Toggle = () => {
     <div
       role="presentation"
       onClick={toggleTheme}
-      className="w-max p-3 cursor-pointer dark:pointerhover:hover:bg-gray-700 pointerhover:hover:bg-gray-300 bg-opacity-30 rounded-[9999px]"
+      className="w-max p-3 cursor-pointer dark:pointerhover:hover:bg-gray-700 pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[9999px]"
     >
       <DarkModeSwitch
         checked={isDark}
