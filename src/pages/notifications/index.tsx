@@ -1,5 +1,11 @@
+import ModalNav from '@/components/layout/nav/ModalNav';
+
 const NotificationsPage = () => {
-  return <div>NotificationsPage</div>;
+  return (
+    <div>
+      <ModalNav />
+    </div>
+  );
 };
 
 export default NotificationsPage;

@@ -9,10 +9,14 @@ const Header = () => {
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
 
   return (
-    <header className="flex items-center justify-between my-4 md:h-10 md:mt-5">
+    <header
+      className={`flex items-center justify-between pt-4 mb-12 ${
+        user ? ' md:hidden sticky px-4 top-0 backdrop-blur-sm' : 'flex  px-8'
+      } md:pt-5`}
+    >
       <HeaderProfile user={user} />
-      <Link to="/" className="">
-        <RiTwitterXLine size={40} className="dark:text-white" />
+      <Link to="/">
+        <RiTwitterXLine size={30} className="dark:text-white" />
       </Link>
       <Toggle />
     </header>

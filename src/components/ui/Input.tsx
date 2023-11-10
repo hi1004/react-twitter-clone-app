@@ -116,7 +116,7 @@ const Input = ({
           htmlFor={id}
           className={`
         absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-white bg-white  px-2 peer-focus:px-2 peer-focus:text-primary peer-focus:dark:text-primary peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-[0.8] peer-focus:-translate-y-4 left-1
-         dark:bg-black dark:peer-focus:bg-black 
+         dark:bg-dark dark:peer-focus:bg-dark 
         ${
           errors[id]
             ? 'peer-focus:text-rose-500 peer-focus:dark:text-rose-500 text-rose-500 dark:text-rose-500'
