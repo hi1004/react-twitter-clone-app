@@ -1,5 +1,6 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
+import { PostProps } from '@/store/posts/postAtoms';
 import { useContext, useState } from 'react';
 import {
   AiFillDelete,
@@ -11,7 +12,11 @@ import {
 import { GoComment } from 'react-icons/go';
 import { useNavigate } from 'react-router';
 
-const PostListItem = ({ post }) => {
+interface PostListItemProps {
+  post: PostProps;
+}
+
+const PostListItem = ({ post }: PostListItemProps) => {
   const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
