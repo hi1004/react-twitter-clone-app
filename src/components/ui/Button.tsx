@@ -35,8 +35,10 @@ const Button = ({
           ? className
           : `
         disabled:opacity-70
+        disabled:bg-opacity-70
         disabled:cursor-not-allowed
-        disabled:bg-gray-400
+        disabled:bg-primary
+        disabled:border-primary
         font-bold
         rounded-[9999px]
         relative
