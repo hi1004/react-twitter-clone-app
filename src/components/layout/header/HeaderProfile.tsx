@@ -1,7 +1,7 @@
 import { homeModalState } from '@/store/Nav/homeModalAtoms';
 import { User } from 'firebase/auth';
 import { FaUserCircle } from 'react-icons/fa';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 
 interface HeaderProfileProps {
@@ -12,6 +12,7 @@ interface HeaderProfileProps {
 const HeaderProfile = ({ user, toProfile = false }: HeaderProfileProps) => {
   const setIsModalOpen = useSetRecoilState(homeModalState);
   const navigate = useNavigate();
+  const location = useLocation();
   const openModal = () => {
     if (!toProfile) {
       setIsModalOpen(true);
@@ -23,7 +24,12 @@ const HeaderProfile = ({ user, toProfile = false }: HeaderProfileProps) => {
       {user && (
         <>
           <div
-            onClick={() => toProfile && navigate('/profile')}
+            onClick={e => {
+              e.stopPropagation();
+              if (location.pathname !== '/profile') {
+                toProfile && navigate('/profile');
+              }
+            }}
             className="flex items-center justify-center w-10 h-10 overflow-hidden rounded-full cursor-pointer"
           >
             {user?.photoURL ? (

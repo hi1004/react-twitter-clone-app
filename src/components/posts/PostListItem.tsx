@@ -35,7 +35,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
       >
         <HeaderProfile user={user} toProfile />
       </div>
-      <div className="flex flex-col" role="presentation">
+      <div className="flex flex-col w-full" role="presentation">
         <div className="flex gap-1">
           <div
             role="presentation"
@@ -68,12 +68,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
             </span>
           </div>
         </div>
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga rerum
-          sit dolor. Facilis sint aliquid labore! Repellendus, libero enim
-          reprehenderit distinctio repellat officiis excepturi non ea eligendi
-          quos nesciunt maiores?
-        </p>
+        <p>{post?.content}</p>
         <ul className="flex items-center justify-between mt-1">
           <div className="flex gap-2">
             <li
@@ -95,32 +90,34 @@ const PostListItem = ({ post }: PostListItemProps) => {
               <span> 10</span>
             </li>
           </div>
-          <div className="flex">
-            <li
-              onClick={e => {
-                e.stopPropagation();
-              }}
-              onMouseEnter={() => setIsEdit(true)}
-              onMouseLeave={() => setIsEdit(false)}
-              className={`flex font-bold items-center gap-1 text-green-600 dark:text-emerald-400 pointerhover:hover:text-green-600 p-3 dark:pointerhover:hover:bg-gray-700 pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[50%] ${
-                isEdit && 'text-green-600'
-              }`}
-            >
-              {isEdit ? <AiTwotoneEdit /> : <AiOutlineEdit />}
-            </li>
-            <li
-              onClick={e => {
-                e.stopPropagation();
-              }}
-              onMouseEnter={() => setIsDelete(true)}
-              onMouseLeave={() => setIsDelete(false)}
-              className={`flex font-bold items-center gap-1 text-red-600 pointerhover:hover:text-red-600 p-3 dark:pointerhover:hover:bg-gray-700  pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[50%] ${
-                isDelete && 'text-red-600'
-              }`}
-            >
-              {isDelete ? <AiFillDelete /> : <AiOutlineDelete />}
-            </li>
-          </div>
+          {user?.uid === post?.uid && (
+            <div className="flex">
+              <li
+                onClick={e => {
+                  e.stopPropagation();
+                }}
+                onMouseEnter={() => setIsEdit(true)}
+                onMouseLeave={() => setIsEdit(false)}
+                className={`flex font-bold items-center gap-1 text-green-600 dark:text-emerald-400 pointerhover:hover:text-green-600 p-3 dark:pointerhover:hover:bg-gray-700 pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[50%] ${
+                  isEdit && 'text-green-600'
+                }`}
+              >
+                {isEdit ? <AiTwotoneEdit /> : <AiOutlineEdit />}
+              </li>
+              <li
+                onClick={e => {
+                  e.stopPropagation();
+                }}
+                onMouseEnter={() => setIsDelete(true)}
+                onMouseLeave={() => setIsDelete(false)}
+                className={`flex font-bold items-center gap-1 text-red-600 pointerhover:hover:text-red-600 p-3 dark:pointerhover:hover:bg-gray-700  pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[50%] ${
+                  isDelete && 'text-red-600'
+                }`}
+              >
+                {isDelete ? <AiFillDelete /> : <AiOutlineDelete />}
+              </li>
+            </div>
+          )}
         </ul>
       </div>
     </li>
