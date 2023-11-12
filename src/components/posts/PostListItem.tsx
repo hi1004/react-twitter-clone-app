@@ -1,5 +1,6 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
+import { editModalState } from '@/store/modal/homeModalAtoms';
 import { PostProps } from '@/store/posts/postAtoms';
 import { useContext, useState } from 'react';
 import {
@@ -11,6 +12,7 @@ import {
 } from 'react-icons/ai';
 import { GoComment } from 'react-icons/go';
 import { useNavigate } from 'react-router';
+import { useSetRecoilState } from 'recoil';
 
 interface PostListItemProps {
   post: PostProps;
@@ -19,11 +21,12 @@ interface PostListItemProps {
 const PostListItem = ({ post }: PostListItemProps) => {
   const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const setIsEditModalOpen = useSetRecoilState(editModalState);
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
   const navigate = useNavigate();
   return (
     <li
-      onClick={() => navigate('/posts/:id')}
+      onClick={() => navigate(`/posts/${post?.id}`)}
       className="flex px-6 pt-4 pb-2 border-b cursor-pointer border-b-gray-300 dark:border-b-slate-700 dark:pointerhover:hover:bg-slate-800 pointerhover:hover:bg-gray-100"
     >
       <div
@@ -95,6 +98,8 @@ const PostListItem = ({ post }: PostListItemProps) => {
               <li
                 onClick={e => {
                   e.stopPropagation();
+                  // navigate(`/posts/edit/${post?.id}`);
+                  setIsEditModalOpen(true);
                 }}
                 onMouseEnter={() => setIsEdit(true)}
                 onMouseLeave={() => setIsEdit(false)}

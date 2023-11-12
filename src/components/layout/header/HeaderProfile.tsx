@@ -1,4 +1,4 @@
-import { homeModalState } from '@/store/Nav/homeModalAtoms';
+import { homeModalState } from '@/store/modal/homeModalAtoms';
 import { User } from 'firebase/auth';
 import { FaUserCircle } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router';

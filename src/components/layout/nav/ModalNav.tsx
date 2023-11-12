@@ -1,7 +1,7 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import MenuNavItem from '@/components/layout/nav/MenuNavItem';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
-import { homeModalState } from '@/store/Nav/homeModalAtoms';
+import { homeModalState } from '@/store/modal/homeModalAtoms';
 import { useContext } from 'react';
 import { useRecoilState } from 'recoil';
 

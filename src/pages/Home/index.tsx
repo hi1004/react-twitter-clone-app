@@ -1,11 +1,12 @@
 import ModalNav from '@/components/layout/nav/ModalNav';
 import PostList from '@/components/posts/PostList';
-import { homeModalState } from '@/store/Nav/homeModalAtoms';
+import { homeModalState } from '@/store/modal/homeModalAtoms';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 const HomePage = () => {
   const setIsModalOpen = useSetRecoilState(homeModalState);
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {

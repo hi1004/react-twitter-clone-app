@@ -40,7 +40,7 @@ const LoginPage = () => {
   };
   return (
     <>
-      <form className="sm:max-w-sm sm:m-auto md:flex md:max-w-[80%] md:justify-center md:items-center md:gap-8">
+      <form className="sm:max-w-sm sm:m-auto md:flex md:max-w-[100%] md:w-full md:justify-center md:items-center md:gap-8">
         <RiTwitterXLine className="max-w-[757px] max-h-[444px] w-full h-full flex-1 hidden md:block" />
         <div className="flex-1">
           <h1 className="text-4xl leading-[50px] font-semibold sm:text-6xl sm:leading-[80px] sm:font-bold">
