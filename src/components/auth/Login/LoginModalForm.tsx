@@ -34,6 +34,7 @@ const LoginModalForm = ({
         `${auth.currentUser?.displayName}様、ログインに成功しました`
       );
       closeLoginPage();
+
       navigate('/');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,7 +73,7 @@ const LoginModalForm = ({
             isSubmitted={isSubmitted}
           />
           <div className="mt-5">
-            <Button label="ログインする" disabled={isSubmitted || !isValid} />
+            <Button label="ログインする" disabled={!isValid} />
           </div>
         </div>
         <p className="mt-5 font-light">

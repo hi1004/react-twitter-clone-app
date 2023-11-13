@@ -6,6 +6,7 @@ import { useSetRecoilState } from 'recoil';
 
 const ProfilePage = () => {
   const setIsModalOpen = useSetRecoilState(homeModalState);
+
   return (
     <div>
       porifle

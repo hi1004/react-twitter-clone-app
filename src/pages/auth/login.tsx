@@ -36,7 +36,6 @@ const LoginPage = () => {
     e.preventDefault();
     clickLoginButton();
   };
-  console.log(isLoginModalOpen);
   return (
     <>
       <form className="sm:max-w-sm sm:m-auto md:flex md:max-w-[100%] md:w-full md:justify-center md:items-center md:gap-8">
