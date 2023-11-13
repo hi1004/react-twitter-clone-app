@@ -1,11 +1,12 @@
 import { homeModalState } from '@/store/modal/homeModalAtoms';
+import { PostProps } from '@/store/posts/postAtoms';
 import { User } from 'firebase/auth';
 import { FaUserCircle } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 
 interface HeaderProfileProps {
-  user: User | null;
+  user: User | PostProps | null;
   toProfile?: boolean;
 }
 

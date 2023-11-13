@@ -3,7 +3,11 @@ import Button from '@/components/ui/Button';
 import Toggle from '@/components/ui/Toggle';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
 import ThemeContext from '@/context/ThemeContext';
-import { homeModalState, postModalState } from '@/store/modal/homeModalAtoms';
+import {
+  editModalState,
+  homeModalState,
+  postModalState,
+} from '@/store/modal/homeModalAtoms';
 import { homeResizeState } from '@/store/posts/postAtoms';
 import { useContext, useEffect, useState } from 'react';
 import { AiOutlineHome, AiOutlineSearch, AiTwotoneHome } from 'react-icons/ai';
@@ -27,6 +31,7 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
   const setIsMobileSize = useSetRecoilState(homeResizeState);
   const [isPostIconVisible, setIsPostIconVisible] = useState<boolean>(false);
   const setIsPostModalOpen = useSetRecoilState(postModalState);
+  const setIsEditModalOpen = useSetRecoilState(editModalState);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -35,7 +40,12 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
       if (window.innerWidth < 768) {
         setIsMobileSize(true);
         setIsPostModalOpen(false);
-      } else if (window.innerWidth < 1280) {
+        setIsEditModalOpen(false);
+      } else {
+        setIsMobileSize(false);
+      }
+
+      if (window.innerWidth < 1280) {
         setIsPostIconVisible(true);
       } else {
         setIsMobileSize(false);

@@ -9,7 +9,10 @@ import { FaFileImage } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useRecoilState } from 'recoil';
 
-const PostForm = () => {
+interface PostFormProps {
+  autoFocus?: boolean;
+}
+const PostForm = ({ autoFocus }: PostFormProps) => {
   const [content, setContent] = useState<string>('');
   const textarea = useRef<HTMLTextAreaElement | null>(null);
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
@@ -38,6 +41,8 @@ const PostForm = () => {
         }),
         uid: user?.uid,
         email: user?.email,
+        photoURL: user?.photoURL,
+        displayName: user?.displayName,
       });
       setContent('');
       setIsPostModalOpen(false);
@@ -67,6 +72,7 @@ const PostForm = () => {
             className={`w-full text-xl h-auto bg-transparent border-none outline-none resize-none`}
             onChange={handleChange}
             value={content}
+            autoFocus={autoFocus}
             placeholder="いまどうしてる？"
           />
           <div className="flex items-center justify-between mt-1">

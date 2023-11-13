@@ -1,7 +1,11 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
 import { editModalState } from '@/store/modal/homeModalAtoms';
-import { PostProps } from '@/store/posts/postAtoms';
+import {
+  PostProps,
+  homeResizeState,
+  postIdState,
+} from '@/store/posts/postAtoms';
 import { useContext, useState } from 'react';
 import {
   AiFillDelete,
@@ -12,7 +16,7 @@ import {
 } from 'react-icons/ai';
 import { GoComment } from 'react-icons/go';
 import { useNavigate } from 'react-router';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 interface PostListItemProps {
   post: PostProps;
@@ -22,11 +26,19 @@ const PostListItem = ({ post }: PostListItemProps) => {
   const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const setIsEditModalOpen = useSetRecoilState(editModalState);
-  const { user } = useContext(AuthContext as React.Context<AuthProps>);
+  const isMobileSize = useRecoilValue(homeResizeState);
+  const setCurrentPostId = useSetRecoilState(postIdState);
+  const loggedInUser = useContext(AuthContext as React.Context<AuthProps>)
+    ?.user;
   const navigate = useNavigate();
   return (
     <li
-      onClick={() => navigate(`/posts/${post?.id}`)}
+      onClick={() => {
+        if (post?.id) {
+          setCurrentPostId(post?.id);
+          navigate(`/posts/${post?.id}`);
+        }
+      }}
       className="flex px-6 pt-4 pb-2 border-b cursor-pointer border-b-gray-300 dark:border-b-slate-700 dark:pointerhover:hover:bg-slate-800 pointerhover:hover:bg-gray-100"
     >
       <div
@@ -36,8 +48,9 @@ const PostListItem = ({ post }: PostListItemProps) => {
           e.stopPropagation();
         }}
       >
-        <HeaderProfile user={user} toProfile />
+        <HeaderProfile user={post} toProfile />
       </div>
+
       <div className="flex flex-col w-full" role="presentation">
         <div className="flex gap-1">
           <div
@@ -48,23 +61,23 @@ const PostListItem = ({ post }: PostListItemProps) => {
             }}
             className="font-bold cursor-pointer pointerhover:hover:underline"
           >
-            {user?.displayName}
+            {post?.displayName}
           </div>
           <div className="text-sm cursor-pointer text-slate-500">
             @
-            {!user?.email
-              ? user?.displayName
+            {!post?.email
+              ? post?.displayName
                   ?.replace(/[^\w\s]/g, '')
                   ?.match(/\S+\s/)?.[0]
                   ?.toLocaleLowerCase()
-              : user?.email?.replace(/@.*$/, '').toLocaleLowerCase()}
+              : post?.email?.replace(/@.*$/, '').toLocaleLowerCase()}
             ・
             <span
               className=" pointerhover:hover:underline"
               role="presentation"
               onClick={e => {
                 e.stopPropagation();
-                navigate('/posts/:id');
+                navigate(`/posts/${post?.id}`);
               }}
             >
               {new Date().toLocaleDateString()}
@@ -93,13 +106,18 @@ const PostListItem = ({ post }: PostListItemProps) => {
               <span> 10</span>
             </li>
           </div>
-          {user?.uid === post?.uid && (
+          {loggedInUser?.uid === post?.uid && (
             <div className="flex">
               <li
                 onClick={e => {
                   e.stopPropagation();
-                  // navigate(`/posts/edit/${post?.id}`);
-                  setIsEditModalOpen(true);
+                  if (isMobileSize) {
+                    if (post?.id) setCurrentPostId(post?.id);
+                    navigate(`/posts/edit/${post?.id}`);
+                  } else {
+                    if (post?.id) setCurrentPostId(post?.id);
+                    setIsEditModalOpen(true);
+                  }
                 }}
                 onMouseEnter={() => setIsEdit(true)}
                 onMouseLeave={() => setIsEdit(false)}

@@ -4,6 +4,7 @@ interface ButtonProps {
   label: string;
   className?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   outline?: boolean;
   small?: boolean;
@@ -27,7 +28,6 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      type="submit"
       id={id}
       name={id}
       className={

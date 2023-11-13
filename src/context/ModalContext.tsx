@@ -41,12 +41,11 @@ export const ModalProvider = ({ children }: ModalProps) => {
     setIsLoginModalOpen(false);
   };
 
-  if (!login) {
+  if (!isLoginModalOpen) {
     useEffect(() => {
       const handleResize = () => {
         if (location.pathname === '/signup' && window.innerWidth < 768) {
           closeModal();
-          setLogin(false);
           setIsLoginModalOpen(false);
         } else if (
           location.pathname === '/signup' &&
@@ -96,7 +95,7 @@ export const ModalProvider = ({ children }: ModalProps) => {
         ) {
           setLoading(true);
           setTimeout(() => {
-            openModal();
+            clickLoginButton();
             setLoading(false);
           }, 400);
         } else if (
@@ -106,13 +105,11 @@ export const ModalProvider = ({ children }: ModalProps) => {
         ) {
           setLoading(true);
           setTimeout(() => {
-            closeModal();
+            closeLoginPage();
             setLoading(false);
           }, 400);
         }
       };
-      setLogin(true);
-      setIsLoginModalOpen(true);
 
       handleResize();
       window.addEventListener('resize', handleResize);

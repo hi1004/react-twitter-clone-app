@@ -34,10 +34,9 @@ const LoginPage = () => {
   };
   const onLoginClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!isLoginModalOpen) {
-      clickLoginButton();
-    }
+    clickLoginButton();
   };
+  console.log(isLoginModalOpen);
   return (
     <>
       <form className="sm:max-w-sm sm:m-auto md:flex md:max-w-[100%] md:w-full md:justify-center md:items-center md:gap-8">
@@ -91,7 +90,7 @@ const LoginPage = () => {
           />
         </div>
       </form>
-      {login && (
+      {isLoginModalOpen && (
         <Modal
           isOpen={isLoginModalOpen}
           onClose={closeLoginPage}

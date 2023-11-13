@@ -33,57 +33,63 @@ const LoginModalForm = ({
       toast.success(
         `${auth.currentUser?.displayName}様、ログインに成功しました`
       );
+      closeLoginPage();
       navigate('/');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log(error);
-
-      toast.error('ログインに失敗しました');
       onLoginClick();
+      toast.error('ログインに失敗しました');
     }
   });
   return (
-    <form
-      className="flex flex-col items-center justify-center w-full px-1 sm:px-16"
-      onSubmit={onSubmit}
-    >
-      <h2 className="mb-12 text-2xl font-bold">Xにログイン</h2>
+    <div className="flex flex-col w-full items-centerjustify-center sm:px-10">
+      <h2 className="mb-12 text-2xl font-bold text-center">Xにログイン</h2>
+
       <OAuth login={login} />
-      <div className="flex flex-col w-full gap-4 mt-4">
-        <Input
-          id="email"
-          label="email"
-          register={register}
-          errors={errors}
-          isSubmitted={isSubmitted}
-        />
-        <Input
-          id="password"
-          type="password"
-          label="password"
-          register={register}
-          errors={errors}
-          isSubmitted={isSubmitted}
-        />
-        <div className="mt-5">
-          <Button label="login" disabled={isSubmitted || !isValid} />
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          onSubmit();
+        }}
+        className="flex flex-col items-center justify-center w-full px-1"
+      >
+        <div className="flex flex-col w-full gap-4 mt-4">
+          <Input
+            id="email"
+            label="email"
+            register={register}
+            errors={errors}
+            isSubmitted={isSubmitted}
+          />
+          <Input
+            id="password"
+            type="password"
+            label="password"
+            register={register}
+            errors={errors}
+            isSubmitted={isSubmitted}
+          />
+          <div className="mt-5">
+            <Button label="ログインする" disabled={isSubmitted || !isValid} />
+          </div>
         </div>
-      </div>
-      <p className="mt-5 font-light">
-        アカウントをお持ちでない場合は
-        <span
-          role="presentation"
-          className="cursor-pointer text-primary pointerhover:hover:underline"
-          onClick={() => {
-            closeLoginPage();
-            navigate('/signup');
-          }}
-        >
-          登録
-        </span>
-      </p>
-    </form>
+        <p className="mt-5 font-light">
+          アカウントをお持ちでない場合は
+          <span
+            role="presentation"
+            className="cursor-pointer text-primary pointerhover:hover:underline"
+            onClick={() => {
+              closeLoginPage();
+              navigate('/signup');
+            }}
+          >
+            登録
+          </span>
+        </p>
+      </form>
+    </div>
   );
 };
 

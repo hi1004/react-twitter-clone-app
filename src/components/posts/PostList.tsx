@@ -1,12 +1,10 @@
 import PostEditForm from '@/components/posts/PostEditForm';
 import Loader from '@/components/ui/Loader';
-import { db } from '@/firebaseApp';
 import { editModalState, postModalState } from '@/store/modal/homeModalAtoms';
-import { PostProps, postState } from '@/store/posts/postAtoms';
-import { collection, onSnapshot, orderBy, query } from '@firebase/firestore';
-import React, { Suspense, useEffect } from 'react';
+import { postState } from '@/store/posts/postAtoms';
+import React, { Suspense } from 'react';
 import { CgClose } from 'react-icons/cg';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const PostNav = React.lazy(() => import('@/components/posts/PostNav'));
 const PostForm = React.lazy(() => import('@/components/posts/PostForm'));
@@ -18,21 +16,9 @@ const HomeAside = React.lazy(
 );
 
 const PostList = () => {
-  const [posts, setPosts] = useRecoilState(postState);
+  const posts = useRecoilValue(postState);
   const [isPostModalOpen, setIsPostModalOpen] = useRecoilState(postModalState);
   const [isEditModalOpen, setIsEditModalOpen] = useRecoilState(editModalState);
-  useEffect(() => {
-    const postRef = collection(db, 'posts');
-    const postsQuery = query(postRef, orderBy('createdAt', 'desc'));
-    onSnapshot(postsQuery, snapShot => {
-      const dataObj = snapShot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc?.id,
-      }));
-
-      setPosts(dataObj as PostProps[]);
-    });
-  }, []);
 
   return (
     <div className="flex flex-col relative justify-between gap-4 mt-[3.75rem] md:mt-0 md:flex-row">
@@ -55,7 +41,7 @@ const PostList = () => {
             >
               <CgClose />
             </div>
-            <PostForm />
+            <PostForm autoFocus />
           </div>
         </Suspense>
       )}
