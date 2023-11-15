@@ -45,7 +45,7 @@ const LoginModalForm = ({
     }
   });
   return (
-    <div className="flex flex-col w-full items-centerjustify-center sm:px-10">
+    <div className="flex flex-col justify-center w-full items-centerjustify-center sm:px-10">
       <h2 className="mb-12 text-2xl font-bold text-center">Xにログイン</h2>
 
       <OAuth login={login} />

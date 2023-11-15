@@ -53,12 +53,12 @@ export const ModalProvider = ({ children }: ModalProps) => {
         ) {
           setLoading(true);
           setTimeout(() => {
-            navigate('/login');
+            navigate('/');
             openModal();
             setLoading(false);
           }, 400);
         } else if (
-          location.pathname === '/login' &&
+          location.pathname === '/' &&
           isModalOpen &&
           window.innerWidth < 768
         ) {
@@ -99,7 +99,7 @@ export const ModalProvider = ({ children }: ModalProps) => {
             setLoading(false);
           }, 400);
         } else if (
-          location.pathname === '/login' &&
+          location.pathname === '/' &&
           isModalOpen &&
           window.innerWidth < 768
         ) {

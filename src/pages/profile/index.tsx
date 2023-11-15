@@ -1,3 +1,4 @@
+import Button from '@/components/ui/Button';
 import { app } from '@/firebaseApp';
 import { homeModalState } from '@/store/modal/homeModalAtoms';
 import { getAuth, signOut } from '@firebase/auth';
@@ -16,8 +17,9 @@ const ProfilePage = () => {
           setIsModalOpen(false);
           toast.success('logout');
         }}
+        className="cursor-pointer"
       >
-        logOut
+        <Button label="logOut" />
       </div>
     </div>
   );
