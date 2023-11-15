@@ -1,5 +1,5 @@
 import MenuNavItem from '@/components/layout/nav/MenuNavItem';
-import { homeModalState } from '@/store/Nav/homeModalAtoms';
+import { homeModalState } from '@/store/modal/homeModalAtoms';
 import { useRecoilValue } from 'recoil';
 
 const MenuNav = () => {

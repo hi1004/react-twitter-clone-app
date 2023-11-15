@@ -1,4 +1,4 @@
-import { homeModalState } from '@/store/Nav/homeModalAtoms';
+import { homeModalState } from '@/store/modal/homeModalAtoms';
 import { useRecoilValue } from 'recoil';
 
 const PostNav = () => {

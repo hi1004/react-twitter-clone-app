@@ -10,7 +10,7 @@ interface ModalProps {
 
 const Modal = ({ isOpen, onClose, children, isSubmitted }: ModalProps) => {
   useEffect(() => {
-    if (isSubmitted) onClose();
+    if (!isOpen) onClose();
   }, [isSubmitted]);
   if (!isOpen) return null;
 

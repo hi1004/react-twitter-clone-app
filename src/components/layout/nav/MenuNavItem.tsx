@@ -1,15 +1,22 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
+import Button from '@/components/ui/Button';
 import Toggle from '@/components/ui/Toggle';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
 import ThemeContext from '@/context/ThemeContext';
-import { homeModalState } from '@/store/Nav/homeModalAtoms';
-import { useContext } from 'react';
+import {
+  editModalState,
+  homeModalState,
+  postModalState,
+} from '@/store/modal/homeModalAtoms';
+import { homeResizeState } from '@/store/posts/postAtoms';
+import { useContext, useEffect, useState } from 'react';
 import { AiOutlineHome, AiOutlineSearch, AiTwotoneHome } from 'react-icons/ai';
 import { ImSearch } from 'react-icons/im';
 import { IoIosNotifications, IoMdNotificationsOutline } from 'react-icons/io';
 import { RiTwitterXLine } from 'react-icons/ri';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { SlPencil } from 'react-icons/sl';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 interface MenuNavItemProps {
   gridRow?: string;
@@ -18,9 +25,39 @@ interface MenuNavItemProps {
 
 const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
   const isModalOpen = useRecoilValue(homeModalState);
+  const setIsModalOpen = useSetRecoilState(postModalState);
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
   const { isDark, toggleTheme } = useContext(ThemeContext);
+  const setIsMobileSize = useSetRecoilState(homeResizeState);
+  const [isPostIconVisible, setIsPostIconVisible] = useState<boolean>(false);
+  const setIsPostModalOpen = useSetRecoilState(postModalState);
+  const setIsEditModalOpen = useSetRecoilState(editModalState);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsMobileSize(true);
+        setIsPostModalOpen(false);
+        setIsEditModalOpen(false);
+      } else {
+        setIsMobileSize(false);
+      }
+
+      if (window.innerWidth < 1280) {
+        setIsPostIconVisible(true);
+      } else {
+        setIsMobileSize(false);
+        setIsPostIconVisible(false);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [setIsMobileSize]);
 
   return (
     <ul
@@ -131,6 +168,13 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
             </span>
           </NavLink>
         </li>
+        <li className={`${isModalOpen && 'hidden'} mt-4 hidden md:block`}>
+          <Button
+            label={isPostIconVisible ? '' : 'ポストする'}
+            onClick={() => setIsModalOpen(true)}
+            icon={SlPencil}
+          />
+        </li>
       </div>
 
       <li
@@ -138,7 +182,13 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
           isModalOpen && 'hidden'
         } hidden md:items-center xl:items-start md:flex md:flex-col-reverse xl:pl-2  p-3  gap-4 xl:m-0 md:m-auto md:mb-4 xl:mb-4 `}
       >
-        <div className="flex w-full xl:pr-4 items-center gap-4 cursor-pointer p-3  dark:pointerhover:hover:bg-gray-700 pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[9999px]">
+        <div
+          onClick={() => {
+            if (location.pathname !== `/profile/${user?.uid}`)
+              navigate(`/profile/${user?.uid}`);
+          }}
+          className="flex w-full xl:pr-4 items-center gap-4 cursor-pointer p-3  dark:pointerhover:hover:bg-gray-700 pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[9999px]"
+        >
           {user && <HeaderProfile user={user} toProfile />}
 
           <div className="flex flex-col md:hidden xl:flex">

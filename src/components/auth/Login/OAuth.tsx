@@ -18,34 +18,34 @@ const OAuth = ({ login }: OAutProps) => {
       {login ? (
         <>
           <Button
-            label={'Githubのアカウントでログイン'}
-            id="login-github"
-            outline
-            icon={AiFillGithub}
-            onClick={handleSocalLogin}
-          />
-          <Button
             label={'Googleでログイン'}
             id="login-google"
             outline
             icon={FcGoogle}
             onClick={handleSocalLogin}
           />
-        </>
-      ) : (
-        <>
           <Button
-            label={'Githubのアカウントで登録'}
-            id="github"
+            label={'Githubのアカウントでログイン'}
+            id="login-github"
             outline
             icon={AiFillGithub}
             onClick={handleSocalLogin}
           />
+        </>
+      ) : (
+        <>
           <Button
             label={'Googleで登録'}
             id="google"
             outline
             icon={FcGoogle}
+            onClick={handleSocalLogin}
+          />
+          <Button
+            label={'Githubのアカウントで登録'}
+            id="github"
+            outline
+            icon={AiFillGithub}
             onClick={handleSocalLogin}
           />
         </>
