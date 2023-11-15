@@ -10,6 +10,8 @@ interface ButtonProps {
   small?: boolean;
   icon?: IconType;
   color?: string;
+  bgcolor?: string;
+  borderColor?: string;
   name?: string;
   register?: UseFormRegister<FieldValues>;
   id?: string;
@@ -23,6 +25,8 @@ const Button = ({
   small,
   icon: Icon,
   color,
+  borderColor,
+  bgcolor,
   register,
   id,
 }: ButtonProps) => {
@@ -45,13 +49,15 @@ const Button = ({
         border-[1px]
         w-full
         pointerhover:hover:opacity-80
+        ${bgcolor && bgcolor}
+        ${borderColor && borderColor}
 
         ${outline ? 'bg-white' : 'bg-primary'}
         ${outline ? 'border-slate-300' : 'border-primary'}
         ${outline ? `${color ? color : 'text-slate-700'} ` : 'text-white'}
         ${disabled && 'border-slate-400'}
         ${small ? 'text-xs' : 'text-sm'}
-        ${small ? 'py-1' : 'py-2'}
+        ${small ? 'py-1' : 'py-3'}
         ${small ? 'font-medium' : 'font-semibold'}
         `
       }

@@ -184,7 +184,8 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
       >
         <div
           onClick={() => {
-            if (location.pathname !== '/profile') navigate('/profile');
+            if (location.pathname !== `/profile/${user?.uid}`)
+              navigate(`/profile/${user?.uid}`);
           }}
           className="flex w-full xl:pr-4 items-center gap-4 cursor-pointer p-3  dark:pointerhover:hover:bg-gray-700 pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[9999px]"
         >

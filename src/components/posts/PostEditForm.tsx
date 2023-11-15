@@ -39,7 +39,6 @@ const PostEditForm = () => {
   useEffect(() => {
     if (currentPostId) {
       getPost();
-      console.log('getpost');
     }
   }, [getPost]);
   useEffect(() => {
@@ -80,7 +79,9 @@ const PostEditForm = () => {
   return (
     <>
       <form
-        className="w-full px-6 pt-4 pb-2 border-b dark:border-b-slate-700"
+        className={`w-full px-6 pt-4 pb-4 ${
+          isEditModalOpen ? ' border-none' : 'border-b dark:border-b-slate-700'
+        } `}
         onSubmit={handlePostEditSubmit}
       >
         <div className="flex gap-4 ">
@@ -90,12 +91,12 @@ const PostEditForm = () => {
 
           <div
             className={`flex flex-col justify-between w-full ${
-              isEditModalOpen && 'min-h-[200px]'
+              isEditModalOpen && 'min-h-[200px] h-full'
             }`}
           >
             <textarea
               ref={textarea}
-              className={`w-full text-xl h-auto bg-transparent outline-none resize-none`}
+              className={`w-full text-xl h-auto bg-transparent outline-none  min-h-[480px]  resize-none`}
               onChange={handleChange}
               value={content}
               placeholder="いまどうしてる？"

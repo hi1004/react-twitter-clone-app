@@ -1,8 +1,6 @@
 import HomeAside from '@/components/layout/aside/HomeAside';
 import ModalNav from '@/components/layout/nav/ModalNav';
 import PostDetail from '@/components/posts/PostDetail';
-import Loader from '@/components/ui/Loader';
-import { Suspense } from 'react';
 
 const PostDetailPage = () => {
   return (
@@ -10,9 +8,7 @@ const PostDetailPage = () => {
       <ModalNav />
       <PostDetail />
       <div className="relative hidden lg:block">
-        <Suspense fallback={<Loader />}>
-          <HomeAside />
-        </Suspense>
+        <HomeAside />
       </div>
     </div>
   );

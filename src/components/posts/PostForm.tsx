@@ -45,6 +45,7 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
         displayName: user?.displayName,
       });
       setContent('');
+      if (textarea.current) textarea.current.style.height = 'auto';
       setIsPostModalOpen(false);
       toast.success('Tweetできました');
     } catch (e) {
@@ -54,7 +55,9 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
 
   return (
     <form
-      className="w-full px-6 pt-4 pb-2 border-b dark:border-b-slate-700"
+      className={`w-full px-6 pt-4 pb-4 ${
+        isPostModalOpen ? 'border-none' : 'border-b dark:border-b-slate-700'
+      }`}
       onSubmit={handlePostSubmit}
     >
       <div className="flex gap-4 ">
@@ -63,13 +66,13 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
         </div>
 
         <div
-          className={`flex flex-col ${
-            isPostModalOpen && 'min-h-[200px]'
+          className={`flex flex-col  ${
+            isPostModalOpen && 'min-h-[200px] '
           }  justify-between w-full`}
         >
           <textarea
             ref={textarea}
-            className={`w-full text-xl h-auto bg-transparent border-none outline-none resize-none`}
+            className={`w-full text-xl h-auto bg-transparent max-h-[580px]  border-none outline-none resize-none`}
             onChange={handleChange}
             value={content}
             autoFocus={autoFocus}

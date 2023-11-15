@@ -13,3 +13,8 @@ export const editModalState = atom({
   key: 'editModalState',
   default: false,
 });
+
+export const deleteModalState = atom({
+  key: 'deleteModalState',
+  default: false,
+});

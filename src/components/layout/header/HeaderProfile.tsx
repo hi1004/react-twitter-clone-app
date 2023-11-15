@@ -14,6 +14,7 @@ const HeaderProfile = ({ user, toProfile = false }: HeaderProfileProps) => {
   const setIsModalOpen = useSetRecoilState(homeModalState);
   const navigate = useNavigate();
   const location = useLocation();
+
   const openModal = () => {
     if (!toProfile) {
       setIsModalOpen(true);
@@ -27,8 +28,8 @@ const HeaderProfile = ({ user, toProfile = false }: HeaderProfileProps) => {
           <div
             onClick={e => {
               e.stopPropagation();
-              if (location.pathname !== '/profile') {
-                toProfile && navigate('/profile');
+              if (location.pathname !== `/profile/${user.uid}`) {
+                toProfile && navigate(`/profile/${user.uid}`);
               }
             }}
             className="flex items-center justify-center w-10 h-10 overflow-hidden rounded-full cursor-pointer"

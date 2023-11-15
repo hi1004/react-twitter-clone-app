@@ -9,7 +9,6 @@ const ProfilePage = () => {
 
   return (
     <div>
-      porifle
       <div
         onClick={async () => {
           const auth = getAuth(app);
