@@ -57,6 +57,35 @@ const PostListItem = ({ post }: PostListItemProps) => {
       setIsDeleteModalOpen(true);
     }
   };
+
+  const getFormattedTime = (createdAt: string) => {
+    const currentDate = new Date();
+    const postDate = new Date(createdAt);
+
+    const timeDifference = currentDate.getTime() - postDate.getTime();
+    const secondsDifference = Math.floor(timeDifference / 1000);
+    const minutesDifference = Math.floor(secondsDifference / 60);
+
+    if (minutesDifference === 0) {
+      return '現在';
+    }
+    if (minutesDifference < 60) {
+      return `${minutesDifference}分前`;
+    }
+    if (minutesDifference < 1440) {
+      // 一日（２４時間*６０分）
+      const hoursDifference = Math.floor(minutesDifference / 60);
+      return `${hoursDifference}時間前`;
+    } else {
+      return postDate.toLocaleString('ja-JP', {
+        month: 'long',
+        day: 'numeric',
+      });
+    }
+  };
+
+  const formattedTime = post?.createdAt && getFormattedTime(post?.createdAt);
+
   return (
     <li
       onClick={() => {
@@ -110,7 +139,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
                 navigate(`/posts/${post?.id}`);
               }}
             >
-              {new Date().toLocaleDateString()}
+              {formattedTime}
             </span>
           </div>
         </div>
