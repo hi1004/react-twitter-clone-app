@@ -1,4 +1,8 @@
-import { deleteModalState } from '@/store/modal/homeModalAtoms';
+import {
+  deleteModalState,
+  editModalState,
+  postModalState,
+} from '@/store/modal/homeModalAtoms';
 import { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import { useSetRecoilState } from 'recoil';
@@ -9,9 +13,12 @@ interface ModalPortalProps {
 
 const ModalOverlay = ({ children }: ModalPortalProps) => {
   const setIsDeleteModalOpen = useSetRecoilState(deleteModalState);
-
+  const setIsEditModalOpen = useSetRecoilState(editModalState);
+  const setIsPostModalOpen = useSetRecoilState(postModalState);
   const handleOverlayClick = () => {
     setIsDeleteModalOpen(false);
+    setIsEditModalOpen(false);
+    setIsPostModalOpen(false);
   };
 
   return ReactDOM.createPortal(
