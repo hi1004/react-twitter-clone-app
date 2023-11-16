@@ -1,6 +1,14 @@
-const Loader = () => {
+interface LoaderProps {
+  bottom?: boolean;
+}
+
+const Loader = ({ bottom }: LoaderProps) => {
   return (
-    <div className="absolute -translate-x-1/2 -translate-y-1/2 top-48 left-1/2">
+    <div
+      className={`absolute -translate-x-1/2 -translate-y-1/2 ${
+        bottom ? 'bottom-0 left-0' : ' top-48'
+      } left-1/2`}
+    >
       <div role="status">
         <svg
           aria-hidden="true"

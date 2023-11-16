@@ -44,6 +44,7 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
         photoURL: user?.photoURL,
         displayName: user?.displayName,
       });
+
       setContent('');
       if (textarea.current) textarea.current.style.height = 'auto';
       setIsPostModalOpen(false);

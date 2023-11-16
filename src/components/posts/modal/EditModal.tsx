@@ -19,7 +19,7 @@ const EditModal = () => {
               onClick={() => {
                 setIsEditModalOpen(false);
               }}
-              className="flex items-center h-10 gap-12 p-3 rounded-full cursor-pointer w-max pointerhover:hover:bg-gray-200 dark:pointerhover:hover:bg-gray-600 bg-opacity-20"
+              className="flex items-center h-10 gap-12 p-3 m-2 rounded-full cursor-pointer w-max pointerhover:hover:bg-gray-200 dark:pointerhover:hover:bg-gray-600 bg-opacity-20"
             >
               <CgClose />
             </div>

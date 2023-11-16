@@ -95,9 +95,9 @@ const PostListItem = ({ post }: PostListItemProps) => {
         }
       }}
       className={`flex px-6 pt-4 pb-2 border-b ${
-        location.pathname === `/posts/${post?.id}`
+        location.pathname === `/posts/${post?.uid}`
           ? 'cursor-default max-h-full'
-          : 'max-h-[600px]  cursor-pointer'
+          : 'max-h-[600px] min-h-[150px]  cursor-pointer'
       } border-b-gray-300 dark:border-b-slate-700 dark:pointerhover:hover:bg-slate-800 pointerhover:hover:bg-gray-100`}
     >
       <div
@@ -110,7 +110,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
         <HeaderProfile user={post} toProfile />
       </div>
 
-      <div className="flex flex-col w-full" role="presentation">
+      <div className="flex flex-col justify-between w-full" role="presentation">
         <div className="flex gap-1">
           <div
             role="presentation"

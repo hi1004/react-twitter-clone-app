@@ -13,6 +13,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { FaFileImage } from 'react-icons/fa';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
@@ -84,8 +85,20 @@ const PostEditForm = () => {
         } `}
         onSubmit={handlePostEditSubmit}
       >
+        {isMobileSize && (
+          <div className="flex items-center p-3 gap-14">
+            <button
+              onClick={() => navigate('..')}
+              className="p-2 rounded-full dark:pointerhover:hover:bg-slate-600 pointerhover:hover:bg-slate-300 bg-opacity-40"
+            >
+              <AiOutlineArrowLeft size={20} />
+            </button>
+            <span className="text-xl font-semibold">ポストする</span>
+          </div>
+        )}
+
         <div className="flex gap-4 ">
-          <div className={`flexpl-0 cursor-pointer scale-90 h-fit`}>
+          <div className={`flex pl-0 cursor-pointer scale-90 h-fit`}>
             <HeaderProfile user={user} toProfile />
           </div>
 
