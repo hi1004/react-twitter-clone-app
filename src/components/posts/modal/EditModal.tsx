@@ -11,14 +11,9 @@ const EditModal = () => {
       {isEditModalOpen && (
         <ModalPortal>
           <div
-            className="fixed top-0 left-0 z-30 w-full h-full bg-slate-800 bg-opacity-70"
-            onClick={e => {
-              e.stopPropagation();
-              setIsEditModalOpen(false);
-            }}
-          ></div>
-
-          <div className="fixed hidden md:block left-1/2  -translate-x-1/2 z-30 rounded-3xl dark:bg-black bg-white w-[580px] top-36">
+            onClick={e => e.stopPropagation()}
+            className="fixed hidden md:block left-1/2  -translate-x-1/2 z-40 rounded-3xl text-black bg-white dark:bg-slate-800 dark:text-white w-[580px] top-36"
+          >
             <div
               role="presentation"
               onClick={() => {
