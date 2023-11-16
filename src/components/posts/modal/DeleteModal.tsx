@@ -30,7 +30,7 @@ const DeleteModal = ({ postId }: DeleteModal) => {
           <ModalPortal>
             <div
               onClick={e => e.stopPropagation()}
-              className="flex flex-col gap-6 fixed top-1/2 -translate-y-1/2 p-10 left-1/2 dark:bg-slate-800 bg-white text-black  dark:text-white -translate-x-1/2 z-40 rounded-3xl  w-[400px]"
+              className="flex flex-col gap-6 fixed top-1/2 -translate-y-1/2 p-8 sm:p-10 left-1/2 dark:bg-slate-800 bg-white text-black  dark:text-white -translate-x-1/2 z-40 rounded-3xl  w-[330px] sm:w-[400px]"
             >
               <div className="flex flex-col gap-3">
                 <h3 className="text-xl font-semibold">

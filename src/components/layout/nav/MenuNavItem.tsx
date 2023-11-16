@@ -65,7 +65,8 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
         isModalOpen
           ? gridRow
           : 'border-t dark:border-t-slate-700 border-r-slate-300 grid-flow-col col-span-3'
-      } md:flex md:flex-col md:items-center xl:items-start grid xl:w-[280px] md:w-auto md:h-screen md:border-r dark:md:border-r-slate-700 md:border-r-slate-300`}
+      } md:flex md:flex-col md:items-center xl:items-start grid xl:w-[280px] md:w-auto md:h-screen md:border-r dark:md:border-r-slate-700 md:border-r-slate-300
+      `}
     >
       <div
         className={`${

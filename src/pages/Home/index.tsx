@@ -7,11 +7,11 @@ import { PostProps, postState } from '@/store/posts/postAtoms';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { useContext, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-
 const HomePage = () => {
   const setIsModalOpen = useSetRecoilState(homeModalState);
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
   const setPosts = useSetRecoilState(postState);
+
   useEffect(() => {
     if (user) {
       const postRef = collection(db, 'posts');
@@ -26,6 +26,7 @@ const HomePage = () => {
       });
     }
   }, [user]);
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -40,6 +41,7 @@ const HomePage = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   return (
     <div className="w-full md:w-auto">
       <ModalNav />
