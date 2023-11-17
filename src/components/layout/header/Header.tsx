@@ -27,13 +27,14 @@ const Header = () => {
     () =>
       throttle(() => {
         const currentScrollY = window.scrollY;
+        console.log(beforeScrollY.current < currentScrollY);
         if (beforeScrollY.current < currentScrollY) {
           setVisible(false);
         } else {
           setVisible(true);
         }
         beforeScrollY.current = currentScrollY;
-      }, 300),
+      }, 700),
     [beforeScrollY]
   );
   return (
@@ -47,7 +48,11 @@ const Header = () => {
           location.pathname === `/posts/${currentPostId}`) &&
         'hidden'
       }
-      ${user && !visible ? ' -translate-y-[140px]' : 'translate-y-0'}
+      ${
+        user && !visible
+          ? ' -translate-y-[130px]  -mt-[130px]'
+          : 'translate-y-0'
+      }
       md:pt-5`}
     >
       <div className="flex items-center justify-between w-full px-4 ">
