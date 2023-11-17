@@ -1,13 +1,15 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
+import HashTagForm from '@/components/posts/HashTagForm';
 import Button from '@/components/ui/Button';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
 import { db } from '@/firebaseApp';
 import { postModalState } from '@/store/modal/homeModalAtoms';
+import { hashState, tagState } from '@/store/posts/postAtoms';
 import { addDoc, collection } from '@firebase/firestore';
 import React, { FormEvent, useContext, useRef, useState } from 'react';
 import { FaFileImage } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 interface PostFormProps {
   autoFocus?: boolean;
@@ -17,6 +19,8 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
   const textarea = useRef<HTMLTextAreaElement | null>(null);
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
   const [isPostModalOpen, setIsPostModalOpen] = useRecoilState(postModalState);
+  const [tags, setTags] = useRecoilState(tagState);
+  const setHashTag = useSetRecoilState(hashState);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
@@ -43,9 +47,12 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
         email: user?.email,
         photoURL: user?.photoURL,
         displayName: user?.displayName,
+        hashTags: tags,
       });
 
       setContent('');
+      setTags([]);
+      setHashTag('');
       if (textarea.current) textarea.current.style.height = 'auto';
       setIsPostModalOpen(false);
       toast.success('Tweetできました');
@@ -73,12 +80,13 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
         >
           <textarea
             ref={textarea}
-            className={`w-full text-xl h-auto bg-transparent max-h-[580px]  border-none outline-none resize-none`}
+            className={`w-full text-xl h-auto bg-transparent max-h-[580px] mb-3  border-none outline-none resize-none`}
             onChange={handleChange}
             value={content}
             autoFocus={autoFocus}
             placeholder="いまどうしてる？"
           />
+          <HashTagForm />
           <div className="flex items-center justify-between mt-1">
             <div className="">
               <label htmlFor="file-input" className="cursor-pointer">

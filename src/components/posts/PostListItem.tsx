@@ -7,6 +7,7 @@ import {
   homeResizeState,
   postIdState,
 } from '@/store/posts/postAtoms';
+import { uniqueId } from 'lodash';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   AiFillDelete,
@@ -166,6 +167,16 @@ const PostListItem = ({ post }: PostListItemProps) => {
             {location.pathname === `/` && 'さらに表示'}
           </button>
         )}
+        <div className="flex flex-wrap gap-3 pt-6 ">
+          {post?.hashTags?.map(tag => (
+            <span
+              className="text-sm cursor-pointer text-primary"
+              key={uniqueId()}
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
 
         <ul className="flex items-center justify-between mt-1">
           <div className="flex gap-2">

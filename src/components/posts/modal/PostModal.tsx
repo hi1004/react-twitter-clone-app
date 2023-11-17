@@ -19,7 +19,7 @@ const PostModal = () => {
               isMobileSize
                 ? 'flex flex-col w-full h-full top-0 left-0'
                 : 'top-36 rounded-3xl'
-            } left-1/2  -translate-x-1/2 z-40 text-black bg-white dark:bg-slate-800 dark:text-white w-[580px] `}
+            } left-1/2  -translate-x-1/2 z-40 text-black bg-white dark:bg-dark dark:text-white w-[580px] `}
           >
             <div
               role="presentation"
