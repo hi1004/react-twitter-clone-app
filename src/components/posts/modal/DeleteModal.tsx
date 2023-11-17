@@ -2,22 +2,19 @@ import Button from '@/components/ui/Button';
 import ModalPortal from '@/components/ui/ModalPortal';
 import { db } from '@/firebaseApp';
 import { deleteModalState } from '@/store/modal/homeModalAtoms';
+import { postIdState } from '@/store/posts/postAtoms';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-interface DeleteModal {
-  postId?: string;
-}
-
-const DeleteModal = ({ postId }: DeleteModal) => {
+const DeleteModal = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] =
     useRecoilState(deleteModalState);
+  const currentPostId = useRecoilValue(postIdState);
   const navigate = useNavigate();
-
   const handleDelete = async () => {
     if (isDeleteModalOpen) {
-      await deleteDoc(doc(db, 'posts', postId as string));
+      await deleteDoc(doc(db, 'posts', currentPostId as string));
 
       setIsDeleteModalOpen(false);
       navigate('/');

@@ -74,6 +74,11 @@ const PostEditForm = () => {
         await updateDoc(postRef, {
           content,
           hashTags: tags,
+          createdAt: new Date()?.toLocaleDateString('ja', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          }),
         });
         setIsEditModalOpen(false);
         navigate(`/posts/${currentPostId}`);

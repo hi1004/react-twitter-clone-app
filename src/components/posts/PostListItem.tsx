@@ -54,6 +54,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
 
   const handleDelete = async (e: React.MouseEvent<HTMLLIElement>) => {
     e.stopPropagation();
+    if (post?.id) setCurrentPostId(post?.id);
     if (!isDeleteModalOpen) {
       setIsDeleteModalOpen(true);
     }
@@ -230,7 +231,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
               >
                 <>
                   {isDelete ? <AiFillDelete /> : <AiOutlineDelete />}
-                  <DeleteModal postId={post?.id} />
+                  <DeleteModal />
                 </>
               </li>
             </div>
