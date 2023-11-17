@@ -52,3 +52,12 @@ export const postIdState = atom<string>({
   key: 'postIdState',
   default: '',
 });
+
+export const tagState = atom<string[]>({
+  key: 'tagState',
+  default: [],
+});
+export const hashState = atom<string>({
+  key: 'hashState',
+  default: '',
+});

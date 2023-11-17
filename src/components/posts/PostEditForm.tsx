@@ -1,9 +1,14 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
+import HashTagForm from '@/components/posts/HashTagForm';
 import Button from '@/components/ui/Button';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
 import { db } from '@/firebaseApp';
 import { editModalState } from '@/store/modal/homeModalAtoms';
-import { homeResizeState, postIdState } from '@/store/posts/postAtoms';
+import {
+  homeResizeState,
+  postIdState,
+  tagState,
+} from '@/store/posts/postAtoms';
 import { doc, getDoc, updateDoc } from '@firebase/firestore';
 import React, {
   FormEvent,
@@ -17,7 +22,7 @@ import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { FaFileImage } from 'react-icons/fa';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 const PostEditForm = () => {
   const [content, setContent] = useState<string>('');
@@ -28,12 +33,14 @@ const PostEditForm = () => {
   const isMobileSize = useRecoilValue(homeResizeState);
   const currentPostId = useRecoilValue(postIdState);
   const setIsEditModalOpen = useSetRecoilState(editModalState);
+  const [tags, setTags] = useRecoilState(tagState);
   const getPost = useCallback(async () => {
     if (currentPostId) {
       const docRef = doc(db, 'posts', currentPostId);
       const docSnap = await getDoc(docRef);
 
       setContent(docSnap?.data()?.content);
+      setTags(docSnap?.data()?.hashTags);
     }
   }, [currentPostId]);
 
@@ -66,11 +73,12 @@ const PostEditForm = () => {
         const postRef = doc(db, 'posts', currentPostId);
         await updateDoc(postRef, {
           content,
+          hashTags: tags,
         });
         setIsEditModalOpen(false);
         navigate(`/posts/${currentPostId}`);
       }
-
+      setTags([]);
       toast.success('Tweetを修正しました');
     } catch (e) {
       console.log(e);
@@ -88,7 +96,10 @@ const PostEditForm = () => {
         {isMobileSize && (
           <div className="flex items-center p-3 gap-14">
             <button
-              onClick={() => navigate('..')}
+              onClick={() => {
+                navigate('..');
+                setTags([]);
+              }}
               className="p-2 rounded-full dark:pointerhover:hover:bg-slate-600 pointerhover:hover:bg-slate-300 bg-opacity-40"
             >
               <AiOutlineArrowLeft size={20} />
@@ -115,6 +126,7 @@ const PostEditForm = () => {
               placeholder="いまどうしてる？"
               autoFocus
             />
+            <HashTagForm />
             <div className="flex items-center justify-between mt-1">
               <div className="">
                 <label htmlFor="file-input" className="cursor-pointer">
