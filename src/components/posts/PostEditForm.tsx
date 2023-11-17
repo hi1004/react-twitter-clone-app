@@ -118,11 +118,7 @@ const PostEditForm = () => {
             <HeaderProfile user={user} toProfile />
           </div>
 
-          <div
-            className={`flex flex-col justify-between w-full ${
-              isEditModalOpen && 'min-h-[200px] h-full'
-            }`}
-          >
+          <div className={`flex flex-col justify-between w-full`}>
             <textarea
               ref={textarea}
               className={`w-full text-xl h-auto bg-transparent outline-none  min-h-[480px]  resize-none`}

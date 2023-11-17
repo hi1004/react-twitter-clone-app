@@ -28,7 +28,6 @@ const MAX_CONTENT_HEIGHT = 450;
 const PostListItem = ({ post }: PostListItemProps) => {
   const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
   const [isContentExpanded, setIsContentExpanded] = useState(false);
   const setIsEditModalOpen = useSetRecoilState(editModalState);
   const isMobileSize = useRecoilValue(homeResizeState);

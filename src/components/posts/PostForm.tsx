@@ -73,11 +73,7 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
           <HeaderProfile user={user} toProfile />
         </div>
 
-        <div
-          className={`flex flex-col  ${
-            isPostModalOpen && 'min-h-[200px] '
-          }  justify-between w-full`}
-        >
+        <div className={`flex flex-col justify-between w-full`}>
           <textarea
             ref={textarea}
             className={`w-full text-xl h-auto bg-transparent max-h-[580px] mb-3  border-none outline-none resize-none`}
