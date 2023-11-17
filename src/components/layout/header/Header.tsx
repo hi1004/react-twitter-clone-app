@@ -27,19 +27,23 @@ const Header = () => {
     () =>
       throttle(() => {
         const currentScrollY = window.scrollY;
-        console.log(beforeScrollY.current < currentScrollY);
+
         if (beforeScrollY.current < currentScrollY) {
           setVisible(false);
+          beforeScrollY.current = currentScrollY - 130;
         } else {
           setVisible(true);
+          beforeScrollY.current = currentScrollY;
         }
-        beforeScrollY.current = currentScrollY;
-      }, 700),
+        if (beforeScrollY.current <= 130) {
+          beforeScrollY.current = 0;
+        }
+      }, 300),
     [beforeScrollY]
   );
   return (
     <header
-      className={`flex flex-col transition-transform duration-700 items-center justify-between pt-4  ${
+      className={`flex flex-col  transition-transform duration-700 items-center justify-between pt-4  ${
         user
           ? 'md:hidden sticky top-0 backdrop-blur-sm z-10'
           : 'flex mb-12 px-8'
