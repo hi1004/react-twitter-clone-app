@@ -71,6 +71,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
     if (!isDeleteModalOpen) {
       setIsDeleteModalOpen(true);
     }
+    setIsHidden(false);
   };
 
   const getFormattedTime = (createdAt: string) => {
