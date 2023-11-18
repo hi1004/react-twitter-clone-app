@@ -27,7 +27,6 @@ const HeaderProfile = ({
       setIsModalOpen(false);
     }
   };
-  console.log(profilePath);
   return (
     <>
       {user && (
