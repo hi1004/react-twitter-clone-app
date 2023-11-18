@@ -6,6 +6,7 @@ import ThemeContext from '@/context/ThemeContext';
 import {
   editModalState,
   homeModalState,
+  imgModalState,
   postModalState,
 } from '@/store/modal/homeModalAtoms';
 import { homeResizeState } from '@/store/posts/postAtoms';
@@ -34,6 +35,7 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
   const setIsEditModalOpen = useSetRecoilState(editModalState);
   const location = useLocation();
   const navigate = useNavigate();
+  const setIsHidden = useSetRecoilState(imgModalState);
 
   useEffect(() => {
     const handleResize = () => {
@@ -172,7 +174,10 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
         <li className={`${isModalOpen && 'hidden'} mt-4 hidden md:block`}>
           <Button
             label={isPostIconVisible ? '' : 'ポストする'}
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setIsModalOpen(true);
+              setIsHidden(true);
+            }}
             icon={SlPencil}
           />
         </li>

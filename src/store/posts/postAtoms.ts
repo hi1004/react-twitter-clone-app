@@ -43,6 +43,11 @@ export const postObjectState: RecoilValueReadOnly<PostProps[]> = selector({
   },
 });
 
+export const postDataState = atom<PostProps>({
+  key: 'postDataState',
+  default: {},
+});
+
 export const homeResizeState = atom({
   key: 'homeResizeState',
   default: false,

@@ -18,3 +18,8 @@ export const deleteModalState = atom({
   key: 'deleteModalState',
   default: false,
 });
+
+export const imgModalState = atom({
+  key: 'imgModalState',
+  default: false,
+});
