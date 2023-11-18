@@ -1,6 +1,6 @@
 import HomeAside from '@/components/layout/aside/HomeAside';
 import ModalNav from '@/components/layout/nav/ModalNav';
-import ProfileInfo from '@/components/profile/profileInfo';
+import ProfileInfo from '@/components/profile/ProfileInfo';
 import Loader from '@/components/ui/Loader';
 import { Suspense } from 'react';
 
