@@ -19,7 +19,7 @@ const PostModal = () => {
             className={`fixed  md:block ${
               isMobileSize
                 ? 'flex flex-col w-full h-full top-0 left-0'
-                : 'top-36 rounded-3xl  max-h-[780px] overflow-scroll'
+                : 'top-36 rounded-3xl  max-h-[780px] overflow-auto'
             } left-1/2  -translate-x-1/2 z-40 text-black bg-white dark:bg-dark dark:text-white w-[580px] `}
           >
             <div

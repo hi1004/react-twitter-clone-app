@@ -110,7 +110,7 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
         <div className={`flex flex-col justify-between w-full`}>
           <textarea
             ref={textarea}
-            className={`w-full text-xl h-auto bg-transparent max-h-[580px] mb-3  border-none outline-none resize-none`}
+            className={`w-full text-xl h-auto bg-transparent max-h-[580px] mb-3  border-none  outline-none resize-none`}
             onChange={handleChange}
             value={content}
             autoFocus={autoFocus}
@@ -129,7 +129,7 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
               />
               {imageFile && (
                 <div
-                  className={`relative max-h-[380px] overflow-scroll  items-center justify-center flex rounded-xl cursor-pointer`}
+                  className={`relative max-h-[380px]  overflow-hidden  items-center justify-center flex rounded-xl cursor-pointer`}
                 >
                   <img
                     src={imageFile}
