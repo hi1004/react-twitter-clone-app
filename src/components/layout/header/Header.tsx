@@ -6,7 +6,7 @@ import { postIdState } from '@/store/posts/postAtoms';
 import { throttle } from 'lodash';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { RiTwitterXLine } from 'react-icons/ri';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 const Header = () => {
@@ -15,6 +15,7 @@ const Header = () => {
   const currentPostId = useRecoilValue(postIdState);
   const [visible, setVisible] = useState(true);
   const beforeScrollY = useRef(0);
+  const params = useParams();
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -49,7 +50,8 @@ const Header = () => {
           : 'flex mb-12 px-8'
       } ${
         (location.pathname === `/posts/edit/${currentPostId}` ||
-          location.pathname === `/posts/${currentPostId}`) &&
+          location.pathname === `/posts/${currentPostId}` ||
+          location.pathname === `/profile/${params.id}`) &&
         'hidden'
       }
       ${

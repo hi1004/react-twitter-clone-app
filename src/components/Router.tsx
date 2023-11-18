@@ -22,7 +22,6 @@ const Router = ({ isAuthenticated }: RouterProps) => {
           <Route index element={<HomePage />} />
           <Route path="/posts/:id" element={<PostDetailPage />} />
           <Route path="/posts/edit/:id" element={<PostEditPage />} />
-          {/* <Route path="/profile" element={<ProfilePage />} /> */}
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
