@@ -3,7 +3,7 @@ import HashTagForm from '@/components/posts/HashTagForm';
 import Button from '@/components/ui/Button';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
 import { db, storage } from '@/firebaseApp';
-import { editModalState } from '@/store/modal/homeModalAtoms';
+import { editModalState, imgModalState } from '@/store/modal/homeModalAtoms';
 import {
   homeResizeState,
   postDataState,
@@ -45,6 +45,7 @@ const PostEditForm = () => {
   const [imageFile, setImageFile] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const postData = useRecoilValue(postDataState);
+  const setIsHidden = useSetRecoilState(imgModalState);
 
   const getPost = useCallback(async () => {
     if (currentPostId) {
@@ -141,7 +142,7 @@ const PostEditForm = () => {
         setIsEditModalOpen(false);
         navigate(`/posts/${currentPostId}`);
       }
-
+      setIsHidden(false);
       setTags([]);
       setImageFile(null);
       setIsSubmitting(false);
