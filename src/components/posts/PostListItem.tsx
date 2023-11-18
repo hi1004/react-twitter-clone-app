@@ -1,12 +1,18 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
-import DeleteModal from '@/components/posts/modal/DeleteModal';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
-import { deleteModalState, editModalState } from '@/store/modal/homeModalAtoms';
+import { storage } from '@/firebaseApp';
+import {
+  deleteModalState,
+  editModalState,
+  imgModalState,
+} from '@/store/modal/homeModalAtoms';
 import {
   PostProps,
   homeResizeState,
+  postDataState,
   postIdState,
 } from '@/store/posts/postAtoms';
+import { deleteObject, ref } from 'firebase/storage';
 import { uniqueId } from 'lodash';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
@@ -28,7 +34,6 @@ const MAX_CONTENT_HEIGHT = 450;
 const PostListItem = ({ post }: PostListItemProps) => {
   const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
   const [isContentExpanded, setIsContentExpanded] = useState(false);
   const setIsEditModalOpen = useSetRecoilState(editModalState);
   const isMobileSize = useRecoilValue(homeResizeState);
@@ -39,6 +44,9 @@ const PostListItem = ({ post }: PostListItemProps) => {
     ?.user;
   const navigate = useNavigate();
   const contentRef = useRef<HTMLParagraphElement | null>(null);
+  const setPostData = useSetRecoilState(postDataState);
+  const imageRef = ref(storage, post?.imageUrl);
+  const setIsHidden = useSetRecoilState(imgModalState);
 
   useEffect(() => {
     if (contentRef.current) {
@@ -54,6 +62,11 @@ const PostListItem = ({ post }: PostListItemProps) => {
 
   const handleDelete = async (e: React.MouseEvent<HTMLLIElement>) => {
     e.stopPropagation();
+    // storage イメージ削除
+
+    if (post?.imageUrl) {
+      deleteObject(imageRef).catch(error => console.log(error));
+    }
     if (post?.id) setCurrentPostId(post?.id);
     if (!isDeleteModalOpen) {
       setIsDeleteModalOpen(true);
@@ -168,6 +181,21 @@ const PostListItem = ({ post }: PostListItemProps) => {
             {location.pathname === `/` && 'さらに表示'}
           </button>
         )}
+        {post?.imageUrl && (
+          <div
+            className={`overflow-hidden rounded-xl items-center justify-center flex mt-4 mb-2 ${
+              location.pathname === `/posts/${post?.id}`
+                ? 'max-h-full'
+                : 'max-h-[680px]'
+            } `}
+          >
+            <img
+              src={post?.imageUrl}
+              alt={post?.photoURL}
+              className="w-[475px] object-cover"
+            />
+          </div>
+        )}
         <div className="flex flex-wrap gap-3 pt-6 ">
           {post?.hashTags?.map(tag => (
             <span
@@ -211,7 +239,9 @@ const PostListItem = ({ post }: PostListItemProps) => {
                   } else {
                     if (post?.id) setCurrentPostId(post?.id);
                     setIsEditModalOpen(true);
+                    setIsHidden(true);
                   }
+                  setPostData(post);
                 }}
                 onMouseEnter={() => setIsEdit(true)}
                 onMouseLeave={() => setIsEdit(false)}
@@ -229,10 +259,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
                   isDelete && 'text-red-600'
                 }`}
               >
-                <>
-                  {isDelete ? <AiFillDelete /> : <AiOutlineDelete />}
-                  <DeleteModal />
-                </>
+                <>{isDelete ? <AiFillDelete /> : <AiOutlineDelete />}</>
               </li>
             </div>
           )}

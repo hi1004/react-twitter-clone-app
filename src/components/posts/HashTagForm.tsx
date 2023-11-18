@@ -41,8 +41,9 @@ const HashTagForm = () => {
       </div>
       <input
         type="text"
+        autoComplete="off"
         name="hashtag"
-        placeholder="ハッシュタグ + スペースキー(文字だけ)"
+        placeholder="ハッシュタグ + スペースキー"
         className="w-full mt-2 bg-transparent outline-none"
         onChange={onChangeHashTag}
         onKeyUp={handleKeyUp}

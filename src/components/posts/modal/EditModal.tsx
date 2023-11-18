@@ -1,6 +1,6 @@
 import PostEditForm from '@/components/posts/PostEditForm';
 import ModalPortal from '@/components/ui/ModalPortal';
-import { editModalState } from '@/store/modal/homeModalAtoms';
+import { editModalState, imgModalState } from '@/store/modal/homeModalAtoms';
 import { hashState, tagState } from '@/store/posts/postAtoms';
 import { CgClose } from 'react-icons/cg';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -9,18 +9,21 @@ const EditModal = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useRecoilState(editModalState);
   const setTags = useSetRecoilState(tagState);
   const setHashTag = useSetRecoilState(hashState);
+  const setIsHidden = useSetRecoilState(imgModalState);
+
   return (
     <>
       {isEditModalOpen && (
         <ModalPortal>
           <div
             onClick={e => e.stopPropagation()}
-            className="fixed hidden md:block left-1/2  -translate-x-1/2 z-40 rounded-3xl text-black bg-white dark:bg-dark dark:text-white w-[580px] top-36"
+            className="fixed hidden md:block left-1/2  -translate-x-1/2 z-40 rounded-3xl text-black bg-white dark:bg-dark dark:text-white w-[580px] overflow-scroll max-h-[780px] top-36"
           >
             <div
               role="presentation"
               onClick={() => {
                 setIsEditModalOpen(false);
+                setIsHidden(false);
                 setTags([]);
                 setHashTag('');
               }}

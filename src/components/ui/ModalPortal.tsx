@@ -1,8 +1,10 @@
 import {
   deleteModalState,
   editModalState,
+  imgModalState,
   postModalState,
 } from '@/store/modal/homeModalAtoms';
+import { tagState } from '@/store/posts/postAtoms';
 import { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import { useSetRecoilState } from 'recoil';
@@ -15,10 +17,15 @@ const ModalOverlay = ({ children }: ModalPortalProps) => {
   const setIsDeleteModalOpen = useSetRecoilState(deleteModalState);
   const setIsEditModalOpen = useSetRecoilState(editModalState);
   const setIsPostModalOpen = useSetRecoilState(postModalState);
+  const setIsHidden = useSetRecoilState(imgModalState);
+
+  const setTags = useSetRecoilState(tagState);
   const handleOverlayClick = () => {
     setIsDeleteModalOpen(false);
     setIsEditModalOpen(false);
     setIsPostModalOpen(false);
+    setIsHidden(false);
+    setTags([]);
   };
 
   return ReactDOM.createPortal(

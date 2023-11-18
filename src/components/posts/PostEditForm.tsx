@@ -2,14 +2,21 @@ import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import HashTagForm from '@/components/posts/HashTagForm';
 import Button from '@/components/ui/Button';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
-import { db } from '@/firebaseApp';
+import { db, storage } from '@/firebaseApp';
 import { editModalState } from '@/store/modal/homeModalAtoms';
 import {
   homeResizeState,
+  postDataState,
   postIdState,
   tagState,
 } from '@/store/posts/postAtoms';
 import { doc, getDoc, updateDoc } from '@firebase/firestore';
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadString,
+} from 'firebase/storage';
 import React, {
   FormEvent,
   useCallback,
@@ -18,11 +25,12 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { AiOutlineArrowLeft } from 'react-icons/ai';
+import { AiOutlineArrowLeft, AiOutlineClose } from 'react-icons/ai';
 import { FaFileImage } from 'react-icons/fa';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { v4 as uuidv4 } from 'uuid';
 
 const PostEditForm = () => {
   const [content, setContent] = useState<string>('');
@@ -34,6 +42,10 @@ const PostEditForm = () => {
   const currentPostId = useRecoilValue(postIdState);
   const setIsEditModalOpen = useSetRecoilState(editModalState);
   const [tags, setTags] = useRecoilState(tagState);
+  const [imageFile, setImageFile] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const postData = useRecoilValue(postDataState);
+
   const getPost = useCallback(async () => {
     if (currentPostId) {
       const docRef = doc(db, 'posts', currentPostId);
@@ -41,6 +53,7 @@ const PostEditForm = () => {
 
       setContent(docSnap?.data()?.content);
       setTags(docSnap?.data()?.hashTags);
+      setImageFile(docSnap?.data()?.imageUrl);
     }
   }, [currentPostId]);
 
@@ -55,6 +68,32 @@ const PostEditForm = () => {
     }
   }, [isMobileSize]);
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (files && files[0]) {
+      const file = files[0];
+      const fileReader = new FileReader();
+
+      fileReader.onloadend = async (e: ProgressEvent<FileReader>) => {
+        const { result } = e.target as FileReader;
+        setImageFile(result as string);
+
+        const storageRef = ref(storage, `${user?.uid}/${uuidv4()}`);
+        try {
+          const dataUrl = result as string;
+          await uploadString(storageRef, dataUrl, 'data_url');
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fileReader.readAsDataURL(file as Blob);
+    }
+  };
+  const handleFileDelete = () => {
+    setImageFile(null);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
 
@@ -67,23 +106,45 @@ const PostEditForm = () => {
 
   const handlePostEditSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    const key = `${user?.uid}/${uuidv4()}`;
+    const storageRef = ref(storage, key);
 
     try {
-      if (currentPostId) {
+      if (postData) {
+        let imageUrl = null;
+
+        if (imageFile) {
+          const data = await uploadString(storageRef, imageFile, 'data_url');
+          imageUrl = await getDownloadURL(data?.ref);
+        }
+
         const postRef = doc(db, 'posts', currentPostId);
-        await updateDoc(postRef, {
+
+        const postToUpdate = {
           content,
           hashTags: tags,
+          imageUrl,
           createdAt: new Date()?.toLocaleDateString('ja', {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
           }),
-        });
+        };
+
+        if (postData?.imageUrl) {
+          const imageRef = ref(storage, postData?.imageUrl);
+          await deleteObject(imageRef).catch(error => console.log(error));
+        }
+
+        await updateDoc(postRef, postToUpdate);
         setIsEditModalOpen(false);
         navigate(`/posts/${currentPostId}`);
       }
+
       setTags([]);
+      setImageFile(null);
+      setIsSubmitting(false);
       toast.success('Tweetを修正しました');
     } catch (e) {
       console.log(e);
@@ -118,35 +179,53 @@ const PostEditForm = () => {
             <HeaderProfile user={user} toProfile />
           </div>
 
-          <div
-            className={`flex flex-col justify-between w-full ${
-              isEditModalOpen && 'min-h-[200px] h-full'
-            }`}
-          >
+          <div className={`flex flex-col justify-between w-full `}>
             <textarea
               ref={textarea}
-              className={`w-full text-xl h-auto bg-transparent outline-none  min-h-[480px]  resize-none`}
+              className={`w-full text-xl bg-transparent outline-none resize-none`}
               onChange={handleChange}
               value={content}
               placeholder="いまどうしてる？"
               autoFocus
             />
-            <HashTagForm />
-            <div className="flex items-center justify-between mt-1">
-              <div className="">
-                <label htmlFor="file-input" className="cursor-pointer">
-                  <FaFileImage className="text-primary " />
-                </label>
+            <div className="relative flex items-end justify-between w-full mb-7">
+              <div>
                 <input
                   type="file"
                   id="file-input"
                   name="file-input"
                   accept="image/*"
                   className="hidden"
+                  onChange={handleFileUpload}
                 />
+                {imageFile && (
+                  <div className="relative max-h-[680px] items-center justify-center flex overflow-hidden rounded-xl cursor-pointer">
+                    <img
+                      src={imageFile}
+                      alt="attchment"
+                      className="w-[475px] object-cover"
+                    />
+                    <AiOutlineClose
+                      size={30}
+                      className="absolute z-10 p-2 text-white bg-black rounded-full top-2 right-2 bg-opacity-70 pointerhover:hover:bg-opacity-100"
+                      onClick={handleFileDelete}
+                    />
+                  </div>
+                )}
               </div>
+            </div>
+
+            <HashTagForm />
+
+            <div className="flex items-center justify-between">
+              <label htmlFor="file-input" className="cursor-pointer">
+                <FaFileImage className="text-primary " />
+              </label>
               <div className="w-[100px]">
-                <Button label="修正する" disabled={!content.trim()?.length} />
+                <Button
+                  label="修正する"
+                  disabled={!content.trim()?.length || isSubmitting}
+                />
               </div>
             </div>
           </div>
