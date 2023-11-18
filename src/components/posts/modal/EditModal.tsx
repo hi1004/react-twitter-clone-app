@@ -17,7 +17,7 @@ const EditModal = () => {
         <ModalPortal>
           <div
             onClick={e => e.stopPropagation()}
-            className="fixed hidden md:block left-1/2  -translate-x-1/2 z-40 rounded-3xl text-black bg-white dark:bg-dark dark:text-white w-[580px] overflow-scroll max-h-[780px] top-36"
+            className="fixed hidden md:block left-1/2  -translate-x-1/2 z-40 rounded-3xl text-black bg-white dark:bg-dark dark:text-white w-[580px] overflow-auto max-h-[780px] top-36"
           >
             <div
               role="presentation"

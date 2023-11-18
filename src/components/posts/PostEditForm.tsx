@@ -204,7 +204,7 @@ const PostEditForm = () => {
                     <img
                       src={imageFile}
                       alt="attchment"
-                      className="w-[475px] object-cover"
+                      className="w-[475px] max-h-[380px]  overflow-hidden object-cover"
                     />
                     <AiOutlineClose
                       size={30}
