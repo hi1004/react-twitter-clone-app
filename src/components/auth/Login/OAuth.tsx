@@ -20,8 +20,8 @@ const OAuth = ({ login }: OAutProps) => {
           <Button
             label={'Googleでログイン'}
             id="login-google"
-            outline
             icon={FcGoogle}
+            outline
             onClick={handleSocalLogin}
           />
           <Button

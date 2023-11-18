@@ -1,25 +1,20 @@
-import Button from '@/components/ui/Button';
-import { app } from '@/firebaseApp';
-import { homeModalState } from '@/store/modal/homeModalAtoms';
-import { getAuth, signOut } from '@firebase/auth';
-import { toast } from 'react-toastify';
-import { useSetRecoilState } from 'recoil';
+import HomeAside from '@/components/layout/aside/HomeAside';
+import ModalNav from '@/components/layout/nav/ModalNav';
+import ProfileInfo from '@/components/profile/ProfileInfo';
+import Loader from '@/components/ui/Loader';
+import { Suspense } from 'react';
 
 const ProfilePage = () => {
-  const setIsModalOpen = useSetRecoilState(homeModalState);
-
   return (
-    <div>
-      <div
-        onClick={async () => {
-          const auth = getAuth(app);
-          await signOut(auth);
-          setIsModalOpen(false);
-          toast.success('logout');
-        }}
-        className="cursor-pointer"
-      >
-        <Button label="logOut" />
+    <div className="relative flex flex-col justify-between w-full gap-4 md:w-auto md:mt-0 md:flex-row">
+      <div className='md:w-[580px] flex flex-col relative mb-[70px] md:mb-0 md:min-h-screen w-full md:border-r dark:md:border-r-slate-700 md:border-r-slate-300"'>
+        <ModalNav />
+        <ProfileInfo />
+      </div>
+      <div className="relative hidden lg:block">
+        <Suspense fallback={<Loader />}>
+          <HomeAside />
+        </Suspense>
       </div>
     </div>
   );
