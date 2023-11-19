@@ -71,7 +71,17 @@ const PostListItem = ({ post }: PostListItemProps) => {
     if (!isDeleteModalOpen) {
       setIsDeleteModalOpen(true);
     }
-    setIsHidden(false);
+    setPostData(post);
+  };
+
+  const handlePostClick = () => {
+    if (post?.id) {
+      setCurrentPostId(post?.id);
+      const currentLocation = location.pathname;
+
+      if (currentLocation === '/' || currentLocation === `/profile/${post.uid}`)
+        navigate(`/posts/${post?.id}`);
+    }
   };
 
   const getFormattedTime = (createdAt: string) => {
@@ -89,27 +99,20 @@ const PostListItem = ({ post }: PostListItemProps) => {
       return `${minutesDifference}分前`;
     }
     if (minutesDifference < 1440) {
-      // 一日（２４時間*６０分）
       const hoursDifference = Math.floor(minutesDifference / 60);
       return `${hoursDifference}時間前`;
-    } else {
-      return postDate.toLocaleString('ja-JP', {
-        month: 'long',
-        day: 'numeric',
-      });
     }
+    return postDate.toLocaleString('ja-JP', {
+      month: 'long',
+      day: 'numeric',
+    });
   };
 
   const formattedTime = post?.createdAt && getFormattedTime(post?.createdAt);
 
   return (
     <li
-      onClick={() => {
-        if (post?.id) {
-          setCurrentPostId(post?.id);
-          navigate(`/posts/${post?.id}`);
-        }
-      }}
+      onClick={handlePostClick}
       className={`flex px-6 pt-4 pb-2 border-b ${
         location.pathname === `/posts/${post?.uid}`
           ? 'cursor-default max-h-full'
@@ -234,8 +237,8 @@ const PostListItem = ({ post }: PostListItemProps) => {
               <li
                 onClick={e => {
                   e.stopPropagation();
-                  if (isMobileSize) {
-                    if (post?.id) setCurrentPostId(post?.id);
+                  if (post?.id && isMobileSize) {
+                    setCurrentPostId(post?.id);
                     navigate(`/posts/edit/${post?.id}`);
                   } else {
                     if (post?.id) setCurrentPostId(post?.id);

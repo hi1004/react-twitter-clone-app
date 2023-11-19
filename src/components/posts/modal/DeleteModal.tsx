@@ -2,9 +2,9 @@ import Button from '@/components/ui/Button';
 import ModalPortal from '@/components/ui/ModalPortal';
 import { db } from '@/firebaseApp';
 import { deleteModalState } from '@/store/modal/homeModalAtoms';
-import { postIdState } from '@/store/posts/postAtoms';
+import { postDataState, postIdState } from '@/store/posts/postAtoms';
 import { deleteDoc, doc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 const DeleteModal = () => {
@@ -12,12 +12,14 @@ const DeleteModal = () => {
     useRecoilState(deleteModalState);
   const currentPostId = useRecoilValue(postIdState);
   const navigate = useNavigate();
+  const postData = useRecoilValue(postDataState);
+  const location = useLocation();
   const handleDelete = async () => {
     if (isDeleteModalOpen) {
       await deleteDoc(doc(db, 'posts', currentPostId as string));
 
       setIsDeleteModalOpen(false);
-      navigate('/');
+      if (location.pathname === `/posts/${postData?.id}`) navigate('/');
     }
   };
   return (

@@ -53,11 +53,16 @@ const HeaderProfile = ({
             ) : (
               <div
                 onClick={openModal}
-                className="flex items-center justify-center w-10 h-10 overflow-hidden bg-white rounded-full cursor-pointer"
+                className={`${
+                  profilePath &&
+                  'w-32 h-32 dark:border-slate-700 border-slate-200'
+                } flex items-center justify-center w-10 h-10 overflow-hidden bg-white rounded-full cursor-pointer`}
               >
                 <FaUserCircle
                   size={42}
-                  className="flex items-center justify-center text-primary"
+                  className={`${
+                    profilePath && 'w-32 h-32'
+                  } flex items-center justify-center text-primary`}
                 />
               </div>
             )}
