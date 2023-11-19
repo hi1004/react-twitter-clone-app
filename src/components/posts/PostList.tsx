@@ -8,7 +8,6 @@ import { imgModalState, postModalState } from '@/store/modal/homeModalAtoms';
 import { homeResizeState, postState } from '@/store/posts/postAtoms';
 import React, { Suspense } from 'react';
 import { GoPencil } from 'react-icons/go';
-
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 const PostForm = React.lazy(() => import('@/components/posts/PostForm'));
@@ -24,11 +23,17 @@ const PostList = () => {
   const setIsHidden = useSetRecoilState(imgModalState);
   const isHidden = useRecoilValue(imgModalState);
 
+  const handlePostModalOpen = () => {
+    setIsPostModalOpen(true);
+    setIsHidden(true);
+  };
+
   return (
     <div className="relative flex flex-col justify-between gap-4 mt-2 md:mt-0 md:flex-row">
       <PostModal />
       <DeleteModal />
       <EditModal />
+
       <ul className="md:w-[580px] relative mb-[70px] md:mb-0 md:min-h-screen w-full md:border-r dark:md:border-r-slate-700 md:border-r-slate-300">
         {!isMobileSize && <PostNav />}
 
@@ -39,11 +44,9 @@ const PostList = () => {
             posts.map(post => <PostListItem post={post} key={post?.id} />)}
         </div>
       </ul>
+
       <div
-        onClick={() => {
-          setIsPostModalOpen(true);
-          setIsHidden(true);
-        }}
+        onClick={handlePostModalOpen}
         className="fixed md:hidden z-10 right-[30px] bottom-[100px] cursor-pointer shadow-lg rounded-full p-4 bg-primary"
       >
         <GoPencil size={30} className="text-white" />

@@ -15,28 +15,28 @@ interface RouterProps {
 }
 
 const Router = ({ isAuthenticated }: RouterProps) => {
+  const commonRoutes = (
+    <Route element={<RootLayout />}>
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="*" element={<Navigate replace to="/" />} />
+    </Route>
+  );
+
+  const authenticatedRoutes = (
+    <Route element={<RootLayout isHeader={true} />}>
+      <Route index element={<HomePage />} />
+      <Route path="/posts/:id" element={<PostDetailPage />} />
+      <Route path="/posts/edit/:id" element={<PostEditPage />} />
+      <Route path="/profile/:id" element={<ProfilePage />} />
+      <Route path="/search" element={<SearchPage />} />
+      <Route path="/notifications" element={<NotificationsPage />} />
+      <Route path="*" element={<Navigate replace to="/" />} />
+    </Route>
+  );
+
   return (
-    <Routes>
-      {isAuthenticated ? (
-        <Route element={<RootLayout isHeader={true} />}>
-          <Route index element={<HomePage />} />
-          <Route path="/posts/:id" element={<PostDetailPage />} />
-          <Route path="/posts/edit/:id" element={<PostEditPage />} />
-
-          <Route path="/profile/:id" element={<ProfilePage />} />
-
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
-          <Route path="*" element={<Navigate replace to="/" />} />
-        </Route>
-      ) : (
-        <Route element={<RootLayout />}>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="*" element={<Navigate replace to="/" />} />
-        </Route>
-      )}
-    </Routes>
+    <Routes>{isAuthenticated ? authenticatedRoutes : commonRoutes}</Routes>
   );
 };
 

@@ -5,7 +5,6 @@ import DeleteModal from '@/components/posts/modal/DeleteModal';
 import EditModal from '@/components/posts/modal/EditModal';
 import PostModal from '@/components/posts/modal/PostModal';
 import Button from '@/components/ui/Button';
-import Loader from '@/components/ui/Loader';
 import AuthContext from '@/context/AuthContext';
 import { app, db } from '@/firebaseApp';
 import {
@@ -170,11 +169,12 @@ const ProfileInfo = () => {
 
         <PostNav isProfilePostNav={true} />
 
-        {posts ? (
-          posts?.length > 0 &&
+        {posts?.length > 0 ? (
           posts.map(post => <PostListItem post={post} key={post?.id} />)
         ) : (
-          <Loader />
+          <div className="flex flex-col gap-4 m-auto mt-3 text-center">
+            <p>まだポストがありません</p>
+          </div>
         )}
       </div>
     </>
