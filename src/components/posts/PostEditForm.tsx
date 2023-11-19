@@ -63,11 +63,6 @@ const PostEditForm = () => {
       getPost();
     }
   }, [getPost]);
-  useEffect(() => {
-    if (!isMobileSize) {
-      navigate('/');
-    }
-  }, [isMobileSize]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -140,8 +135,10 @@ const PostEditForm = () => {
 
         await updateDoc(postRef, postToUpdate);
         setIsEditModalOpen(false);
+
         navigate(`/posts/${currentPostId}`);
       }
+      if (!isMobileSize) navigate(-1);
       setIsHidden(false);
       setTags([]);
       setImageFile(null);
