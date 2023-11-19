@@ -4,31 +4,34 @@ import EditModal from '@/components/posts/modal/EditModal';
 import PostModal from '@/components/posts/modal/PostModal';
 import Loader from '@/components/ui/Loader';
 import { db } from '@/firebaseApp';
-import { PostProps, postIdState } from '@/store/posts/postAtoms';
+import { editModalState } from '@/store/modal/homeModalAtoms';
+import { PostProps, homeResizeState } from '@/store/posts/postAtoms';
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 const PostDetail = () => {
   const navigate = useNavigate();
-  const currentPostId = useRecoilValue(postIdState);
   const [post, setPost] = useState<PostProps | null>(null);
+  const isMobileSize = useRecoilValue(homeResizeState);
+  const isEditModalOpen = useRecoilValue(editModalState);
 
+  const params = useParams();
   useEffect(() => {
     const getPost = async () => {
-      if (currentPostId) {
-        const docRef = doc(db, 'posts', currentPostId);
+      if (params.id) {
+        const docRef = doc(db, 'posts', params.id);
         const docSnap = await getDoc(docRef);
         setPost({ ...docSnap?.data(), id: docSnap?.id });
       }
     };
     window.scrollTo(0, 0);
-    if (currentPostId) {
+    if (params.id) {
       getPost();
     }
-  }, [currentPostId]);
+  }, [params.id, isEditModalOpen]);
 
   return (
     <div className="md:w-[580px] relative min-h-screen w-full md:border-r dark:md:border-r-slate-700 md:border-r-slate-300">
@@ -38,7 +41,11 @@ const PostDetail = () => {
 
       <div className="flex items-center p-3 gap-14">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() =>
+            location.pathname === `/posts/${params.id}` && isMobileSize
+              ? navigate('..')
+              : navigate(-1)
+          }
           className="p-2 rounded-full dark:pointerhover:hover:bg-slate-600 pointerhover:hover:bg-slate-300 bg-opacity-40"
         >
           <AiOutlineArrowLeft size={20} />

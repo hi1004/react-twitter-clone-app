@@ -47,7 +47,6 @@ const PostListItem = ({ post }: PostListItemProps) => {
   const setPostData = useSetRecoilState(postDataState);
   const imageRef = ref(storage, post?.imageUrl);
   const setIsHidden = useSetRecoilState(imgModalState);
-
   useEffect(() => {
     if (contentRef.current) {
       const contentHeight = contentRef.current?.clientHeight;
