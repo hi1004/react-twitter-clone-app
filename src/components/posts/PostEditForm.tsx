@@ -89,17 +89,21 @@ const PostEditForm = () => {
   const handleFileDelete = () => {
     setImageFile(null);
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
-
     if (textarea.current) {
       setContent(value);
+
       textarea.current.style.height = 'auto';
       textarea.current.style.height = textarea.current.scrollHeight + 'px';
     }
   };
-
+  useEffect(() => {
+    if (textarea.current) {
+      textarea.current.style.height = 'auto';
+      textarea.current.style.height = textarea.current.scrollHeight + 'px';
+    }
+  }, [content]);
   const handlePostEditSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -158,7 +162,7 @@ const PostEditForm = () => {
         onSubmit={handlePostEditSubmit}
       >
         {isMobileSize && (
-          <div className="flex items-center p-3 gap-14">
+          <div className="flex items-center p-3 md:hidden gap-14">
             <button
               onClick={() => {
                 navigate('..');
@@ -180,7 +184,7 @@ const PostEditForm = () => {
           <div className={`flex flex-col justify-between w-full `}>
             <textarea
               ref={textarea}
-              className={`w-full text-xl bg-transparent outline-none resize-none`}
+              className={`w-full max-h-[450px] text-xl bg-transparent outline-none resize-none`}
               onChange={handleChange}
               value={content}
               placeholder="いまどうしてる？"
@@ -197,7 +201,7 @@ const PostEditForm = () => {
                   onChange={handleFileUpload}
                 />
                 {imageFile && (
-                  <div className="relative max-h-[680px] items-center justify-center flex overflow-hidden rounded-xl cursor-pointer">
+                  <div className="relative max-h-[680px] mt-4 items-center justify-center flex overflow-hidden rounded-xl cursor-pointer">
                     <img
                       src={imageFile}
                       alt="attchment"

@@ -49,9 +49,9 @@ const PostListItem = ({ post }: PostListItemProps) => {
   const setIsHidden = useSetRecoilState(imgModalState);
   useEffect(() => {
     if (contentRef.current) {
-      const contentHeight = contentRef.current?.clientHeight;
-
-      if (contentHeight > MAX_CONTENT_HEIGHT) {
+      const contentHeight = contentRef.current?.scrollHeight;
+      console.log(contentHeight);
+      if (contentHeight >= MAX_CONTENT_HEIGHT) {
         setIsContentExpanded(true);
       } else {
         setIsContentExpanded(false);
@@ -108,14 +108,13 @@ const PostListItem = ({ post }: PostListItemProps) => {
   };
 
   const formattedTime = post?.createdAt && getFormattedTime(post?.createdAt);
-
   return (
     <li
       onClick={handlePostClick}
       className={`flex px-6 pt-4 pb-2 border-b ${
-        location.pathname === `/posts/${post?.uid}`
+        location.pathname === `/posts/${post?.id}`
           ? 'cursor-default max-h-full'
-          : 'min-h-[150px]  cursor-pointer'
+          : `min-h-[150px] max-h-[450px] cursor-pointer`
       } border-b-gray-300 dark:border-b-slate-700 dark:pointerhover:hover:bg-slate-800 pointerhover:hover:bg-gray-100`}
     >
       <div
