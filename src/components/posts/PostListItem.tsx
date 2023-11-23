@@ -29,7 +29,6 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 interface PostListItemProps {
   post: PostProps;
 }
-const MAX_CONTENT_HEIGHT = 450;
 
 const PostListItem = ({ post }: PostListItemProps) => {
   const [isDelete, setIsDelete] = useState(false);
@@ -47,6 +46,8 @@ const PostListItem = ({ post }: PostListItemProps) => {
   const setPostData = useSetRecoilState(postDataState);
   const imageRef = ref(storage, post?.imageUrl);
   const setIsHidden = useSetRecoilState(imgModalState);
+  const MAX_CONTENT_HEIGHT = post?.imageUrl ? 135 : 250;
+
   useEffect(() => {
     if (contentRef.current) {
       const contentHeight = contentRef.current?.scrollHeight;
@@ -114,7 +115,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
       className={`flex px-6 pt-4 pb-2 border-b ${
         location.pathname === `/posts/${post?.id}`
           ? 'cursor-default max-h-full'
-          : `min-h-[150px] max-h-[450px] cursor-pointer`
+          : `min-h-[150px] max-h-[750px] cursor-pointer`
       } border-b-gray-300 dark:border-b-slate-700 dark:pointerhover:hover:bg-slate-800 pointerhover:hover:bg-gray-100`}
     >
       <div
@@ -162,7 +163,13 @@ const PostListItem = ({ post }: PostListItemProps) => {
         </div>
         <p
           className={`${
-            location.pathname !== `/posts/${post?.id}` && 'overflow-hidden'
+            location.pathname !== `/posts/${post?.id}`
+              ? `overflow-hidden  max-h-[250px]`
+              : 'max-h-auto'
+          } ${
+            post?.imageUrl && location.pathname !== `/posts/${post?.id}`
+              ? 'max-h-[135px]'
+              : 'max-h-auto'
           }`}
           ref={contentRef}
         >
