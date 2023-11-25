@@ -13,6 +13,7 @@ export interface PostProps {
   hashTags?: string[];
   imageUrl?: string;
   displayName?: string;
+  intro?: string;
 }
 
 export const postState = atom<PostProps[]>({

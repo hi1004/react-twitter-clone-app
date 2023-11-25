@@ -42,6 +42,7 @@ const Input = ({
   const errorMessage = (errors[id] as FieldError)?.message || '';
   const passwordValue = watch && watch('password');
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
+
   if (type === 'password' && isVisiblePassword) {
     type = 'text';
   }
@@ -66,6 +67,11 @@ const Input = ({
       value: 8,
       message: `${label}は8文字以上でなければなりません`,
     };
+  } else if (id === 'profile_name') {
+    registerValid.minLength = {
+      value: 2,
+      message: `${label}は2文字以上でなければなりません`,
+    };
   } else if (id === 'password_confirm') {
     registerValid.validate = (value: string) => {
       if (value === passwordValue && value.length >= 8) {
@@ -81,13 +87,41 @@ const Input = ({
   return (
     <>
       <div className="relative w-full">
-        <input
-          id={id}
-          type={type}
-          disabled={id === 'tel' ? true : disabled}
-          required={required}
-          placeholder={placeholder}
-          className={`input-autofill dark:input-autofill
+        {type === 'textarea' ? (
+          <textarea
+            id={id}
+            className={`input-autofill  dark:input-autofill min-h-[250px] resize-none
+          relative block px-2.5 pb-2.5 pt-4 w-full text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer
+          border focus:border-2 text-base dark:text-white 
+          ${errors[id] ? 'border-rose-500 dark:border-rose-500 sm:h-auto' : ''}
+          ${
+            errors[id]
+              ? 'focus:border-rose-500 dark:focus:border-rose-500'
+              : 'focus:border-sky-600'
+          }
+        ${
+          !errorMessage &&
+          watch &&
+          watch(id) &&
+          'border-green-600 dark:border-green-600 focus:border-green-600 dark:focus:border-green-600'
+        }
+          `}
+            {...register(id, {
+              ...registerValid,
+            })}
+            aria-invalid={
+              isSubmitted ? (errors[id] ? 'true' : 'false') : undefined
+            }
+            autoFocus={id === focused}
+          />
+        ) : (
+          <input
+            id={id}
+            type={type}
+            disabled={id === 'tel' ? true : disabled}
+            required={required}
+            placeholder={placeholder}
+            className={`input-autofill dark:input-autofill
         relative block px-2.5 pb-2.5 pt-4 w-full text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary peer
         border focus:border-2 text-base dark:text-white 
         ${errors[id] ? 'border-rose-500 dark:border-rose-500 sm:h-auto' : ''}
@@ -103,15 +137,17 @@ const Input = ({
         'border-green-600 dark:border-green-600 focus:border-green-600 dark:focus:border-green-600'
       }
         `}
-          {...register(id, {
-            required: true,
-            ...registerValid,
-          })}
-          aria-invalid={
-            isSubmitted ? (errors[id] ? 'true' : 'false') : undefined
-          }
-          autoFocus={id === focused}
-        />
+            {...register(id, {
+              required: true,
+              ...registerValid,
+            })}
+            aria-invalid={
+              isSubmitted ? (errors[id] ? 'true' : 'false') : undefined
+            }
+            autoFocus={id === focused}
+          />
+        )}
+
         <label
           htmlFor={id}
           className={`
@@ -154,7 +190,8 @@ const Input = ({
           </div>
         </div>
       </div>
-      {errorMessage && (
+
+      {errorMessage && type !== 'textarea' && (
         <div className="mt-2 text-rose-500">
           <small className="flex items-center gap-1">
             <CgDanger size={16} /> {errorMessage}

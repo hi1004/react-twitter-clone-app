@@ -41,7 +41,7 @@ export const AuthContextProvider = ({ children }: LoginProps) => {
         setCurrentUser(null);
       }
     });
-  }, [auth]);
+  }, [auth, currentUser]);
   const handleSocalLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const { id } = e.currentTarget;

@@ -123,7 +123,7 @@ const PostForm = ({ autoFocus }: PostFormProps) => {
                 type="file"
                 id="file-input"
                 name="file-input"
-                accept="image/*"
+                accept="image/*, video/*"
                 className="hidden"
                 onChange={handleFileUpload}
               />
