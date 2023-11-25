@@ -126,25 +126,14 @@ const ProfileInfo = () => {
           </button>
           <div className="flex flex-col py-3">
             <div className="text-base font-semibold md:text-xl">
-              {user?.uid === currentUser?.user?.uid
-                ? currentUser?.user?.displayName
-                : user?.displayName}
+              {user?.displayName}
             </div>
             <span className="text-xs text-slate-400">{`${posts.length}件のポスト`}</span>
           </div>
         </div>
         <div className="w-full  relative h-[100px] md:h-[200px] dark:bg-slate-600 bg-slate-300">
           <div className="absolute left-5 -bottom-20">
-            {user?.uid === currentUser?.user?.uid ? (
-              <HeaderProfile
-                user={user}
-                src={currentUser?.user?.photoURL}
-                toProfile
-                profilePath={true}
-              />
-            ) : (
-              <HeaderProfile user={user} toProfile profilePath={true} />
-            )}
+            <HeaderProfile user={user} toProfile profilePath={true} />
           </div>
           {user?.uid === currentUser?.user?.uid && (
             <button
@@ -158,9 +147,7 @@ const ProfileInfo = () => {
         <div className="mb-24"></div>
         <div className="flex flex-col px-5 mb-10 ">
           <div className="text-base font-semibold md:text-xl">
-            {user?.uid === currentUser?.user?.uid
-              ? currentUser?.user?.displayName
-              : user?.displayName}
+            {user?.displayName}
           </div>
           <div className="text-sm cursor-pointer text-slate-500">{mention}</div>
 

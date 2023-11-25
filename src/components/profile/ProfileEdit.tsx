@@ -2,31 +2,31 @@ import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
-import { storage } from '@/firebaseApp';
+import { db, storage } from '@/firebaseApp';
 import { profileModalState } from '@/store/modal/homeModalAtoms';
 import { profileEidtState } from '@/store/modal/profileModalAtoms';
 import { updateProfile } from 'firebase/auth';
+import { addDoc, collection } from 'firebase/firestore';
 import {
   deleteObject,
   getDownloadURL,
   ref,
   uploadString,
 } from 'firebase/storage';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { CgClose } from 'react-icons/cg';
 import { FaFileImage } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 
 const STORAGE_DOWNLOAD_URL_STR = 'https://firebasestorage.googleapis.com';
 
 const ProfileEdit = () => {
   const setIsProfileEditModalOpen = useSetRecoilState(profileModalState);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const setIsProfileEdit = useSetRecoilState(profileEidtState);
+  const [imageUrl, setImageUrl] = useRecoilState(profileEidtState);
   const {
     register,
     handleSubmit,
@@ -56,7 +56,7 @@ const ProfileEdit = () => {
       setImageUrl(result);
     };
   };
-
+  console.log(imageUrl, user?.photoURL);
   const onHandleSubmit = handleSubmit(async data => {
     const { profile_name } = data;
     const key = `${user?.uid}/${uuidv4()}`;
@@ -82,15 +82,22 @@ const ProfileEdit = () => {
         await updateProfile(user, {
           displayName: profile_name || '',
           photoURL: newImageUrl,
-        }).then(() => {
-          toast.success('プロフィールが修正できました');
-          setImageUrl(user?.photoURL);
-          setIsProfileEdit(true);
-          navigate(`/profile/${user.uid}`);
-          setIsProfileEditModalOpen(false);
         });
+
+        await addDoc(collection(db, 'posts'), {
+          uid: user?.uid,
+          email: user?.email,
+          photoURL: user?.photoURL,
+          displayName: user?.displayName,
+          imageUrl,
+        });
+
+        toast.success('プロフィールが修正できました');
+        setImageUrl(user?.photoURL);
+        navigate(`/profile/${user.uid}`);
+        setIsProfileEditModalOpen(false);
       }
-    } catch (error: unknown) {
+    } catch (error) {
       console.log(error);
     }
   });
@@ -123,13 +130,15 @@ const ProfileEdit = () => {
             htmlFor="file-input"
             className="absolute overflow-hidden left-5 -bottom-20"
           >
-            <HeaderProfile
-              user={user}
-              toProfile
-              profilePath={true}
-              src={imageUrl}
-              overlay={true}
-            />
+            {imageUrl && (
+              <HeaderProfile
+                user={user}
+                toProfile
+                src={imageUrl}
+                profilePath={true}
+                overlay={true}
+              />
+            )}
 
             <div className="absolute w-full h-full p-4 -translate-x-1/2 -translate-y-1/2 bg-opacity-50 rounded-full cursor-pointer top-1/2 left-1/2 bg-dark pointerhover:hover:bg-opacity-60">
               <FaFileImage className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" />

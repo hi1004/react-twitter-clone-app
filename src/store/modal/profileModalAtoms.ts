@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-export const profileEidtState = atom<boolean>({
+export const profileEidtState = atom<string | null>({
   key: 'profileEidtState',
-  default: false,
+  default: null,
 });

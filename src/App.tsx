@@ -24,7 +24,6 @@ const App = () => {
       setInit(true);
     });
   }, [auth, init]);
-
   return (
     <div className="min-h-[1008px]">
       <ToastContainer

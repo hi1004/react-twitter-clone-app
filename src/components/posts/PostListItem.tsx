@@ -124,11 +124,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
           e.stopPropagation();
         }}
       >
-        {loggedInUser?.uid === post?.uid ? (
-          <HeaderProfile user={loggedInUser} toProfile />
-        ) : (
-          <HeaderProfile user={post} toProfile />
-        )}
+        <HeaderProfile user={post} toProfile />
       </div>
 
       <div className="flex flex-col justify-between w-full" role="presentation">
