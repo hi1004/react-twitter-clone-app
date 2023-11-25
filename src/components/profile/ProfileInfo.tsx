@@ -11,6 +11,7 @@ import {
   homeModalState,
   imgModalState,
   postModalState,
+  profileModalState,
 } from '@/store/modal/homeModalAtoms';
 import { PostProps } from '@/store/posts/postAtoms';
 import { getAuth, signOut } from 'firebase/auth';
@@ -40,6 +41,7 @@ const ProfileInfo = () => {
   const beforeScrollY = useRef(0);
   const setIsHidden = useSetRecoilState(imgModalState);
   const setIsPostModalOpen = useSetRecoilState(postModalState);
+  const setIsProfileEditModalOpen = useSetRecoilState(profileModalState);
   useEffect(() => {
     if (params?.id) {
       window.scrollTo(0, 0);
@@ -55,6 +57,7 @@ const ProfileInfo = () => {
           ...doc.data(),
           id: doc?.id,
         }));
+
         setPosts(dataObj);
       });
     }
@@ -96,6 +99,7 @@ const ProfileInfo = () => {
       <PostModal />
       <DeleteModal />
       <EditModal />
+
       <div
         onClick={() => {
           setIsPostModalOpen(true);
@@ -122,25 +126,41 @@ const ProfileInfo = () => {
           </button>
           <div className="flex flex-col py-3">
             <div className="text-base font-semibold md:text-xl">
-              {user?.displayName}
+              {user?.uid === currentUser?.user?.uid
+                ? currentUser?.user?.displayName
+                : user?.displayName}
             </div>
             <span className="text-xs text-slate-400">{`${posts.length}件のポスト`}</span>
           </div>
         </div>
-
         <div className="w-full  relative h-[100px] md:h-[200px] dark:bg-slate-600 bg-slate-300">
           <div className="absolute left-5 -bottom-20">
-            <HeaderProfile user={user} toProfile profilePath={true} />
+            {user?.uid === currentUser?.user?.uid ? (
+              <HeaderProfile
+                user={user}
+                src={currentUser?.user?.photoURL}
+                toProfile
+                profilePath={true}
+              />
+            ) : (
+              <HeaderProfile user={user} toProfile profilePath={true} />
+            )}
           </div>
-          <button className="absolute px-4 py-2 border rounded-full right-5 -bottom-14 border-slate-600 dark:pointerhover:hover:bg-slate-800 pointerhover:hover:bg-slate-100">
-            プロフィールを編集
-          </button>
+          {user?.uid === currentUser?.user?.uid && (
+            <button
+              onClick={() => setIsProfileEditModalOpen(true)}
+              className="absolute px-4 py-2 border rounded-full right-5 -bottom-14 border-slate-600 dark:pointerhover:hover:bg-slate-800 pointerhover:hover:bg-slate-100"
+            >
+              プロフィールを編集
+            </button>
+          )}
         </div>
-
         <div className="mb-24"></div>
         <div className="flex flex-col px-5 mb-10 ">
           <div className="text-base font-semibold md:text-xl">
-            {user?.displayName}
+            {user?.uid === currentUser?.user?.uid
+              ? currentUser?.user?.displayName
+              : user?.displayName}
           </div>
           <div className="text-sm cursor-pointer text-slate-500">{mention}</div>
 
@@ -153,22 +173,22 @@ const ProfileInfo = () => {
               <span className="font-bold text-black dark:text-white">7</span>{' '}
               フォロワー
             </div>
-            <div
-              onClick={async () => {
-                const auth = getAuth(app);
-                await signOut(auth);
-                setIsModalOpen(false);
-                toast.success('ログアウトしました');
-              }}
-              className="absolute right-0 cursor-pointer w-[100px] -top-5"
-            >
-              <Button label={`ログアウト`} />
-            </div>
+            {user?.uid === currentUser?.user?.uid && (
+              <div
+                onClick={async () => {
+                  const auth = getAuth(app);
+                  await signOut(auth);
+                  setIsModalOpen(false);
+                  toast.success('ログアウトしました');
+                }}
+                className="absolute right-0 cursor-pointer w-[100px] -top-5"
+              >
+                <Button label={`ログアウト`} />
+              </div>
+            )}
           </div>
         </div>
-
         <PostNav isProfilePostNav={true} />
-
         {posts?.length > 0 ? (
           posts.map(post => <PostListItem post={post} key={post?.id} />)
         ) : (

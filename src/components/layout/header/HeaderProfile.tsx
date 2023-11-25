@@ -9,12 +9,16 @@ interface HeaderProfileProps {
   user: User | PostProps | null;
   toProfile?: boolean;
   profilePath?: boolean;
+  overlay?: boolean;
+  src?: string | null;
 }
 
 const HeaderProfile = ({
   user,
   toProfile = false,
   profilePath,
+  src,
+  overlay,
 }: HeaderProfileProps) => {
   const setIsModalOpen = useSetRecoilState(homeModalState);
   const navigate = useNavigate();
@@ -38,16 +42,18 @@ const HeaderProfile = ({
                 toProfile && navigate(`/profile/${user.uid}`);
               }
             }}
-            className={`${
+            className={`${overlay && 'w-28 h-28'}  ${
               profilePath &&
               'w-32 h-32 border-4 dark:border-slate-700 border-slate-200'
-            } flex items-center justify-center w-10 h-10 overflow-hidden rounded-full cursor-pointer`}
+            } flex items-center justify-center w-10 h-10 overflow-hidden  rounded-full cursor-pointer`}
           >
             {user?.photoURL ? (
               <img
-                className={`${profilePath && 'w-32 h-32'}`}
+                className={`w-full h-full ${overlay && 'w-28 h-28'} ${
+                  profilePath && 'w-32 h-32'
+                }`}
                 onClick={openModal}
-                src={user?.photoURL}
+                src={src ? src : user?.photoURL}
                 alt={user?.displayName || undefined}
               />
             ) : (
@@ -56,7 +62,7 @@ const HeaderProfile = ({
                 className={`${
                   profilePath &&
                   'w-32 h-32 dark:border-slate-700 border-slate-200'
-                } flex items-center justify-center w-10 h-10 overflow-hidden bg-white rounded-full cursor-pointer`}
+                } flex items-center justify-center w-full h-full overflow-hidden bg-white rounded-full cursor-pointer`}
               >
                 <FaUserCircle
                   size={42}

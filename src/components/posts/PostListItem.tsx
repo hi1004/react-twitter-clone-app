@@ -51,7 +51,6 @@ const PostListItem = ({ post }: PostListItemProps) => {
   useEffect(() => {
     if (contentRef.current) {
       const contentHeight = contentRef.current?.scrollHeight;
-      console.log(contentHeight);
       if (contentHeight >= MAX_CONTENT_HEIGHT) {
         setIsContentExpanded(true);
       } else {
@@ -125,7 +124,11 @@ const PostListItem = ({ post }: PostListItemProps) => {
           e.stopPropagation();
         }}
       >
-        <HeaderProfile user={post} toProfile />
+        {loggedInUser?.uid === post?.uid ? (
+          <HeaderProfile user={loggedInUser} toProfile />
+        ) : (
+          <HeaderProfile user={post} toProfile />
+        )}
       </div>
 
       <div className="flex flex-col justify-between w-full" role="presentation">
@@ -138,7 +141,9 @@ const PostListItem = ({ post }: PostListItemProps) => {
             }}
             className="font-bold cursor-pointer pointerhover:hover:underline"
           >
-            {post?.displayName}
+            {loggedInUser?.uid === post?.uid
+              ? loggedInUser?.displayName
+              : post?.displayName}
           </div>
           <div className="text-sm cursor-pointer text-slate-500">
             @
@@ -168,7 +173,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
               : 'max-h-auto'
           } ${
             post?.imageUrl && location.pathname !== `/posts/${post?.id}`
-              ? 'max-h-[135px]'
+              ? 'max-h-[115px]'
               : 'max-h-auto'
           }`}
           ref={contentRef}
@@ -200,11 +205,12 @@ const PostListItem = ({ post }: PostListItemProps) => {
           >
             <img
               src={post?.imageUrl}
-              alt={post?.photoURL}
+              alt={post?.imageUrl}
               className="w-[475px] object-cover"
             />
           </div>
         )}
+
         <div className="flex flex-wrap gap-3 pt-6 ">
           {post?.hashTags?.map(tag => (
             <span

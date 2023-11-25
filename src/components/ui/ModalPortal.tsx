@@ -3,6 +3,7 @@ import {
   editModalState,
   imgModalState,
   postModalState,
+  profileModalState,
 } from '@/store/modal/homeModalAtoms';
 import { tagState } from '@/store/posts/postAtoms';
 import { ReactNode } from 'react';
@@ -17,6 +18,8 @@ const ModalOverlay = ({ children }: ModalPortalProps) => {
   const setIsDeleteModalOpen = useSetRecoilState(deleteModalState);
   const setIsEditModalOpen = useSetRecoilState(editModalState);
   const setIsPostModalOpen = useSetRecoilState(postModalState);
+  const setIsProfileModalOpen = useSetRecoilState(profileModalState);
+
   const setIsHidden = useSetRecoilState(imgModalState);
 
   const setTags = useSetRecoilState(tagState);
@@ -24,6 +27,7 @@ const ModalOverlay = ({ children }: ModalPortalProps) => {
     setIsDeleteModalOpen(false);
     setIsEditModalOpen(false);
     setIsPostModalOpen(false);
+    setIsProfileModalOpen(false);
     setIsHidden(false);
     setTags([]);
   };
