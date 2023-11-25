@@ -2,11 +2,10 @@ import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
-import { db, storage } from '@/firebaseApp';
+import { storage } from '@/firebaseApp';
 import { profileModalState } from '@/store/modal/homeModalAtoms';
 import { profileEidtState } from '@/store/modal/profileModalAtoms';
 import { updateProfile } from 'firebase/auth';
-import { addDoc, collection } from 'firebase/firestore';
 import {
   deleteObject,
   getDownloadURL,
@@ -56,7 +55,6 @@ const ProfileEdit = () => {
       setImageUrl(result);
     };
   };
-  console.log(imageUrl, user?.photoURL);
   const onHandleSubmit = handleSubmit(async data => {
     const { profile_name } = data;
     const key = `${user?.uid}/${uuidv4()}`;
@@ -82,14 +80,6 @@ const ProfileEdit = () => {
         await updateProfile(user, {
           displayName: profile_name || '',
           photoURL: newImageUrl,
-        });
-
-        await addDoc(collection(db, 'posts'), {
-          uid: user?.uid,
-          email: user?.email,
-          photoURL: user?.photoURL,
-          displayName: user?.displayName,
-          imageUrl,
         });
 
         toast.success('プロフィールが修正できました');

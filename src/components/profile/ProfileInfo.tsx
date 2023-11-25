@@ -5,7 +5,6 @@ import DeleteModal from '@/components/posts/modal/DeleteModal';
 import EditModal from '@/components/posts/modal/EditModal';
 import PostModal from '@/components/posts/modal/PostModal';
 import Button from '@/components/ui/Button';
-import AuthContext from '@/context/AuthContext';
 import { app, db } from '@/firebaseApp';
 import {
   homeModalState,
@@ -14,7 +13,7 @@ import {
   profileModalState,
 } from '@/store/modal/homeModalAtoms';
 import { PostProps } from '@/store/posts/postAtoms';
-import { getAuth, signOut } from 'firebase/auth';
+import { User, getAuth, signOut } from 'firebase/auth';
 import {
   collection,
   onSnapshot,
@@ -23,18 +22,22 @@ import {
   where,
 } from 'firebase/firestore';
 import { throttle } from 'lodash';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { GoPencil } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
 
-const ProfileInfo = () => {
+interface ProfileInfoProps {
+  currentUser?: User;
+}
+
+const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
   const [posts, setPosts] = useState<PostProps[]>([]);
   const setIsModalOpen = useSetRecoilState(homeModalState);
-  const currentUser = useContext(AuthContext);
-  const user = posts[0] || currentUser?.user;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = currentUser ? currentUser : (posts[0] as any);
   const params = useParams();
   const navigate = useNavigate();
   const [visible, setVisible] = useState(true);
@@ -42,6 +45,7 @@ const ProfileInfo = () => {
   const setIsHidden = useSetRecoilState(imgModalState);
   const setIsPostModalOpen = useSetRecoilState(postModalState);
   const setIsProfileEditModalOpen = useSetRecoilState(profileModalState);
+
   useEffect(() => {
     if (params?.id) {
       window.scrollTo(0, 0);
@@ -135,7 +139,7 @@ const ProfileInfo = () => {
           <div className="absolute left-5 -bottom-20">
             <HeaderProfile user={user} toProfile profilePath={true} />
           </div>
-          {user?.uid === currentUser?.user?.uid && (
+          {user?.uid === currentUser?.uid && (
             <button
               onClick={() => setIsProfileEditModalOpen(true)}
               className="absolute px-4 py-2 border rounded-full right-5 -bottom-14 border-slate-600 dark:pointerhover:hover:bg-slate-800 pointerhover:hover:bg-slate-100"
@@ -160,7 +164,7 @@ const ProfileInfo = () => {
               <span className="font-bold text-black dark:text-white">7</span>{' '}
               フォロワー
             </div>
-            {user?.uid === currentUser?.user?.uid && (
+            {user?.uid === currentUser?.uid && (
               <div
                 onClick={async () => {
                   const auth = getAuth(app);
@@ -177,7 +181,9 @@ const ProfileInfo = () => {
         </div>
         <PostNav isProfilePostNav={true} />
         {posts?.length > 0 ? (
-          posts.map(post => <PostListItem post={post} key={post?.id} />)
+          posts.map(post => (
+            <PostListItem post={post} user={user} key={post?.id} />
+          ))
         ) : (
           <div className="flex flex-col gap-4 m-auto mt-3 text-center">
             <p>まだポストがありません</p>

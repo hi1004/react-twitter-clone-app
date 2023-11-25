@@ -1,5 +1,4 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
-import AuthContext, { AuthProps } from '@/context/AuthContext';
 import { storage } from '@/firebaseApp';
 import {
   deleteModalState,
@@ -12,9 +11,10 @@ import {
   postDataState,
   postIdState,
 } from '@/store/posts/postAtoms';
+import { User } from 'firebase/auth';
 import { deleteObject, ref } from 'firebase/storage';
 import { uniqueId } from 'lodash';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AiFillDelete,
   AiOutlineDelete,
@@ -28,9 +28,10 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 interface PostListItemProps {
   post: PostProps;
+  user?: User;
 }
 
-const PostListItem = ({ post }: PostListItemProps) => {
+const PostListItem = ({ post, user }: PostListItemProps) => {
   const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isContentExpanded, setIsContentExpanded] = useState(false);
@@ -39,8 +40,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
   const setCurrentPostId = useSetRecoilState(postIdState);
   const [isDeleteModalOpen, setIsDeleteModalOpen] =
     useRecoilState(deleteModalState);
-  const loggedInUser = useContext(AuthContext as React.Context<AuthProps>)
-    ?.user;
+
   const navigate = useNavigate();
   const contentRef = useRef<HTMLParagraphElement | null>(null);
   const setPostData = useSetRecoilState(postDataState);
@@ -82,7 +82,6 @@ const PostListItem = ({ post }: PostListItemProps) => {
         navigate(`/posts/${post?.id}`);
     }
   };
-
   const getFormattedTime = (createdAt: string) => {
     const currentDate = new Date();
     const postDate = new Date(createdAt);
@@ -106,7 +105,6 @@ const PostListItem = ({ post }: PostListItemProps) => {
       day: 'numeric',
     });
   };
-
   const formattedTime = post?.createdAt && getFormattedTime(post?.createdAt);
   return (
     <li
@@ -124,7 +122,11 @@ const PostListItem = ({ post }: PostListItemProps) => {
           e.stopPropagation();
         }}
       >
-        <HeaderProfile user={post} toProfile />
+        {user?.photoURL ? (
+          <HeaderProfile user={user} toProfile />
+        ) : (
+          <HeaderProfile user={post} toProfile />
+        )}
       </div>
 
       <div className="flex flex-col justify-between w-full" role="presentation">
@@ -137,9 +139,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
             }}
             className="font-bold cursor-pointer pointerhover:hover:underline"
           >
-            {loggedInUser?.uid === post?.uid
-              ? loggedInUser?.displayName
-              : post?.displayName}
+            {user?.uid === post?.uid ? user?.displayName : post?.displayName}
           </div>
           <div className="text-sm cursor-pointer text-slate-500">
             @
@@ -239,7 +239,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
               <span> 10</span>
             </li>
           </div>
-          {loggedInUser?.uid === post?.uid && (
+          {user?.uid === post?.uid && (
             <div className="flex">
               <li
                 onClick={e => {
