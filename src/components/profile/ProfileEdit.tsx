@@ -30,7 +30,7 @@ const ProfileEdit = () => {
     register,
     handleSubmit,
     setValue,
-    formState: { isSubmitting, isSubmitted, errors, isValid },
+    formState: { isSubmitting, isSubmitted, errors },
   } = useForm<FieldValues>({ mode: 'onChange' });
   const navigate = useNavigate();
 
@@ -109,7 +109,7 @@ const ProfileEdit = () => {
         </div>
         <Button
           label="保存"
-          disabled={!isValid || isSubmitting}
+          disabled={isSubmitting}
           className="px-4 py-1 rounded-full disabled:bg-gray-200 bg-primary dark:disabled:bg-gray-700 w-max pointerhover:hover:bg-opacity-70"
         />
       </div>
