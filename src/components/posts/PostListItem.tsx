@@ -1,5 +1,6 @@
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
-import { storage } from '@/firebaseApp';
+import AuthContext from '@/context/AuthContext';
+import { db, storage } from '@/firebaseApp';
 import {
   deleteModalState,
   editModalState,
@@ -12,11 +13,13 @@ import {
   postIdState,
 } from '@/store/posts/postAtoms';
 import { User } from 'firebase/auth';
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
 import { uniqueId } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   AiFillDelete,
+  AiFillHeart,
   AiOutlineDelete,
   AiOutlineEdit,
   AiOutlineHeart,
@@ -46,6 +49,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   const setPostData = useSetRecoilState(postDataState);
   const imageRef = ref(storage, post?.imageUrl);
   const setIsHidden = useSetRecoilState(imgModalState);
+  const currentUser = useContext(AuthContext);
   const MAX_CONTENT_HEIGHT = post?.imageUrl ? 135 : 250;
 
   useEffect(() => {
@@ -106,6 +110,27 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
     });
   };
   const formattedTime = post?.createdAt && getFormattedTime(post?.createdAt);
+  const toggleLike = async (e: React.MouseEvent<HTMLLIElement>) => {
+    e.stopPropagation();
+    if (post?.id) {
+      const postRef = doc(db, 'posts', post.id);
+
+      if (
+        currentUser?.user?.uid &&
+        post?.likes?.includes(currentUser?.user?.uid)
+      ) {
+        await updateDoc(postRef, {
+          likes: arrayRemove(currentUser?.user?.uid),
+          likeCount: post?.likeCount ? post?.likeCount - 1 : 0,
+        });
+      } else {
+        await updateDoc(postRef, {
+          likes: arrayUnion(currentUser?.user?.uid),
+          likeCount: post?.likeCount ? post?.likeCount + 1 : 1,
+        });
+      }
+    }
+  };
   return (
     <li
       onClick={handlePostClick}
@@ -122,11 +147,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
           e.stopPropagation();
         }}
       >
-        {user?.photoURL ? (
-          <HeaderProfile user={user} toProfile />
-        ) : (
-          <HeaderProfile user={post} toProfile />
-        )}
+        <HeaderProfile user={post} toProfile />
       </div>
 
       <div className="flex flex-col justify-between w-full" role="presentation">
@@ -144,10 +165,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
           <div className="text-sm cursor-pointer text-slate-500">
             @
             {!post?.email
-              ? post?.displayName
-                  ?.replace(/[^\w\s]/g, '')
-                  ?.match(/\S+\s/)?.[0]
-                  ?.toLocaleLowerCase()
+              ? post?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase()
               : post?.email?.replace(/@.*$/, '').toLocaleLowerCase()}
             ・
             <span
@@ -227,19 +245,27 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
               className="flex items-center gap-1 py-3 text-sm cursor-pointer dark:text-slate-300 pointerhover:hover:text-primary "
             >
               <GoComment className="scale-x-[-1]" />
-              <span> 10</span>
+              <span> 0</span>
             </li>
             <li
-              onClick={e => {
-                e.stopPropagation();
-              }}
+              onClick={toggleLike}
               className="flex items-center gap-1 py-3 text-sm cursor-pointer dark:text-slate-300 pointerhover:hover:text-pink-300 "
             >
-              <AiOutlineHeart />
-              <span> 10</span>
+              {currentUser?.user &&
+              post?.likes?.includes(currentUser?.user?.uid) ? (
+                <>
+                  <AiFillHeart className="text-pink-300" />
+                  <span className="text-pink-300"> {post?.likeCount || 0}</span>
+                </>
+              ) : (
+                <>
+                  <AiOutlineHeart />
+                  <span> {post?.likeCount || 0}</span>
+                </>
+              )}
             </li>
           </div>
-          {user?.uid === post?.uid && (
+          {currentUser?.user?.uid === post?.uid && (
             <div className="flex">
               <li
                 onClick={e => {

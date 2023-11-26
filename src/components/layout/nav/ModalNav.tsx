@@ -49,13 +49,13 @@ const ModalNav = () => {
               <div className="flex gap-4 mt-3 text-sm text-slate-500">
                 <div className="cursor-pointer pointerhover:hover:underline">
                   <span className="font-bold text-black dark:text-white">
-                    7
+                    0
                   </span>{' '}
                   フォロー中
                 </div>
                 <div className="cursor-pointer pointerhover:hover:underline">
                   <span className="font-bold text-black dark:text-white">
-                    7
+                    0
                   </span>{' '}
                   フォロワー
                 </div>

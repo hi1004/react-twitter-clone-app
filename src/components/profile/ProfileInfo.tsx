@@ -12,6 +12,7 @@ import {
   postModalState,
   profileModalState,
 } from '@/store/modal/homeModalAtoms';
+import { profileTabState } from '@/store/modal/profileModalAtoms';
 import { PostProps } from '@/store/posts/postAtoms';
 import { User, getAuth, signOut } from 'firebase/auth';
 import {
@@ -27,17 +28,15 @@ import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { GoPencil } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 interface ProfileInfoProps {
   currentUser?: User;
 }
 
 const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
-  const [posts, setPosts] = useState<PostProps[]>([]);
+  const [activeTab, setActiveTab] = useRecoilState(profileTabState);
   const setIsModalOpen = useSetRecoilState(homeModalState);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const user = currentUser ? currentUser : (posts[0] as any);
   const params = useParams();
   const navigate = useNavigate();
   const [visible, setVisible] = useState(true);
@@ -45,7 +44,11 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
   const setIsHidden = useSetRecoilState(imgModalState);
   const setIsPostModalOpen = useSetRecoilState(postModalState);
   const setIsProfileEditModalOpen = useSetRecoilState(profileModalState);
-
+  const [myPosts, setMyPosts] = useState<PostProps[]>([]);
+  const [likePosts, setLikePosts] = useState<PostProps[]>([]);
+  const [posts, setPosts] = useState<PostProps[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = currentUser ? currentUser : (posts[0] as any);
   useEffect(() => {
     if (params?.id) {
       window.scrollTo(0, 0);
@@ -66,13 +69,47 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
       });
     }
   }, [params?.id]);
+
+  useEffect(() => {
+    if (user) {
+      window.scrollTo(0, 0);
+      const postsRef = collection(db, 'posts');
+
+      const myPostQuery = query(
+        postsRef,
+        where('uid', '==', user?.uid),
+        orderBy('createdAt', 'desc')
+      );
+      const likePostQuery = query(
+        postsRef,
+        where('likes', 'array-contains', user?.uid),
+        orderBy('createdAt', 'desc')
+      );
+
+      onSnapshot(myPostQuery, snapShot => {
+        const dataObj = snapShot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc?.id,
+        }));
+
+        setMyPosts(dataObj as PostProps[]);
+      });
+
+      onSnapshot(likePostQuery, snapShot => {
+        const dataObj = snapShot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc?.id,
+        }));
+
+        setLikePosts(dataObj as PostProps[]);
+      });
+    }
+    setActiveTab('my');
+  }, [user]);
   const mention = `@
   ${
     !user?.email
-      ? user?.displayName
-          ?.replace(/[^\w\s]/g, '')
-          ?.match(/\S+\s/)?.[0]
-          ?.toLocaleLowerCase()
+      ? user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase()
       : user?.email?.replace(/@.*$/, '').toLocaleLowerCase()
   }
     `;
@@ -132,7 +169,7 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
             <div className="text-base font-semibold md:text-xl">
               {user?.displayName}
             </div>
-            <span className="text-xs text-slate-400">{`${posts.length}件のポスト`}</span>
+            <span className="text-xs text-slate-400">{`${myPosts.length}件のポスト`}</span>
           </div>
         </div>
         <div className="w-full  relative h-[100px] md:h-[200px] dark:bg-slate-600 bg-slate-300">
@@ -180,13 +217,30 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
           </div>
         </div>
         <PostNav isProfilePostNav={true} />
-        {posts?.length > 0 ? (
-          posts.map(post => (
-            <PostListItem post={post} user={user} key={post?.id} />
-          ))
-        ) : (
-          <div className="flex flex-col gap-4 m-auto mt-3 text-center">
-            <p>まだポストがありません</p>
+        {activeTab === 'my' && (
+          <div>
+            {posts?.length > 0 ? (
+              posts.map(post => (
+                <PostListItem post={post} user={user} key={post?.id} />
+              ))
+            ) : (
+              <div className="flex flex-col gap-4 m-auto mt-3 text-center">
+                <p>まだポストがありません</p>
+              </div>
+            )}
+          </div>
+        )}
+        {activeTab === 'like' && (
+          <div>
+            {likePosts?.length > 0 ? (
+              likePosts.map(post => (
+                <PostListItem post={post} user={user} key={post?.id} />
+              ))
+            ) : (
+              <div className="flex flex-col gap-4 m-auto mt-3 text-center">
+                <p>まだいいねがありません</p>
+              </div>
+            )}
           </div>
         )}
       </div>
