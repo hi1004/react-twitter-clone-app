@@ -6,7 +6,7 @@ import EditModal from '@/components/posts/modal/EditModal';
 import PostModal from '@/components/posts/modal/PostModal';
 import Loader from '@/components/ui/Loader';
 import { imgModalState, postModalState } from '@/store/modal/homeModalAtoms';
-import { homeResizeState, postState } from '@/store/posts/postAtoms';
+import { PostProps, homeResizeState } from '@/store/posts/postAtoms';
 import React, { Suspense } from 'react';
 import { GoPencil } from 'react-icons/go';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -17,8 +17,11 @@ const HomeAside = React.lazy(
   () => import('@/components/layout/aside/HomeAside')
 );
 
-const PostList = () => {
-  const posts = useRecoilValue(postState);
+interface PostListProps {
+  posts: PostProps[];
+}
+
+const PostList = ({ posts }: PostListProps) => {
   const setIsPostModalOpen = useSetRecoilState(postModalState);
   const isMobileSize = useRecoilValue(homeResizeState);
   const setIsHidden = useSetRecoilState(imgModalState);
@@ -42,8 +45,13 @@ const PostList = () => {
         <div className="relative">
           <Suspense fallback={<Loader />}>{!isHidden && <PostForm />}</Suspense>
 
-          {posts?.length > 0 &&
-            posts.map(post => <PostListItem post={post} key={post?.id} />)}
+          {posts?.length > 0 ? (
+            posts.map(post => <PostListItem post={post} key={post?.id} />)
+          ) : (
+            <div className="mt-10 text-center text-bold">
+              フォロー中のポストがありません。
+            </div>
+          )}
         </div>
       </ul>
 

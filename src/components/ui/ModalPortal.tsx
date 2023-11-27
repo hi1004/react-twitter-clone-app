@@ -1,4 +1,5 @@
 import {
+  commentModalState,
   deleteModalState,
   editModalState,
   imgModalState,
@@ -19,6 +20,7 @@ const ModalOverlay = ({ children }: ModalPortalProps) => {
   const setIsEditModalOpen = useSetRecoilState(editModalState);
   const setIsPostModalOpen = useSetRecoilState(postModalState);
   const setIsProfileModalOpen = useSetRecoilState(profileModalState);
+  const setIsCommentModalOpen = useSetRecoilState(commentModalState);
 
   const setIsHidden = useSetRecoilState(imgModalState);
 
@@ -29,6 +31,7 @@ const ModalOverlay = ({ children }: ModalPortalProps) => {
     setIsPostModalOpen(false);
     setIsProfileModalOpen(false);
     setIsHidden(false);
+    setIsCommentModalOpen(false);
     setTags([]);
   };
 
