@@ -1,3 +1,5 @@
+import CommentList from '@/components/comments/CommentList';
+import CommentForm from '@/components/comments/commentForm';
 import PostListItem from '@/components/posts/PostListItem';
 import DeleteModal from '@/components/posts/modal/DeleteModal';
 import EditModal from '@/components/posts/modal/EditModal';
@@ -6,7 +8,8 @@ import Loader from '@/components/ui/Loader';
 import { db } from '@/firebaseApp';
 import { editModalState } from '@/store/modal/homeModalAtoms';
 import { PostProps, homeResizeState } from '@/store/posts/postAtoms';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { uniqueId } from 'lodash';
 import { useEffect, useState } from 'react';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -23,8 +26,9 @@ const PostDetail = () => {
     const getPost = async () => {
       if (params.id) {
         const docRef = doc(db, 'posts', params.id);
-        const docSnap = await getDoc(docRef);
-        setPost({ ...docSnap?.data(), id: docSnap?.id });
+        onSnapshot(docRef, doc => {
+          setPost({ ...(doc?.data() as PostProps), id: doc?.id });
+        });
       }
     };
     window.scrollTo(0, 0);
@@ -38,7 +42,6 @@ const PostDetail = () => {
       <PostModal />
       <EditModal />
       <DeleteModal />
-
       <div className="flex items-center p-3 gap-14">
         <button
           onClick={() =>
@@ -52,7 +55,23 @@ const PostDetail = () => {
         </button>
         <span className="text-xl font-semibold">ポストする</span>
       </div>
-      {post ? <PostListItem post={post} /> : <Loader />}
+
+      {post ? (
+        <>
+          <PostListItem post={post} />
+          <CommentForm post={post} />
+          <DeleteModal />
+          {post?.comments
+            ?.slice(0)
+            ?.reverse()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ?.map((data: any) => (
+              <CommentList data={data} key={uniqueId()} post={post} />
+            ))}
+        </>
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 };

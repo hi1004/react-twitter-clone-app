@@ -1,5 +1,6 @@
 import PostListItem from '@/components/posts/PostListItem';
 import PostNav from '@/components/posts/PostNav';
+import CommentModal from '@/components/posts/modal/CommentModal';
 import DeleteModal from '@/components/posts/modal/DeleteModal';
 import EditModal from '@/components/posts/modal/EditModal';
 import PostModal from '@/components/posts/modal/PostModal';
@@ -33,6 +34,7 @@ const PostList = () => {
       <PostModal />
       <DeleteModal />
       <EditModal />
+      <CommentModal />
 
       <ul className="md:w-[580px] relative mb-[70px] md:mb-0 md:min-h-screen w-full md:border-r dark:md:border-r-slate-700 md:border-r-slate-300">
         {!isMobileSize && <PostNav />}

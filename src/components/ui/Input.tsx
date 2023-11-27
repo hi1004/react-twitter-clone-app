@@ -22,6 +22,7 @@ export interface InputProps {
   focused?: string;
   isSubmitted: boolean;
   watch?: UseFormWatch<FieldValues>;
+  ref?: React.Ref<HTMLTextAreaElement>;
 }
 
 const Input = ({

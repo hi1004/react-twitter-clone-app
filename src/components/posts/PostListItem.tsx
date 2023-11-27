@@ -2,6 +2,7 @@ import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import AuthContext from '@/context/AuthContext';
 import { db, storage } from '@/firebaseApp';
 import {
+  commentModalState,
   deleteModalState,
   editModalState,
   imgModalState,
@@ -32,9 +33,10 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 interface PostListItemProps {
   post: PostProps;
   user?: User;
+  onlyContent?: boolean;
 }
 
-const PostListItem = ({ post, user }: PostListItemProps) => {
+const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
   const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isContentExpanded, setIsContentExpanded] = useState(false);
@@ -43,7 +45,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   const setCurrentPostId = useSetRecoilState(postIdState);
   const [isDeleteModalOpen, setIsDeleteModalOpen] =
     useRecoilState(deleteModalState);
-
+  const setIsCommentModalOpen = useSetRecoilState(commentModalState);
   const navigate = useNavigate();
   const contentRef = useRef<HTMLParagraphElement | null>(null);
   const setPostData = useSetRecoilState(postDataState);
@@ -246,32 +248,42 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
 
         <ul className="flex items-center justify-between mt-1">
           <div className="flex gap-2">
-            <li
-              onClick={e => {
-                e.stopPropagation();
-              }}
-              className="flex items-center gap-1 py-3 text-sm cursor-pointer dark:text-slate-300 pointerhover:hover:text-primary "
-            >
-              <GoComment className="scale-x-[-1]" />
-              <span> 0</span>
-            </li>
-            <li
-              onClick={toggleLike}
-              className="flex items-center gap-1 py-3 text-sm cursor-pointer dark:text-slate-300 pointerhover:hover:text-pink-300 "
-            >
-              {currentUser?.user &&
-              post?.likes?.includes(currentUser?.user?.uid) ? (
-                <>
-                  <AiFillHeart className="text-pink-300" />
-                  <span className="text-pink-300"> {post?.likeCount || 0}</span>
-                </>
-              ) : (
-                <>
-                  <AiOutlineHeart />
-                  <span> {post?.likeCount || 0}</span>
-                </>
-              )}
-            </li>
+            {!onlyContent && (
+              <>
+                <li
+                  onClick={e => {
+                    e.stopPropagation();
+                    setIsCommentModalOpen(true);
+                    setPostData(post);
+                  }}
+                  className="flex items-center gap-1 py-3 text-sm cursor-pointer dark:text-slate-300 pointerhover:hover:text-primary "
+                >
+                  <GoComment className="scale-x-[-1]" />
+                  <span>{post.comments?.length || 0}</span>
+                </li>
+
+                <li
+                  onClick={toggleLike}
+                  className="flex items-center gap-1 py-3 text-sm cursor-pointer dark:text-slate-300 pointerhover:hover:text-pink-300 "
+                >
+                  {currentUser?.user &&
+                  post?.likes?.includes(currentUser?.user?.uid) ? (
+                    <>
+                      <AiFillHeart className="text-pink-300" />
+                      <span className="text-pink-300">
+                        {' '}
+                        {post?.likeCount || 0}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <AiOutlineHeart />
+                      <span> {post?.likeCount || 0}</span>
+                    </>
+                  )}
+                </li>
+              </>
+            )}
           </div>
           {currentUser?.user?.uid === post?.uid && (
             <div className="flex">
