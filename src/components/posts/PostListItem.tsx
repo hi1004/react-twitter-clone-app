@@ -232,7 +232,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
         <div className="flex flex-wrap gap-3 pt-6 ">
           {post?.hashTags?.map(tag => (
             <span
-              className="text-sm cursor-pointer text-primary pointerhover:hover:underline"
+              className={`text-sm cursor-pointer text-primary pointerhover:hover:underline`}
               onClick={e => {
                 e.stopPropagation();
                 navigate(`/search?query=${tag}`);

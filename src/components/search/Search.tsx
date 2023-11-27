@@ -88,8 +88,10 @@ const Search = () => {
               {tagQuery.length > 0 ? (
                 <p>
                   <span
+                    onClick={() => navigate(`/search?query=${tagQuery}`)}
                     className={`${
-                      posts?.length > 0 && 'text-bold text-primary'
+                      posts?.length > 0 &&
+                      'cursor-pointer text-bold text-primary'
                     }`}
                   >
                     {posts?.length}件
