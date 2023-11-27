@@ -81,12 +81,35 @@ const Search = () => {
         </div>
         <ul>
           {location.pathname === '/search' && posts?.length > 0 ? (
-            posts.map(post => <PostListItem post={post} key={post?.id} />)
+            posts.map(post => (
+              <>
+                <li className={`py-10 text-center`}>
+                  {tagQuery.length > 0 ? (
+                    <p>
+                      検索結果、
+                      <span
+                        onClick={() => navigate(`/search?query=${tagQuery}`)}
+                        className={`${
+                          posts?.length > 0 &&
+                          'cursor-pointer text-bold text-primary'
+                        }`}
+                      >
+                        {posts?.length}件
+                      </span>
+                      見つかりました。
+                    </p>
+                  ) : (
+                    <p>ここには何か入れる予定</p>
+                  )}
+                </li>
+                <PostListItem post={post} key={post?.id} />
+              </>
+            ))
           ) : (
             <li className={`py-10 text-center`}>
-              検索結果、
               {tagQuery.length > 0 ? (
                 <p>
+                  検索結果、
                   <span
                     onClick={() => navigate(`/search?query=${tagQuery}`)}
                     className={`${
