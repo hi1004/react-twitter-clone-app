@@ -82,7 +82,11 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
       setCurrentPostId(post?.id);
       const currentLocation = location.pathname;
 
-      if (currentLocation === '/' || currentLocation === `/profile/${post.uid}`)
+      if (
+        currentLocation === '/' ||
+        currentLocation === `/profile/${post.uid}` ||
+        currentLocation === '/search'
+      )
         navigate(`/posts/${post?.id}`);
     }
   };
@@ -228,7 +232,11 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
         <div className="flex flex-wrap gap-3 pt-6 ">
           {post?.hashTags?.map(tag => (
             <span
-              className="text-sm cursor-pointer text-primary"
+              className="text-sm cursor-pointer text-primary pointerhover:hover:underline"
+              onClick={e => {
+                e.stopPropagation();
+                navigate(`/search?query=${tag}`);
+              }}
               key={uniqueId()}
             >
               #{tag}

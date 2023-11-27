@@ -68,7 +68,7 @@ const Header = () => {
         </Link>
         <Toggle />
       </div>
-      {user && <PostNav />}
+      {user && location.pathname !== '/search' && <PostNav />}
     </header>
   );
 };

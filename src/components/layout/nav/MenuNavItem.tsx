@@ -204,7 +204,6 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
               {!user?.email
                 ? user?.displayName
                     ?.replace(/[^\w\s]/g, '')
-                    ?.match(/\S+\s/)?.[0]
                     ?.toLocaleLowerCase()
                 : user?.email?.replace(/@.*$/, '').toLocaleLowerCase()}
             </div>
