@@ -1,3 +1,4 @@
+import FollowingBox from '@/components/follow/FollowingBox';
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import AuthContext from '@/context/AuthContext';
 import { db, storage } from '@/firebaseApp';
@@ -140,7 +141,7 @@ const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
   return (
     <li
       onClick={handlePostClick}
-      className={`flex px-6 pt-4 pb-2 border-b ${
+      className={`flex px-6 pt-2 pb-2 border-b ${
         location.pathname === `/posts/${post?.id}`
           ? 'cursor-default max-h-full'
           : `min-h-[150px] max-h-[750px] cursor-pointer`
@@ -157,34 +158,39 @@ const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
       </div>
 
       <div className="flex flex-col justify-between w-full" role="presentation">
-        <div className="flex gap-1">
-          <div
-            role="presentation"
-            onClick={e => {
-              e.stopPropagation();
-              navigate(`/profile/${post.uid}`);
-            }}
-            className="font-bold cursor-pointer pointerhover:hover:underline"
-          >
-            {user?.uid === post?.uid ? user?.displayName : post?.displayName}
-          </div>
-          <div className="text-sm cursor-pointer text-slate-500">
-            @
-            {!post?.email
-              ? post?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase()
-              : post?.email?.replace(/@.*$/, '').toLocaleLowerCase()}
-            ・
-            <span
-              className=" pointerhover:hover:underline"
+        <div className="flex justify-between">
+          <div className="flex items-center gap-1">
+            <div
               role="presentation"
               onClick={e => {
                 e.stopPropagation();
-                navigate(`/posts/${post?.id}`);
+                navigate(`/profile/${post.uid}`);
               }}
+              className="font-bold cursor-pointer pointerhover:hover:underline"
             >
-              {formattedTime}
-            </span>
+              {user?.uid === post?.uid ? user?.displayName : post?.displayName}
+            </div>
+            <div className="text-sm cursor-pointer text-slate-500">
+              @
+              {!post?.email
+                ? post?.displayName
+                    ?.replace(/[^\w\s]/g, '')
+                    ?.toLocaleLowerCase()
+                : post?.email?.replace(/@.*$/, '').toLocaleLowerCase()}
+              ・
+              <span
+                className=" pointerhover:hover:underline"
+                role="presentation"
+                onClick={e => {
+                  e.stopPropagation();
+                  navigate(`/posts/${post?.id}`);
+                }}
+              >
+                {formattedTime}
+              </span>
+            </div>
           </div>
+          {currentUser?.user?.uid !== post?.uid && <FollowingBox post={post} />}
         </div>
         <p
           className={`${

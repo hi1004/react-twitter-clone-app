@@ -1,3 +1,4 @@
+import { UserProps } from '@/components/follow/FollowingBox';
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import PostListItem from '@/components/posts/PostListItem';
 import PostNav from '@/components/posts/PostNav';
@@ -12,23 +13,28 @@ import {
   postModalState,
   profileModalState,
 } from '@/store/modal/homeModalAtoms';
-import { profileTabState } from '@/store/modal/profileModalAtoms';
-import { PostProps } from '@/store/posts/postAtoms';
+import {
+  followerIdsState,
+  followingIdsState,
+  profileTabState,
+} from '@/store/modal/profileModalAtoms';
+import { PostProps, postFollowerState } from '@/store/posts/postAtoms';
 import { User, getAuth, signOut } from 'firebase/auth';
 import {
   collection,
+  doc,
   onSnapshot,
   orderBy,
   query,
   where,
 } from 'firebase/firestore';
 import { throttle } from 'lodash';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { GoPencil } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 interface ProfileInfoProps {
   currentUser?: User;
@@ -49,6 +55,50 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
   const [posts, setPosts] = useState<PostProps[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user = currentUser ? currentUser : (posts[0] as any);
+  const postFollowers = useRecoilValue(postFollowerState);
+  const [followingIds, setFollowingIds] =
+    useRecoilState<string[]>(followingIdsState);
+  const [followerIds, setfollowerIds] =
+    useRecoilState<string[]>(followerIdsState);
+
+  const getFollowingIds = useCallback(async () => {
+    if (user?.uid) {
+      const ref = doc(db, 'following', user?.uid);
+      onSnapshot(ref, doc => {
+        setFollowingIds(['']);
+        doc
+          ?.data()
+          ?.users?.map((user: UserProps) =>
+            setFollowingIds((prev: string[]) =>
+              prev ? [...prev, user?.id] : []
+            )
+          );
+      });
+    }
+  }, [user?.uid]);
+
+  const getFolowerIds = useCallback(async () => {
+    if (user?.uid) {
+      const ref = doc(db, 'follower', user?.uid);
+      onSnapshot(ref, doc => {
+        setfollowerIds(['']);
+        doc
+          ?.data()
+          ?.users?.map((user: UserProps) =>
+            setfollowerIds((prev: string[]) =>
+              prev ? [...prev, user?.id] : []
+            )
+          );
+      });
+    }
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (user?.uid) {
+      getFollowingIds();
+      getFolowerIds();
+    }
+  }, [getFollowingIds, getFolowerIds, user?.uid]);
   useEffect(() => {
     if (params?.id) {
       window.scrollTo(0, 0);
@@ -106,7 +156,8 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
     }
     setActiveTab('my');
   }, [user]);
-  const mention = `@
+
+  const userName = `@
   ${
     !user?.email
       ? user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase()
@@ -134,7 +185,6 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
       }, 300),
     [beforeScrollY]
   );
-
   return (
     <>
       <PostModal />
@@ -176,12 +226,16 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
           <div className="absolute left-5 -bottom-20">
             <HeaderProfile user={user} toProfile profilePath={true} />
           </div>
-          {user?.uid === currentUser?.uid && (
+          {user?.uid === currentUser?.uid ? (
             <button
               onClick={() => setIsProfileEditModalOpen(true)}
               className="absolute px-4 py-2 border rounded-full right-5 -bottom-14 border-slate-600 dark:pointerhover:hover:bg-slate-800 pointerhover:hover:bg-slate-100"
             >
               プロフィールを編集
+            </button>
+          ) : (
+            <button className="absolute px-4 py-2 border rounded-full cursor-default right-5 -bottom-14 border-slate-600">
+              {postFollowers.length > 0 ? <p>フォロー中</p> : <p>フォロー</p>}
             </button>
           )}
         </div>
@@ -190,17 +244,24 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
           <div className="text-base font-semibold md:text-xl">
             {user?.displayName}
           </div>
-          <div className="text-sm cursor-pointer text-slate-500">{mention}</div>
+          <div className="text-sm cursor-pointer text-slate-500">
+            {userName}
+          </div>
 
           <div className="relative flex gap-4 mt-3 text-sm text-slate-500">
             <div className="cursor-pointer pointerhover:hover:underline">
-              <span className="font-bold text-black dark:text-white">7</span>{' '}
+              <span className="font-bold text-black dark:text-white">
+                {followingIds.length - 1 || 0}
+              </span>{' '}
               フォロー中
             </div>
             <div className="cursor-pointer pointerhover:hover:underline">
-              <span className="font-bold text-black dark:text-white">7</span>{' '}
+              <span className="font-bold text-black dark:text-white">
+                {followerIds.length - 1 || 0}
+              </span>{' '}
               フォロワー
             </div>
+
             {user?.uid === currentUser?.uid && (
               <div
                 onClick={async () => {

@@ -1,13 +1,63 @@
+import { UserProps } from '@/components/follow/FollowingBox';
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import MenuNavItem from '@/components/layout/nav/MenuNavItem';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
+import { db } from '@/firebaseApp';
 import { homeModalState } from '@/store/modal/homeModalAtoms';
-import { useContext } from 'react';
+import {
+  followerIdsState,
+  followingIdsState,
+} from '@/store/modal/profileModalAtoms';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { useCallback, useContext, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 const ModalNav = () => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(homeModalState);
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
+  const [followingIds, setFollowingIds] =
+    useRecoilState<string[]>(followingIdsState);
+  const [followerIds, setfollowerIds] =
+    useRecoilState<string[]>(followerIdsState);
+  const getFollowingIds = useCallback(async () => {
+    if (user?.uid) {
+      const ref = doc(db, 'following', user?.uid);
+      onSnapshot(ref, doc => {
+        setFollowingIds(['']);
+        doc
+          ?.data()
+          ?.users?.map((user: UserProps) =>
+            setFollowingIds((prev: string[]) =>
+              prev ? [...prev, user?.id] : []
+            )
+          );
+      });
+    }
+  }, [user?.uid]);
+
+  const getFolowerIds = useCallback(async () => {
+    if (user?.uid) {
+      const ref = doc(db, 'follower', user?.uid);
+      onSnapshot(ref, doc => {
+        setfollowerIds(['']);
+        doc
+          ?.data()
+          ?.users?.map((user: UserProps) =>
+            setfollowerIds((prev: string[]) =>
+              prev ? [...prev, user?.id] : []
+            )
+          );
+      });
+    }
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (user?.uid) {
+      getFollowingIds();
+      getFolowerIds();
+    }
+  }, [getFollowingIds, getFolowerIds, user?.uid]);
+
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       setIsModalOpen(false);
@@ -42,20 +92,19 @@ const ModalNav = () => {
                 {!user?.email
                   ? user?.displayName
                       ?.replace(/[^\w\s]/g, '')
-                      ?.match(/\S+\s/)?.[0]
                       ?.toLocaleLowerCase()
                   : user?.email?.replace(/@.*$/, '').toLocaleLowerCase()}
               </div>
               <div className="flex gap-4 mt-3 text-sm text-slate-500">
                 <div className="cursor-pointer pointerhover:hover:underline">
                   <span className="font-bold text-black dark:text-white">
-                    0
+                    {followingIds.length - 1 || 0}
                   </span>{' '}
                   フォロー中
                 </div>
                 <div className="cursor-pointer pointerhover:hover:underline">
                   <span className="font-bold text-black dark:text-white">
-                    0
+                    {followerIds.length - 1 || 0}
                   </span>{' '}
                   フォロワー
                 </div>

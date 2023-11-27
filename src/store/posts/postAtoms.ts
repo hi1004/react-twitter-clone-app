@@ -1,3 +1,4 @@
+import { UserProps } from '@/components/follow/FollowingBox';
 import { RecoilValueReadOnly, atom, selector } from 'recoil';
 
 export interface PostProps {
@@ -66,4 +67,8 @@ export const tagState = atom<string[]>({
 export const hashState = atom<string>({
   key: 'hashState',
   default: '',
+});
+export const postFollowerState = atom<UserProps[]>({
+  key: 'postFollowerState',
+  default: [],
 });

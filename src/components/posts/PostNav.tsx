@@ -1,5 +1,5 @@
 import { homeModalState } from '@/store/modal/homeModalAtoms';
-import { profileTabState } from '@/store/modal/profileModalAtoms';
+import { homeTabState, profileTabState } from '@/store/modal/profileModalAtoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 interface PostNavProps {
@@ -8,7 +8,7 @@ interface PostNavProps {
 const PostNav = ({ isProfilePostNav }: PostNavProps) => {
   const isModalOpen = useRecoilValue(homeModalState);
   const [activeTab, setActiveTab] = useRecoilState(profileTabState);
-
+  const [activeHomeTab, setActiveHomeTab] = useRecoilState(homeTabState);
   return (
     <nav
       className={`${isModalOpen ? '-z-10' : 'z-10'} ${
@@ -20,11 +20,17 @@ const PostNav = ({ isProfilePostNav }: PostNavProps) => {
           onClick={() => {
             if (isProfilePostNav) {
               setActiveTab('my');
+            } else {
+              setActiveHomeTab('all');
             }
           }}
           className={`flex items-center justify-center h-full cursor-pointer ${
             isProfilePostNav &&
             activeTab === 'my' &&
+            'border-b-4 border-b-primary'
+          } ${
+            !isProfilePostNav &&
+            activeHomeTab === 'all' &&
             'border-b-4 border-b-primary'
           } grow dark:pointerhover:hover:bg-gray-700 pointerhover:hover:font-bold pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30`}
         >
@@ -34,11 +40,17 @@ const PostNav = ({ isProfilePostNav }: PostNavProps) => {
           onClick={() => {
             if (isProfilePostNav) {
               setActiveTab('like');
+            } else {
+              setActiveHomeTab('following');
             }
           }}
           className={`flex items-center justify-center h-full  cursor-pointer ${
             isProfilePostNav &&
             activeTab === 'like' &&
+            'border-b-4 border-b-primary'
+          } ${
+            !isProfilePostNav &&
+            activeHomeTab === 'following' &&
             'border-b-4 border-b-primary'
           } grow dark:pointerhover:hover:bg-gray-700 pointerhover:hover:font-bold pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30`}
         >
