@@ -4,7 +4,7 @@ import PostDetail from '@/components/posts/PostDetail';
 
 const PostDetailPage = () => {
   return (
-    <div className="flex w-full md:w-auto">
+    <div className="flex w-full gap-8 md:w-auto">
       <ModalNav />
       <PostDetail />
       <div className="relative hidden lg:block">

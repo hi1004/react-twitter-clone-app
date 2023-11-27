@@ -29,7 +29,7 @@ const PostList = () => {
   };
 
   return (
-    <div className="relative flex flex-col justify-between gap-4 mt-2 md:mt-0 md:flex-row">
+    <div className="relative flex flex-col justify-between gap-8 mt-2 md:mt-0 md:flex-row">
       <PostModal />
       <DeleteModal />
       <EditModal />
