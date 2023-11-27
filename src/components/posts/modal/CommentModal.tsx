@@ -1,4 +1,4 @@
-import CommentForm from '@/components/comments/commentForm';
+import CommentForm from '@/components/comments/CommentForm';
 import PostListItem from '@/components/posts/PostListItem';
 import ModalPortal from '@/components/ui/ModalPortal';
 import { commentModalState } from '@/store/modal/homeModalAtoms';

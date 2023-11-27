@@ -1,5 +1,5 @@
+import CommentForm from '@/components/comments/CommentForm';
 import CommentList from '@/components/comments/CommentList';
-import CommentForm from '@/components/comments/commentForm';
 import PostListItem from '@/components/posts/PostListItem';
 import DeleteModal from '@/components/posts/modal/DeleteModal';
 import EditModal from '@/components/posts/modal/EditModal';
