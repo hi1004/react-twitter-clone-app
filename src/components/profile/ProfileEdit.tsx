@@ -91,7 +91,10 @@ const ProfileEdit = () => {
       querySnapshot.forEach(async doc => {
         const docRef = doc.ref;
         try {
-          await updateDoc(docRef, { photoURL: newImageUrl });
+          await updateDoc(docRef, {
+            photoURL: newImageUrl,
+            displayName: profile_name,
+          });
         } catch (error) {
           console.error(error);
         }
