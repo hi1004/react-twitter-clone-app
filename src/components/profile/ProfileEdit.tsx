@@ -120,15 +120,13 @@ const ProfileEdit = () => {
             htmlFor="file-input"
             className="absolute overflow-hidden left-5 -bottom-20"
           >
-            {imageUrl && (
-              <HeaderProfile
-                user={user}
-                toProfile
-                src={imageUrl}
-                profilePath={true}
-                overlay={true}
-              />
-            )}
+            <HeaderProfile
+              user={user}
+              toProfile
+              src={imageUrl}
+              profilePath={true}
+              overlay={true}
+            />
 
             <div className="absolute w-full h-full p-4 -translate-x-1/2 -translate-y-1/2 bg-opacity-50 rounded-full cursor-pointer top-1/2 left-1/2 bg-dark pointerhover:hover:bg-opacity-60">
               <FaFileImage className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" />

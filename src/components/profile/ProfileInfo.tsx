@@ -205,7 +205,7 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
       <div className={`w-full mt-[64px] md:mt-0`}>
         <div
           className={`flex items-center bg-slate-200 bg-opacity-40 dark:bg-dark dark:bg-opacity-40 backdrop-blur-sm  gap-7 fixed transition-transform duration-700 top-0 left-0 z-10 w-full md:sticky md:w-auto
-         ${!visible ? ' -translate-y-[64px] ' : 'translate-y-0'}
+         ${!visible ? ' -translate-y-[64px] -mt-[64px]' : 'translate-y-0 mt-0'}
          }
       `}
         >
