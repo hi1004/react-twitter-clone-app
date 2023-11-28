@@ -24,7 +24,7 @@ const NotificationListItem = ({ notification }: NotificationListItemProps) => {
     const timeDifference = currentDate.getTime() - postDate.getTime();
     const secondsDifference = Math.floor(timeDifference / 1000);
     const minutesDifference = Math.floor(secondsDifference / 60);
-
+    console.log(notification?.likes);
     if (minutesDifference === 0) {
       return '現在';
     }
@@ -40,32 +40,65 @@ const NotificationListItem = ({ notification }: NotificationListItemProps) => {
       day: 'numeric',
     });
   };
-
   const formattedTime =
     notification?.createdAt && getFormattedTime(notification?.createdAt);
   return (
-    <li
-      className="px-4 py-5 border-b cursor-pointer dark:pointerhover:hover:bg-gray-800 pointerhover:hover:bg-gray-200 dark:border-b-slate-600 border-b-slate-300"
-      onClick={() => handleClickNotification(notification?.url)}
-    >
-      <div className="relative flex items-start justify-between">
-        <div className="flex items-start gap-4">
-          <HeaderProfile
-            user={notification}
-            src={notification?.photoURL}
-            toProfileSrc={notification?.toProfile}
-            toProfile
-          />
-          <div className="font-bold"> {notification?.displayName}</div>
-        </div>
-        <div className="text-sm text-slate-400">{formattedTime}</div>
-        {notification?.isRead === false && (
-          <div className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-primary" />
-        )}
-      </div>
+    <>
+      {notification?.likeContent ? (
+        <li
+          className="px-4 py-5 border-b cursor-pointer dark:pointerhover:hover:bg-gray-800 pointerhover:hover:bg-gray-200 dark:border-b-slate-600 border-b-slate-300"
+          onClick={() => handleClickNotification(notification?.url)}
+        >
+          <div className="relative flex items-start justify-between">
+            <div className="flex items-start gap-4">
+              <HeaderProfile
+                user={notification}
+                src={notification?.photoURL}
+                toProfileSrc={notification?.toProfile}
+                toProfile
+              />
+              <div className="font-bold"> {notification?.displayName}</div>
+            </div>
+            <div className="text-sm text-slate-400">{formattedTime}</div>
+            {notification?.isRead === false && (
+              <div className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-primary" />
+            )}
+          </div>
 
-      <p className="text-sm pl-14 text-slate-400">{notification.content}</p>
-    </li>
+          <p className="text-sm pl-14 text-slate-400">
+            {notification?.likeContent}
+          </p>
+        </li>
+      ) : (
+        <></>
+      )}
+      {notification?.content && (
+        <li
+          className="px-4 py-5 border-b cursor-pointer dark:pointerhover:hover:bg-gray-800 pointerhover:hover:bg-gray-200 dark:border-b-slate-600 border-b-slate-300"
+          onClick={() => handleClickNotification(notification?.url)}
+        >
+          <div className="relative flex items-start justify-between">
+            <div className="flex items-start gap-4">
+              <HeaderProfile
+                user={notification}
+                src={notification?.photoURL}
+                toProfileSrc={notification?.toProfile}
+                toProfile
+              />
+              <div className="font-bold"> {notification?.displayName}</div>
+            </div>
+            <div className="text-sm text-slate-400">{formattedTime}</div>
+            {notification?.isRead === false && (
+              <div className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-primary" />
+            )}
+          </div>
+
+          <p className="text-sm pl-14 text-slate-400">
+            {notification?.content}
+          </p>
+        </li>
+      )}
+    </>
   );
 };
 

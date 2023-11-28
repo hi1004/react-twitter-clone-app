@@ -2,6 +2,7 @@ import { UserProps } from '@/components/follow/FollowingBox';
 import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import PostListItem from '@/components/posts/PostListItem';
 import PostNav from '@/components/posts/PostNav';
+import CommentModal from '@/components/posts/modal/CommentModal';
 import DeleteModal from '@/components/posts/modal/DeleteModal';
 import EditModal from '@/components/posts/modal/EditModal';
 import PostModal from '@/components/posts/modal/PostModal';
@@ -18,7 +19,7 @@ import {
   followingIdsState,
   profileTabState,
 } from '@/store/modal/profileModalAtoms';
-import { PostProps, postFollowerState } from '@/store/posts/postAtoms';
+import { PostProps } from '@/store/posts/postAtoms';
 import { User, getAuth, signOut } from 'firebase/auth';
 import {
   collection,
@@ -34,7 +35,7 @@ import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { GoPencil } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 interface ProfileInfoProps {
   currentUser?: User;
@@ -55,7 +56,6 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
   const [posts, setPosts] = useState<PostProps[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user = currentUser ? currentUser : (posts[0] as any);
-  const postFollowers = useRecoilValue(postFollowerState);
   const [followingIds, setFollowingIds] =
     useRecoilState<string[]>(followingIdsState);
   const [followerIds, setfollowerIds] =
@@ -190,6 +190,7 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
       <PostModal />
       <DeleteModal />
       <EditModal />
+      <CommentModal />
 
       <div
         onClick={() => {
@@ -235,7 +236,7 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
             </button>
           ) : (
             <button className="absolute px-4 py-2 border rounded-full cursor-default right-5 -bottom-14 border-slate-600">
-              {postFollowers.length > 0 ? <p>フォロー中</p> : <p>フォロー</p>}
+              {followerIds.length > 1 ? <p>フォロー中</p> : <p>フォロー</p>}
             </button>
           )}
         </div>

@@ -146,25 +146,34 @@ const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
         });
       }
     }
-    await addDoc(collection(db, 'notifications'), {
-      createdAt: new Date()?.toLocaleDateString('ja', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      }),
-      content: `"${truncate(post?.content as string)}" に「いいね」しました。`,
-      url: `/posts/${post?.id}`,
-      isRead: false,
-      uid: post?.uid,
-      toProfile: currentUser?.user?.uid,
-      photoURL: currentUser?.user?.photoURL,
-      displayName:
-        currentUser?.user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
-        currentUser?.user?.displayName
-          ?.replace(/[^\w\s]/g, '')
-          ?.toLocaleLowerCase(),
-    });
+    if (
+      currentUser?.user &&
+      !post?.likes?.includes(currentUser?.user?.uid) &&
+      currentUser?.user?.uid !== post?.uid
+    ) {
+      await addDoc(collection(db, 'notifications'), {
+        createdAt: new Date()?.toLocaleDateString('ja', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        }),
+        likeContent: `"${truncate(
+          post?.content as string
+        )}" に「いいね」しました。`,
+        url: `/posts/${post?.id}`,
+        isRead: false,
+        uid: post?.uid,
+        toProfile: currentUser?.user?.uid,
+        photoURL: currentUser?.user?.photoURL,
+        displayName:
+          currentUser?.user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
+          currentUser?.user?.displayName
+            ?.replace(/[^\w\s]/g, '')
+            ?.toLocaleLowerCase(),
+      });
+    }
   };
+
   return (
     <li
       onClick={handlePostClick}

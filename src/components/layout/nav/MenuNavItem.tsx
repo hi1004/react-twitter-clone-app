@@ -9,7 +9,10 @@ import {
   imgModalState,
   postModalState,
 } from '@/store/modal/homeModalAtoms';
-import { notificationReadState } from '@/store/notifications/notificationsCounter';
+import {
+  notificationReadState,
+  notificationState,
+} from '@/store/notifications/notificationsCounter';
 import { homeResizeState } from '@/store/posts/postAtoms';
 import { useContext, useEffect, useState } from 'react';
 import { AiOutlineHome, AiOutlineSearch, AiTwotoneHome } from 'react-icons/ai';
@@ -38,6 +41,7 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
   const navigate = useNavigate();
   const setIsHidden = useSetRecoilState(imgModalState);
   const notificationReadCount = useRecoilValue(notificationReadState);
+  const notifications = useRecoilValue(notificationState);
 
   useEffect(() => {
     const handleResize = () => {
@@ -165,11 +169,14 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
             ) : (
               <IoMdNotificationsOutline size={30} />
             )}
-            {notificationReadCount > 0 && (
-              <div className="absolute px-2 text-white rounded-full -right-2 -top-2 bg-primary">
-                {notificationReadCount}
-              </div>
-            )}
+            {notifications.filter(
+              notification => notification.uid === user?.uid
+            ).length > 0 &&
+              notificationReadCount > 0 && (
+                <div className="absolute px-2 text-white rounded-full -right-2 -top-2 bg-primary">
+                  {notificationReadCount}
+                </div>
+              )}
             <span
               className={`${
                 isModalOpen ? 'block' : 'hidden'

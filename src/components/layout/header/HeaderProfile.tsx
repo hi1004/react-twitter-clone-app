@@ -1,3 +1,4 @@
+import { NotificationsProps } from '@/components/notifications/Notifications';
 import { homeModalState } from '@/store/modal/homeModalAtoms';
 import { PostProps } from '@/store/posts/postAtoms';
 import { User } from 'firebase/auth';
@@ -6,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 
 interface HeaderProfileProps {
-  user: User | PostProps | null;
+  user: User | PostProps | null | NotificationsProps;
   toProfile?: boolean;
   profilePath?: boolean;
   overlay?: boolean;

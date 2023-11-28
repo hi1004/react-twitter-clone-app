@@ -25,6 +25,8 @@ export interface NotificationsProps {
   photoURL: string;
   displayName: string;
   toProfile: string;
+  likeContent?: string;
+  likes?: boolean;
 }
 
 const Notifications = () => {

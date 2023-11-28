@@ -96,6 +96,27 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
           { merge: true }
         );
       }
+      if (postFollowers && user?.uid !== post?.uid) {
+        await addDoc(collection(db, 'notifications'), {
+          createdAt: new Date()?.toLocaleDateString('ja', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          }),
+          content: `${
+            user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
+            user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase()
+          }さんが「フォロー」しました。`,
+          url: `/profile/${post?.uid}`,
+          isRead: false,
+          uid: post?.uid,
+          toProfile: user?.uid,
+          photoURL: user?.photoURL,
+          displayName:
+            user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
+            user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase(),
+        });
+      }
       toast.success(`${userName}さんをフォローしました`);
     } catch (error) {
       console.log(error);
@@ -117,31 +138,13 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
           users: arrayRemove({ id: user.uid }),
         });
       }
-      await addDoc(collection(db, 'notifications'), {
-        createdAt: new Date()?.toLocaleDateString('ja', {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        }),
-        content: `${
-          user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
-          user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase()
-        }さんが「フォロー」しました。`,
-        url: `/profile/${post?.uid}`,
-        isRead: false,
-        uid: post?.uid,
-        toProfile: user?.uid,
-        photoURL: user?.photoURL,
-        displayName:
-          user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
-          user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase(),
-      });
 
       toast.success(`${userName}さんのフォローを削除しました`);
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(postFollowers);
 
   return (
     <div
