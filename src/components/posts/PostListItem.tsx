@@ -15,7 +15,14 @@ import {
   postIdState,
 } from '@/store/posts/postAtoms';
 import { User } from 'firebase/auth';
-import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
 import { uniqueId } from 'lodash';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -116,6 +123,9 @@ const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
     });
   };
   const formattedTime = post?.createdAt && getFormattedTime(post?.createdAt);
+  const truncate = (str: string) => {
+    return str?.length > 300 ? str?.substring(0, 300) + '...' : str;
+  };
   const toggleLike = async (e: React.MouseEvent<HTMLLIElement>) => {
     e.stopPropagation();
     if (post?.id) {
@@ -136,6 +146,24 @@ const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
         });
       }
     }
+    await addDoc(collection(db, 'notifications'), {
+      createdAt: new Date()?.toLocaleDateString('ja', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+      content: `"${truncate(post?.content as string)}" に「いいね」しました。`,
+      url: `/posts/${post?.id}`,
+      isRead: false,
+      uid: post?.uid,
+      toProfile: currentUser?.user?.uid,
+      photoURL: currentUser?.user?.photoURL,
+      displayName:
+        currentUser?.user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
+        currentUser?.user?.displayName
+          ?.replace(/[^\w\s]/g, '')
+          ?.toLocaleLowerCase(),
+    });
   };
   return (
     <li

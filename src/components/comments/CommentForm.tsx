@@ -77,7 +77,9 @@ const CommentForm = ({ post }: CommentFormProps) => {
             toProfile: user?.uid,
             isRead: false,
             url: `/posts/${post?.id}`,
-            content: `${truncate(post?.content as string)}`,
+            content: `"${truncate(
+              post?.content as string
+            )}" に「コメント」しました。`,
             photoURL: user?.photoURL,
             displayName:
               user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
