@@ -54,7 +54,6 @@ const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
   const setIsHidden = useSetRecoilState(imgModalState);
   const currentUser = useContext(AuthContext);
   const MAX_CONTENT_HEIGHT = post?.imageUrl ? 135 : 250;
-
   useEffect(() => {
     if (contentRef.current) {
       const contentHeight = contentRef.current?.scrollHeight;
@@ -154,7 +153,7 @@ const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
           e.stopPropagation();
         }}
       >
-        <HeaderProfile user={post} toProfile />
+        {post && <HeaderProfile user={post} toProfile />}
       </div>
 
       <div className="flex flex-col justify-between w-full" role="presentation">

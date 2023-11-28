@@ -2,10 +2,17 @@ import HeaderProfile from '@/components/layout/header/HeaderProfile';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
-import { storage } from '@/firebaseApp';
+import { db, storage } from '@/firebaseApp';
 import { profileModalState } from '@/store/modal/homeModalAtoms';
 import { profileEidtState } from '@/store/modal/profileModalAtoms';
 import { updateProfile } from 'firebase/auth';
+import {
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 import {
   deleteObject,
   getDownloadURL,
@@ -59,7 +66,8 @@ const ProfileEdit = () => {
     const { profile_name } = data;
     const key = `${user?.uid}/${uuidv4()}`;
     const storageRef = ref(storage, key);
-    let newImageUrl = null;
+    let newImageUrl: string | null = null;
+
     try {
       if (
         user?.photoURL &&
@@ -76,13 +84,26 @@ const ProfileEdit = () => {
         newImageUrl = await getDownloadURL(data?.ref);
       }
 
+      const postsRef = collection(db, 'posts');
+      const userPostsQuery = query(postsRef, where('uid', '==', user?.uid));
+
+      const querySnapshot = await getDocs(userPostsQuery);
+      querySnapshot.forEach(async doc => {
+        const docRef = doc.ref;
+        try {
+          await updateDoc(docRef, { photoURL: newImageUrl });
+        } catch (error) {
+          console.error(error);
+        }
+      });
+
       if (user) {
         await updateProfile(user, {
           displayName: profile_name || '',
           photoURL: newImageUrl,
         });
 
-        toast.success('プロフィールが修正できました');
+        toast.success('プロフィールをアップデートしました');
         setImageUrl(user?.photoURL);
         navigate(`/profile/${user.uid}`);
         setIsProfileEditModalOpen(false);
@@ -91,7 +112,6 @@ const ProfileEdit = () => {
       console.log(error);
     }
   });
-
   return (
     <form className="px-4" onSubmit={onHandleSubmit}>
       <div className="flex items-center justify-between py-3">

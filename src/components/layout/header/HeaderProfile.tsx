@@ -25,7 +25,6 @@ const HeaderProfile = ({
   const setIsModalOpen = useSetRecoilState(homeModalState);
   const navigate = useNavigate();
   const location = useLocation();
-
   const openModal = () => {
     if (!toProfile) {
       setIsModalOpen(true);
