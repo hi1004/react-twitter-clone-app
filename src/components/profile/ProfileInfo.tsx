@@ -210,7 +210,7 @@ const ProfileInfo = ({ currentUser }: ProfileInfoProps) => {
       `}
         >
           <button
-            onClick={() => navigate('..')}
+            onClick={() => navigate(-1)}
             className="p-2 ml-3 rounded-full dark:pointerhover:hover:bg-slate-600 pointerhover:hover:bg-slate-300 bg-opacity-40"
           >
             <AiOutlineArrowLeft size={20} />

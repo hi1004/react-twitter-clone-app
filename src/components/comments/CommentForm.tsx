@@ -4,7 +4,13 @@ import AuthContext, { AuthProps } from '@/context/AuthContext';
 import { db } from '@/firebaseApp';
 import { commentModalState } from '@/store/modal/homeModalAtoms';
 import { PostProps } from '@/store/posts/postAtoms';
-import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
 import { useContext, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
@@ -17,7 +23,12 @@ const CommentForm = ({ post }: CommentFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const setIsCommentModalOpen = useSetRecoilState(commentModalState);
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
+
   const textarea = useRef<HTMLTextAreaElement | null>(null);
+  const truncate = (str: string) => {
+    return str?.length > 300 ? str?.substring(0, 300) + '...' : str;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.currentTarget;
     if (textarea.current) {
@@ -55,6 +66,25 @@ const CommentForm = ({ post }: CommentFormProps) => {
         await updateDoc(postRef, {
           comments: arrayUnion(commentObj),
         });
+        if (user?.uid !== post?.uid) {
+          await addDoc(collection(db, 'notifications'), {
+            createdAt: new Date()?.toLocaleDateString('ja', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            }),
+            uid: post?.uid,
+            toProfile: user?.uid,
+            isRead: false,
+            url: `/posts/${post?.id}`,
+            content: `${truncate(post?.content as string)}`,
+            photoURL: user?.photoURL,
+            displayName:
+              user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
+              user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase(),
+          });
+        }
+
         setIsSubmitting(false);
         if (textarea.current) {
           textarea.current.style.height = 'auto';
