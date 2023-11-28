@@ -58,6 +58,9 @@ const Search = () => {
       setTagQuery(query);
     }
   }, [location]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div>
       <PostModal />

@@ -2,8 +2,10 @@ import AuthContext from '@/context/AuthContext';
 import { db } from '@/firebaseApp';
 import { PostProps } from '@/store/posts/postAtoms';
 import {
+  addDoc,
   arrayRemove,
   arrayUnion,
+  collection,
   doc,
   onSnapshot,
   setDoc,
@@ -69,9 +71,6 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
     e.stopPropagation();
     setIsMoreOpen(prev => !prev);
   };
-
-  console.log(postFollowers);
-
   const handleClickFollow = async (
     e: React.MouseEvent<HTMLParagraphElement>
   ) => {
@@ -102,6 +101,7 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
       console.log(error);
     }
   };
+
   const handleDeleteFollow = async (
     e: React.MouseEvent<HTMLParagraphElement>
   ) => {
@@ -117,6 +117,26 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
           users: arrayRemove({ id: user.uid }),
         });
       }
+      await addDoc(collection(db, 'notifications'), {
+        createdAt: new Date()?.toLocaleDateString('ja', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        }),
+        content: `${
+          user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
+          user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase()
+        }さんがフォローしました。`,
+        url: `/profile/${user?.uid}`,
+        isRead: false,
+        uid: post?.uid,
+        toProfile: user?.uid,
+        photoURL: user?.photoURL,
+        displayName:
+          user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
+          user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase(),
+      });
+
       toast.success(`${userName}さんのフォローを削除しました`);
     } catch (error) {
       console.log(error);
@@ -132,11 +152,11 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
         <CgMoreAlt />
       </div>
       {isMoreOpen && (
-        <div className="absolute cursor-pointer w-max px-4 py-2 rounded-2xl font-bold text-sm h-100px -left-[220px] top-0 bg-slate-200 dark:bg-slate-700">
+        <div className="absolute cursor-pointer w-max px-4 py-2 rounded-2xl font-bold text-sm h-100px -left-[220px] top-0 bg-slate-200 dark:bg-slate-800">
           {postFollowers?.includes(user?.uid) ? (
             <p
               onClick={handleDeleteFollow}
-              className="flex items-center gap-2 p-2 text-red-500 dark:pointerhover:hover:bg-slate-500 pointerhover:hover:bg-slate-400 rounded-2xl"
+              className="flex items-center gap-2 p-2 text-red-500 dark:pointerhover:hover:bg-slate-700 pointerhover:hover:bg-slate-400 rounded-2xl"
             >
               <AiOutlineUserDelete className="text-[20px]" />
               <span>

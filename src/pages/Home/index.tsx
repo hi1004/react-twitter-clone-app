@@ -1,10 +1,15 @@
 import { UserProps } from '@/components/follow/FollowingBox';
 import ModalNav from '@/components/layout/nav/ModalNav';
+import { NotificationsProps } from '@/components/notifications/Notifications';
 import PostList from '@/components/posts/PostList';
 import AuthContext, { AuthProps } from '@/context/AuthContext';
 import { db } from '@/firebaseApp';
 import { homeModalState } from '@/store/modal/homeModalAtoms';
 import { homeTabState } from '@/store/modal/profileModalAtoms';
+import {
+  notificationReadState,
+  notificationState,
+} from '@/store/notifications/notificationsCounter';
 import { PostProps, postState } from '@/store/posts/postAtoms';
 import {
   collection,
@@ -23,6 +28,8 @@ const HomePage = () => {
   const { user } = useContext(AuthContext as React.Context<AuthProps>);
   const [posts, setPosts] = useRecoilState(postState);
   const activeHomeTab = useRecoilValue(homeTabState);
+  const [notifications, setNotifications] = useRecoilState(notificationState);
+  const setNotificationReadCount = useSetRecoilState(notificationReadState);
   const getFollowingIds = useCallback(async () => {
     if (user?.uid) {
       const ref = doc(db, 'following', user?.uid);
@@ -71,6 +78,31 @@ const HomePage = () => {
   useEffect(() => {
     if (user?.uid) getFollowingIds();
   }, [getFollowingIds, user?.uid]);
+
+  useEffect(() => {
+    if (user) {
+      const ref = collection(db, 'notifications');
+      const notificationQuery = query(
+        ref,
+        where('uid', '==', user?.uid),
+        orderBy('createdAt', 'desc')
+      );
+
+      onSnapshot(notificationQuery, snapShot => {
+        const dataObj = snapShot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setNotifications(dataObj as NotificationsProps[]);
+      });
+    }
+  }, [user, setNotificationReadCount]);
+
+  useEffect(() => {
+    setNotificationReadCount(
+      notifications.filter(notification => !notification?.isRead).length
+    );
+  });
 
   useEffect(() => {
     const handleResize = () => {

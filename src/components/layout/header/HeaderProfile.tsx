@@ -11,6 +11,7 @@ interface HeaderProfileProps {
   profilePath?: boolean;
   overlay?: boolean;
   src?: string | null;
+  toProfileSrc?: string;
 }
 
 const HeaderProfile = ({
@@ -18,6 +19,7 @@ const HeaderProfile = ({
   toProfile = false,
   profilePath,
   src,
+  toProfileSrc,
   overlay,
 }: HeaderProfileProps) => {
   const setIsModalOpen = useSetRecoilState(homeModalState);
@@ -38,8 +40,14 @@ const HeaderProfile = ({
           <div
             onClick={e => {
               e.stopPropagation();
-              if (location.pathname !== `/profile/${user.uid}`) {
+              if (
+                !toProfileSrc &&
+                location.pathname !== `/profile/${user.uid}`
+              ) {
                 toProfile && navigate(`/profile/${user.uid}`);
+              }
+              if (toProfileSrc) {
+                toProfile && navigate(`/profile/${toProfileSrc}`);
               }
             }}
             className={`${overlay && 'w-28 h-28'}  ${

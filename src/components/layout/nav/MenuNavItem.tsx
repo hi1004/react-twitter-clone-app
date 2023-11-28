@@ -9,6 +9,7 @@ import {
   imgModalState,
   postModalState,
 } from '@/store/modal/homeModalAtoms';
+import { notificationReadState } from '@/store/notifications/notificationsCounter';
 import { homeResizeState } from '@/store/posts/postAtoms';
 import { useContext, useEffect, useState } from 'react';
 import { AiOutlineHome, AiOutlineSearch, AiTwotoneHome } from 'react-icons/ai';
@@ -36,6 +37,7 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const setIsHidden = useSetRecoilState(imgModalState);
+  const notificationReadCount = useRecoilValue(notificationReadState);
 
   useEffect(() => {
     const handleResize = () => {
@@ -151,17 +153,23 @@ const MenuNavItem = ({ gridRow, handleMenuListClick }: MenuNavItemProps) => {
           <NavLink
             to="/notifications"
             className={({ isActive }) =>
-              `flex items-center gap-4 xl:pr-6 p-3 dark:pointerhover:hover:bg-gray-700  pointerhover:hover:font-bold pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[9999px] w-max ${
+              `flex relative items-center gap-4 xl:pr-6 p-3 dark:pointerhover:hover:bg-gray-700  pointerhover:hover:font-bold pointerhover:hover:bg-gray-300 bg-opacity-30 dark:bg-opacity-30 rounded-[9999px] w-max ${
                 isActive && 'font-bold dark:bg-gray-700 bg-gray-300'
               }`
             }
           >
             {location.pathname === '/notifications' ? (
-              <IoIosNotifications size={30} />
+              <>
+                <IoIosNotifications size={30} />
+              </>
             ) : (
               <IoMdNotificationsOutline size={30} />
             )}
-
+            {notificationReadCount > 0 && (
+              <div className="absolute px-2 text-white rounded-full -right-2 -top-2 bg-primary">
+                {notificationReadCount}
+              </div>
+            )}
             <span
               className={`${
                 isModalOpen ? 'block' : 'hidden'
