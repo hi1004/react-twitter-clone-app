@@ -206,7 +206,7 @@ const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
             >
               {user?.uid === post?.uid ? user?.displayName : post?.displayName}
             </div>
-            <div className="text-sm cursor-pointer text-slate-500">
+            <div className="text-xs cursor-pointer text-slate-500">
               @
               {!post?.email
                 ? post?.displayName
@@ -215,7 +215,7 @@ const PostListItem = ({ post, user, onlyContent }: PostListItemProps) => {
                 : post?.email?.replace(/@.*$/, '').toLocaleLowerCase()}
               ・
               <span
-                className=" pointerhover:hover:underline"
+                className="pointerhover:hover:underline"
                 role="presentation"
                 onClick={e => {
                   e.stopPropagation();

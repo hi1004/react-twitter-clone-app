@@ -1,6 +1,6 @@
 import AuthContext from '@/context/AuthContext';
 import { db } from '@/firebaseApp';
-import { PostProps } from '@/store/posts/postAtoms';
+import { PostProps, homeResizeState } from '@/store/posts/postAtoms';
 import {
   addDoc,
   arrayRemove,
@@ -15,6 +15,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { AiOutlineUserAdd, AiOutlineUserDelete } from 'react-icons/ai';
 import { CgMoreAlt } from 'react-icons/cg';
 import { toast } from 'react-toastify';
+import { useRecoilValue } from 'recoil';
 
 interface FollowingBoxProps {
   post: PostProps;
@@ -29,6 +30,8 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { user } = useContext<any>(AuthContext);
   const [postFollowers, setPostFollowers] = useState<UserProps[]>([]);
+  const isMobileSize = useRecoilValue(homeResizeState);
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const closeMoreOpen = (e: any) => {
@@ -69,7 +72,7 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
 
   const handleClickOpenMore = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    setIsMoreOpen(prev => !prev);
+    if (!isMobileSize) setIsMoreOpen(prev => !prev);
   };
   const handleClickFollow = async (
     e: React.MouseEvent<HTMLParagraphElement>
@@ -151,9 +154,28 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
       className={`relative more-modal cursor-default`}
       onClick={handleClickOpenMore}
     >
-      <div className="p-2 rounded-full cursor-pointer pointerhover:hover:text-primary w-max pointerhover:hover:bg-primary pointerhover:hover:bg-opacity-10">
+      <div className="hidden p-2 rounded-full cursor-pointer md:block pointerhover:hover:text-primary w-max pointerhover:hover:bg-primary pointerhover:hover:bg-opacity-10">
         <CgMoreAlt />
       </div>
+      {isMobileSize && (
+        <div className=" cursor-pointer w-max rounded-2xl font-bold text-sm h-100px -left-[220px] top-0 ">
+          {postFollowers?.includes(user?.uid) ? (
+            <p
+              onClick={handleDeleteFollow}
+              className="flex items-center gap-2 p-2 text-red-500 dark:pointerhover:hover:bg-slate-700 pointerhover:hover:bg-slate-400 rounded-2xl"
+            >
+              <AiOutlineUserDelete className="text-[20px]" />
+            </p>
+          ) : (
+            <p
+              onClick={handleClickFollow}
+              className="flex items-center gap-2 p-2 text-primary pointerhover:hover:bg-slate-500 rounded-2xl"
+            >
+              <AiOutlineUserAdd className="text-[20px]" />
+            </p>
+          )}
+        </div>
+      )}
       {isMoreOpen && (
         <div className="absolute cursor-pointer w-max px-4 py-2 rounded-2xl font-bold text-sm h-100px -left-[220px] top-0 bg-slate-200 dark:bg-slate-800">
           {postFollowers?.includes(user?.uid) ? (
