@@ -42,8 +42,8 @@
   </div>
   <h5>プロフィール</h5>
     <div style="display:flex">
-      <img width="50%" alt="image" src="https://github.com/hi1004/react-twitter-clone-app/assets/80688093/83cf2a39-2a93-43fe-8343-8ebf92629150">
-      <img width="50%" alt="image" src="https://github.com/hi1004/react-twitter-clone-app/assets/80688093/0f630ebf-ca34-40e3-8b20-1e9a03922cec">
+      <img width="100%" alt="image" src="https://github.com/hi1004/react-twitter-clone-app/assets/80688093/83cf2a39-2a93-43fe-8343-8ebf92629150">
+      <img width="100%" alt="image" src="https://github.com/hi1004/react-twitter-clone-app/assets/80688093/0f630ebf-ca34-40e3-8b20-1e9a03922cec">
   </div>
 </div>
 </details>
