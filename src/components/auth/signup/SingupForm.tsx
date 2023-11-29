@@ -1,7 +1,6 @@
 import SignupFormStep1 from '@/components/auth/signup/step/SignupFormStep1';
 import SignupFormStep2 from '@/components/auth/signup/step/SignupFormStep2';
 import SignupFormStep3 from '@/components/auth/signup/step/SignupFormStep3';
-import SignupFormStep4 from '@/components/auth/signup/step/SignupFormStep4';
 import {
   FieldErrors,
   FieldValues,
@@ -63,24 +62,11 @@ const SingupForm = ({
         handleStepSubmit={handleStepSubmit}
         isSubmitted={isSubmitted}
         isSubmitting={isSubmitting}
-        watch={watch}
-        isValid={isValid}
         register={register}
+        isValid={isValid}
+        watch={watch}
       />
       <SignupFormStep3
-        step={step}
-        clickToggle={clickToggle}
-        errors={errors}
-        generateDaysInMonth={generateDaysInMonth}
-        handleClickToggle={handleClickToggle}
-        handleStepSubmit={handleStepSubmit}
-        isSubmitted={isSubmitted}
-        isSubmitting={isSubmitting}
-        register={register}
-        isValid={isValid}
-        watch={watch}
-      />
-      <SignupFormStep4
         step={step}
         clickToggle={clickToggle}
         errors={errors}

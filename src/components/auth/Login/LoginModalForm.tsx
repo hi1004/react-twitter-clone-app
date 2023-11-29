@@ -34,14 +34,14 @@ const LoginModalForm = ({
         `${auth.currentUser?.displayName}様、ログインに成功しました`
       );
       closeLoginPage();
-
       navigate('/');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log(error);
-      onLoginClick();
       toast.error('ログインに失敗しました');
+
+      onLoginClick();
     }
   });
   return (

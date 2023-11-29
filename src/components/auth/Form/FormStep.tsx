@@ -68,7 +68,7 @@ const FormStep = ({
           </div>
         </div>
         <div className="mt-8">
-          {step === 4 ? (
+          {step === 3 ? (
             <Button
               label={buttonText}
               onClick={handleSubmit!(async data => {

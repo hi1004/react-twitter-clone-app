@@ -1,5 +1,4 @@
 import FormInput from '@/components/auth/Form/FormInput';
-import FormSelect from '@/components/auth/Form/FormSelect';
 import FormStep from '@/components/auth/Form/FormStep';
 import { SignupFormProps } from '@/components/auth/signup/SingupForm';
 
@@ -25,7 +24,7 @@ const SignupFormStep1 = ({
           isSubmitted={isSubmitted}
           handleStepSubmit={handleStepSubmit}
           step={step}
-          maxSteps={4}
+          maxSteps={3}
           buttonText="次へ"
           isSubmitting={isSubmitting}
           watch={watch}
@@ -44,7 +43,7 @@ const SignupFormStep1 = ({
           <FormInput
             id={clickToggle ? 'tel' : 'email'}
             type={clickToggle ? 'tel' : 'email'}
-            label={clickToggle ? '電話番号' : 'メールアドレス'}
+            label={clickToggle ? '電話番号（不可能）' : 'メールアドレス'}
             register={register}
             errors={errors}
             watch={watch}
@@ -53,15 +52,10 @@ const SignupFormStep1 = ({
           />
           <span
             onClick={handleClickToggle}
-            className="text-sm cursor-pointer  w-fit text-primary pointerhover:hover:underline focus:underline"
+            className="text-sm cursor-pointer w-fit text-primary pointerhover:hover:underline focus:underline"
           >
             かわりに{!clickToggle ? '電話番号' : 'メールアドレス'}を登録する
           </span>
-          <FormSelect
-            errors={errors}
-            isSubmitted={isSubmitted}
-            register={register}
-          />
         </FormStep>
       )}
     </>

@@ -9,24 +9,44 @@ const SignupFormStep3 = ({
   isSubmitting,
   isSubmitted,
   errors,
-  watch,
+  clickToggle,
+  handleSubmit,
   isValid,
 }: SignupFormProps) => {
   return (
     <>
       {step === 3 && (
         <FormStep
-          title="パスワード設定"
+          title="アカウント確認"
           register={register}
           errors={errors}
           isSubmitted={isSubmitted}
           handleStepSubmit={handleStepSubmit}
           step={step}
-          maxSteps={4}
-          buttonText="次へ"
+          handleSubmit={handleSubmit}
+          maxSteps={3}
+          buttonText="ログイン"
           isSubmitting={isSubmitting}
           isValid={isValid}
         >
+          <FormInput
+            id="name"
+            label="名前"
+            register={register}
+            errors={errors}
+            isSubmitted={isSubmitted}
+            required
+          />
+          <FormInput
+            id={clickToggle ? 'tel' : 'email'}
+            type={clickToggle ? 'tel' : 'email'}
+            label={clickToggle ? '電話番号' : 'メールアドレス'}
+            register={register}
+            errors={errors}
+            isSubmitted={isSubmitted}
+            required
+          />
+
           <FormInput
             id="password"
             type="password"
@@ -34,18 +54,6 @@ const SignupFormStep3 = ({
             register={register}
             errors={errors}
             isSubmitted={isSubmitted}
-            focused="password"
-            watch={watch}
-            required
-          />
-          <FormInput
-            id="password_confirm"
-            type="password"
-            label="パスワード確認"
-            register={register}
-            errors={errors}
-            isSubmitted={isSubmitted}
-            watch={watch}
             required
           />
         </FormStep>
