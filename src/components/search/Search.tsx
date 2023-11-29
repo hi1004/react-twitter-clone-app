@@ -70,7 +70,7 @@ const Search = () => {
         <div
           className={`relative flex items-center px-4 pt-2 ${
             location.pathname === '/search' && 'border-b'
-          } pb-3 border-b-slate-700`}
+          } pb-3 dark:border-b-slate-700 border-b-slate-300`}
         >
           <CgSearch className="absolute left-9 focus:text-primary" />
           <input
