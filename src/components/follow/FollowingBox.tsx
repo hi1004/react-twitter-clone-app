@@ -110,7 +110,7 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
             user?.email?.replace(/@.*$/, '').toLocaleLowerCase() ||
             user?.displayName?.replace(/[^\w\s]/g, '')?.toLocaleLowerCase()
           }さんが「フォロー」しました。`,
-          url: `/profile/${post?.uid}`,
+          url: `/profile/${user?.uid}`,
           isRead: false,
           uid: post?.uid,
           toProfile: user?.uid,
@@ -147,7 +147,6 @@ const FollowingBox = ({ post }: FollowingBoxProps) => {
       console.log(error);
     }
   };
-  console.log(postFollowers);
 
   return (
     <div

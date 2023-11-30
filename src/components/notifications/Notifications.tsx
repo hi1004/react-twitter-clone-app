@@ -57,7 +57,7 @@ const Notifications = () => {
     setNotificationReadCount(
       notifications.filter(notification => !notification?.isRead).length
     );
-  });
+  }, [notifications]);
 
   return (
     <div className={`w-full`}>

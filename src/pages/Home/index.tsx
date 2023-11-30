@@ -102,7 +102,7 @@ const HomePage = () => {
     setNotificationReadCount(
       notifications.filter(notification => !notification?.isRead).length
     );
-  });
+  }, [notifications]);
 
   useEffect(() => {
     const handleResize = () => {
