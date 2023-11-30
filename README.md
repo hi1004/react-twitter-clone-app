@@ -2,7 +2,7 @@
 
 ### 📌 概要
 
-## [🔗 Twitter(X) Clone App Link](https://react-twiiter-clone-app.vercel.app/)
+## https://react-twiiter-clone-app.vercel.app/
 
 > - ログインはGoogleアカウントやGithubアカウント、メール（認証不必要）で出来ます。
 > - 会員登録をしない方はテスト用アカウント使ってください。
